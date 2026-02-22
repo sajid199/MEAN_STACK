@@ -1881,6 +1881,60 @@
           "question": "What is MAPPED TYPES?",
           "answer": "Mapped types transform existing types into new types using [K in Keys] syntax. Used to generate similar types (getters, setters) from existing ones. Powerful for DRY (Don't Repeat Yourself) type definitions.",
           "example": "interface User {\n  name: string;\n  email: string;\n  age: number;\n}\n\n// Make all properties readonly\ntype ReadonlyUser = {\n  readonly [K in keyof User]: User[K];\n};\n// Result: { readonly name: string; readonly email: string; readonly age: number; }\n\n// Make all properties getters\ntype Getters<T> = {\n  [K in keyof T as `get${Capitalize<string & K>}`]: () => T[K];\n};\n\ntype UserGetters = Getters<User>;\n// Result: { getName: () => string; getEmail: () => string; getAge: () => number; }\n\n// Make all properties nullable\ntype Nullable<T> = {\n  [K in keyof T]: T[K] | null;\n};\n\ntype NullableUser = Nullable<User>;\n// Result: { name: string | null; email: string | null; age: number | null; }"
+        },
+        {
+          "id": 13,
+          "question": "What is ENUMS in TypeScript?",
+          "answer": "Enums define a set of named constants (numeric or string). Used for readable code, preventing magic numbers, and type safety. Run-time object in JavaScript. Numeric enums have reverse mapping by default.",
+          "example": "// String enum (preferred)\nenum Role {\n  Admin = 'admin',\n  User = 'user',\n  Guest = 'guest'\n}\n\nconst user: Role = Role.Admin;  // type-safe\n\n// Numeric enum\nenum Status {\n  Pending = 0,\n  Active = 1,\n  Inactive = 2\n}\n\nconst status: Status = Status.Active;\nconsole.log(status);  // 1\n\n// Access by value\nconst statusName = Status[1];  // 'Active'\n\n// Heterogeneous enum (mixed)\nenum Mixed {\n  No = 0,\n  Yes = 'Yes'\n}"
+        },
+        {
+          "id": 14,
+          "question": "What is ABSTRACT CLASS in TypeScript?",
+          "answer": "Abstract class cannot be instantiated directly. Defines interface for subclasses. Can have concrete methods and abstract methods (must be implemented by subclass). Used for shared functionality and contract.",
+          "example": "abstract class Animal {\n  abstract name: string;        // must be defined in subclass\n  abstract makeSound(): void;   // must be implemented\n  \n  move() {  // concrete method\n    console.log('Moving...');\n  }\n}\n\nclass Dog extends Animal {\n  name = 'Dog';\n  \n  makeSound() {\n    console.log('Woof!');\n  }\n}\n\nconst dog = new Dog();  // OK\n// const animal = new Animal();  // Error: abstract"
+        },
+        {
+          "id": 15,
+          "question": "What is NAMESPACE in TypeScript?",
+          "answer": "Namespace organizes code into named containers, preventing global scope pollution. Similar to modules but with different syntax. Rarely used in modern TypeScript (ES modules preferred). Good for organizing large codebases.",
+          "example": "// Define namespace\nnamespace Utils {\n  export function formatDate(date: Date) {\n    return date.toLocaleDateString();\n  }\n  \n  export class Logger {\n    log(msg: string) { console.log(msg); }\n  }\n}\n\n// Usage\nconst formatted = Utils.formatDate(new Date());\nconst logger = new Utils.Logger();\n\n// Nested namespace\nnamespace App.Services {\n  export class ApiService { }\n}\n\nconst api = new App.Services.ApiService();"
+        },
+        {
+          "id": 16,
+          "question": "What is FUNCTION OVERLOADING in TypeScript?",
+          "answer": "Function overloading allows a function to have multiple signatures with different parameter types. Only last declaration includes implementation. Enables type-safe functions with flexible parameter types.",
+          "example": "// Overload signatures\nfunction process(data: string): string;\nfunction process(data: number): number;\nfunction process(data: boolean): boolean;\n\n// Implementation\nfunction process(data: string | number | boolean): string | number | boolean {\n  if (typeof data === 'string') {\n    return data.toUpperCase();\n  } else if (typeof data === 'number') {\n    return data * 2;\n  }\n  return !data;\n}\n\nconst s = process('hello');  // signature 1, returns string\nconst n = process(5);         // signature 2, returns number\nconst b = process(true);      // signature 3, returns boolean"
+        },
+        {
+          "id": 17,
+          "question": "What is READONLY modifier in TypeScript?",
+          "answer": "readonly prevents modification of properties after creation. Can be used on class properties, interface properties, and arrays. Different from const: const prevents reassignment, readonly prevents property mutation.",
+          "example": "interface Config {\n  readonly apiUrl: string;\n  readonly timeout: number;\n}\n\nconst config: Config = {\n  apiUrl: 'https://api.example.com',\n  timeout: 5000\n};\n\n// config.apiUrl = 'https://new.url';  // Error!\n\n// Readonly array\nconst nums: readonly number[] = [1, 2, 3];\n// nums.push(4);  // Error!\n\n// Readonly class property\nclass User {\n  readonly id: number;\n  name: string;\n  \n  constructor(id: number, name: string) {\n    this.id = id;    // OK: in constructor\n    this.name = name;\n  }\n  \n  setId(id: number) {\n    // this.id = id;  // Error: readonly\n  }\n}"
+        },
+        {
+          "id": 18,
+          "question": "What is GENERIC CONSTRAINTS in TypeScript?",
+          "answer": "Generic constraints restrict type parameters. Use `extends` to enforce that generic type has specific properties/structure. Enables more precise type checking while maintaining flexibility.",
+          "example": "// Constraint: T must be an object with 'length'\nfunction getLength<T extends { length: number }>(value: T): number {\n  return value.length;\n}\n\ngetLength('hello');        // OK: strings have length\ngetLength([1, 2, 3]);      // OK: arrays have length\n// getLength(123);           // Error: numbers don't have length\n\n// Constraint: T must extend specific type\nfunction merge<T extends { id: number }>(obj: T, changes: Partial<T>): T {\n  return { ...obj, ...changes };\n}\n\nmerge({ id: 1, name: 'Alice' }, { name: 'Bob' });  // OK\n// merge({ name: 'Alice' }, {});  // Error: no id property\n\n// Constraint: key must be in T\nfunction getProperty<T, K extends keyof T>(obj: T, key: K): T[K] {\n  return obj[key];\n}\n\ngetProperty({ name: 'Alice', age: 25 }, 'name');  // OK\n// getProperty({ name: 'Alice', age: 25 }, 'email');  // Error!"
+        },
+        {
+          "id": 19,
+          "question": "What is INFER keyword in TypeScript?",
+          "answer": "infer extracts type information within conditional types. Used to deduce types from complex structures. Powerful for building flexible utility types that adapt to input types.",
+          "example": "// Extract return type from function\ntype ReturnType<T> = T extends (...args: any[]) => infer R ? R : never;\n\nfunction greet() { return 'hello'; }\ntype GreetReturn = ReturnType<typeof greet>;  // string\n\n// Extract array element type\ntype ArrayElement<T> = T extends Array<infer U> ? U : never;\n\ntype NumArray = ArrayElement<number[]>;  // number\ntype StrArray = ArrayElement<string[]>;  // string\n\n// Extract promise value type\ntype Unwrap<T> = T extends Promise<infer U> ? U : T;\n\ntype Resolved = Unwrap<Promise<string>>;  // string\ntype Direct = Unwrap<number>;              // number\n\n// Complex: extract function parameters\ntype Parameters<T> = T extends (...args: infer P) => any ? P : never;\n\nfunction add(a: number, b: number) { return a + b; }\ntype AddParams = Parameters<typeof add>;  // [number, number]"
+        },
+        {
+          "id": 20,
+          "question": "What is MODULE AUGMENTATION?",
+          "answer": "Module augmentation extends existing modules' types to add new properties or methods. Useful for extending third-party libraries or global types without modifying original files.",
+          "example": "// Augment Express Request\ndeclare global {\n  namespace Express {\n    interface Request {\n      user?: User;\n      id?: string;\n    }\n  }\n}\n\n// Now in routes:\napp.get('/', (req, res) => {\n  console.log(req.user?.name);  // typed!\n  console.log(req.id);           // typed!\n});\n\n// Augment Array methods\ndeclare global {\n  interface Array<T> {\n    last(): T | undefined;\n  }\n}\n\nArray.prototype.last = function() {\n  return this[this.length - 1];\n};\n\nconst arr = [1, 2, 3];\nconsole.log(arr.last());  // 3, typed!"
+        },
+        {
+          "id": 21,
+          "question": "What is DISCRIMINATED UNION TYPES?",
+          "answer": "Discriminated unions use a common property to narrow union types. Type guard on one property narrows all properties. More type-safe than untagged unions, eliminates runtime errors.",
+          "example": "// Discriminated union with 'type' field\ntype Result\n  = { type: 'success'; data: string }\n  | { type: 'error'; error: Error }\n  | { type: 'loading' };\n\nfunction handle(result: Result) {\n  if (result.type === 'success') {\n    console.log(result.data);  // available!\n    // console.log(result.error);  // Error: doesn't exist\n  } else if (result.type === 'error') {\n    console.log(result.error);  // available!\n  }\n}\n\n// API response pattern\ntype Response\n  = { status: 200; body: string }\n  | { status: 404; message: string }\n  | { status: 500; error: string };\n\nconst res: Response = { status: 200, body: 'Success' };\nif (res.status === 200) {\n  console.log(res.body);  // narrowed to 200 case\n}"
         }
       ]
     },
