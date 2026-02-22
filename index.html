@@ -3,7 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>DevInterview Pro — Interview Preparation Guide</title>
+  <title>DevInterview Pro — Smruti's Interview Preparation Guide</title>
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='75' font-size='75' fill='%233b82f6'>⟨/⟩</text></svg>">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=JetBrains+Mono:wght@400;600&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="styles.css">
@@ -30,6 +31,7 @@
     <div class="hero-inner">
       <div class="hero-tag">Interview Preparation Guide</div>
       <h1 class="hero-title">Ace Every<br><em>Technical Interview</em></h1>
+      <p class="hero-dedication">📚 Dedicated to <strong>Smruti</strong> — Your journey to mastering technical interviews starts here. Success awaits! 🚀</p>
       <p class="hero-subtitle">Real-world answers with code examples — crafted for experienced developers with 4 years of expertise in Angular, Node.js, Express, Oracle SQL, HTML, CSS, and JavaScript.</p>
       <div class="search-container">
         <span class="search-icon">⌕</span>
@@ -54,11 +56,14 @@
 
       <!-- Topic Header -->
       <div class="topic-header" id="topicHeader" style="display:none">
-        <div class="topic-header-inner">
-          <span class="topic-icon" id="topicIcon"></span>
-          <div>
-            <h2 class="topic-title" id="topicTitle"></h2>
-            <p class="topic-count" id="topicCount"></p>
+        <div class="topic-header-left">
+          <button class="btn-back" id="backToHome" title="Back to Home">← Back</button>
+          <div class="topic-header-inner">
+            <span class="topic-icon" id="topicIcon"></span>
+            <div>
+              <h2 class="topic-title" id="topicTitle"></h2>
+              <p class="topic-count" id="topicCount"></p>
+            </div>
           </div>
         </div>
         <div class="topic-controls">
@@ -87,5 +92,17 @@
   <div class="progress-line" id="progressLine"></div>
 
   <script src="app.js"></script>
+  <script>
+    // Back to home button functionality
+    document.getElementById('backToHome').addEventListener('click', function() {
+      document.getElementById('homeScreen').style.display = 'flex';
+      document.getElementById('questionsContainer').innerHTML = '';
+      document.getElementById('topicHeader').style.display = 'none';
+      document.getElementById('searchInput').value = '';
+      document.getElementById('searchInfo').style.display = 'none';
+      document.querySelectorAll('.topic-btn').forEach(btn => btn.classList.remove('active'));
+      window.scrollTo(0, 0);
+    });
+  </script>
 </body>
 </html>

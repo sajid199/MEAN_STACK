@@ -114,6 +114,11 @@ body {
   background: linear-gradient(135deg, #3b82f6 0%, #10b981 100%);
   -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
 }
+.hero-dedication {
+  color: #10b981; font-size: 14px; font-weight: 600; margin-bottom: 16px;
+  background: rgba(16, 185, 129, 0.08); padding: 12px 16px; border-radius: 8px;
+  border-left: 3px solid #10b981;
+}
 .hero-subtitle {
   color: var(--text-secondary); font-size: 15.5px; line-height: 1.75;
   margin-bottom: 32px; max-width: 560px; margin-left: auto; margin-right: auto;
@@ -221,7 +226,17 @@ body {
   gap: 16px; margin-bottom: 24px; padding-bottom: 18px;
   border-bottom: 1px solid var(--border); flex-wrap: wrap;
 }
+.topic-header-left { display: flex; align-items: center; gap: 16px; flex: 1; }
 .topic-header-inner { display: flex; align-items: center; gap: 14px; }
+.btn-back {
+  padding: 8px 14px; background: transparent; border: 1px solid var(--border-light);
+  border-radius: 7px; color: var(--text-secondary); font-size: 13px;
+  font-family: var(--font-body); font-weight: 600; cursor: pointer;
+  transition: all var(--transition); white-space: nowrap;
+}
+.btn-back:hover { 
+  background: var(--accent-glow); border-color: var(--accent); color: var(--accent);
+}
 .topic-icon { font-size: 34px; }
 .topic-title { font-family: var(--font-display); font-size: 26px; font-weight: 400; }
 .topic-count { color: var(--text-muted); font-size: 12px; margin-top: 2px; }
@@ -333,6 +348,7 @@ body {
 
 /* ---- HOME SCREEN ---- */
 .home-screen { }
+.home-screen { display: flex; width: 100%; }
 .home-section-title {
   font-family: var(--font-display); font-size: 22px; font-weight: 400;
   margin-bottom: 20px; color: var(--text);
@@ -393,6 +409,11 @@ body {
   .hero { padding-top: calc(var(--header-h) + 44px + 36px); padding-bottom: 36px; }
   .header-stats { display: none; }
   .topic-header { flex-direction: column; align-items: flex-start; }
+  .topic-header-left { flex-direction: column; width: 100%; }
+  .topic-header-inner { width: 100%; }
+  .btn-back { width: 100%; text-align: center; }
+  .topic-controls { width: 100%; display: flex; flex-direction: column; gap: 8px; }
+  .btn-control { width: 100%; }
   .question-body { padding-left: 18px; }
   .home-grid { grid-template-columns: 1fr; }
   .header-meta .badge:last-child { display: none; }
