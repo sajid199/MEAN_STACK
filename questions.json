@@ -2045,26 +2045,92 @@
       "questions": [
         {
           "id": 1,
+          "question": "What is TypeScript and how does it differ from JavaScript?",
+          "answer": "TypeScript is a statically typed superset of JavaScript that adds optional types, compile-time checks, and modern language features. It compiles to plain JavaScript and helps catch errors earlier while improving editor tooling.",
+          "example": "// TypeScript example - type annotations\nfunction add(a: number, b: number): number {\n  return a + b;\n}\n\n// Compiler error if wrong types are used\n// add('1', 2); // Error: Argument of type 'string' is not assignable to parameter of type 'number'"
+        },
+        {
+          "id": 2,
+          "question": "What are basic TypeScript types and type annotations?",
+          "answer": "TypeScript supports primitives (string, number, boolean, null, undefined, symbol, bigint), arrays, tuples, enums, any, unknown, never, and object types. Use annotations to document intent and enable compile-time checks.",
+          "example": "let name: string = 'Alice';\nlet ids: number[] = [1,2,3];\nlet pair: [string, number] = ['age', 30];\nconst flag: boolean = true;"
+        },
+        {
+          "id": 3,
+          "question": "What is the difference between type aliases and interfaces?",
+          "answer": "Both describe object shapes. Interfaces are extendable/mergeable and ideal for public APIs. Type aliases are more flexible (union, tuple, primitive aliases). Use interfaces for object shapes and types for unions or complex compositions.",
+          "example": "// Interface\ninterface User { id: number; name: string; }\n// Type alias (union)\ntype ID = number | string;\n// Both can describe objects, but 'type' can form unions: type Result = Success | Failure;"
+        },
+        {
+          "id": 4,
+          "question": "What are Generics in TypeScript and why use them?",
+          "answer": "Generics let you write reusable, type-safe components by deferring types until usage. They enable functions and classes to work with various types while preserving type information.",
+          "example": "function identity<T>(arg: T): T { return arg; }\nconst s = identity<string>('hello'); // s inferred as string\nconst arr = identity<number[]>([1,2,3]);"
+        },
+        {
+          "id": 5,
+          "question": "What is type narrowing and how do type guards work?",
+          "answer": "Type narrowing reduces a broad type to a more specific one using checks like typeof, instanceof, in, discriminated unions, or custom type guard functions. Narrowing enables safe property access without assertions.",
+          "example": "function format(input: string | number) {\n  if (typeof input === 'string') return input.trim();\n  return input.toFixed(2); // narrowed to number\n}\n\nfunction isUser(obj: any): obj is User { return obj && typeof obj.id === 'number'; }"
+        },
+        {
+          "id": 6,
           "question": "What are TEMPLATE LITERAL TYPES?",
           "answer": "Template literal types use string template syntax to create type unions. Powerful for type-safe paths, variations of strings, discriminating unions. Combined with `as const` for precise string types.",
           "example": "type Method = 'GET' | 'POST' | 'PUT' | 'DELETE';\ntype Path = `/api/${'users' | 'posts' | 'comments'}`;\n\ntype ApiRoute = `${Method} ${Path}`;\n// Creates: 'GET /api/users' | 'GET /api/posts' | ... (24 combinations)\n\nfunction request(route: ApiRoute) { }\nrequest('GET /api/users');     // ✓ OK\nrequest('PATCH /api/users');   // ✗ Error\n\n// Database column types\ntype Column = 'name' | 'email' | 'age';\ntype ColumnGetters = `get${Capitalize<Column>}`;\n// Result: 'getName' | 'getEmail' | 'getAge'"
         },
         {
-          "id": 2,
+          "id": 7,
           "question": "What is SATISFIES keyword in TypeScript 4.9+?",
           "answer": "satisfies checks that a value satisfies a type without changing its inferred type. Different from `as` which changes the type. Validates structure while preserving literal types and inference.",
-          "example": "// Without satisfies: loses literal types\nconst config = {\n  api: 'https://api.example.com',\n  timeout: 5000\n} as const;\ntype Config = typeof config;  // never (weird!)\n\n// With satisfies: preserves types\nconst config = {\n  api: 'https://api.example.com',\n  timeout: 5000\n} satisfies { api: string; timeout: number };\n// Type is: { api: 'https://api.example.com'; timeout: 5000 }\n\n// Validates palette without losing color literals\ntype Palette = Record<'bg' | 'fg', string>;\nconst palette = {\n  bg: '#fff',\n  fg: '#000'\n} satisfies Palette;\n// palette['bg'] is still '#fff' (literal), not string"
+          "example": "// Without satisfies: loses literal types\nconst config = {\n  api: 'https://api.example.com',\n  timeout: 5000\n} as const;\n\n// With satisfies: preserves types\nconst config = {\n  api: 'https://api.example.com',\n  timeout: 5000\n} satisfies { api: string; timeout: number };\n// Type is: { api: 'https://api.example.com'; timeout: 5000 }\n\n// Validates palette without losing color literals\ntype Palette = Record<'bg' | 'fg', string>;\nconst palette = {\n  bg: '#fff',\n  fg: '#000'\n} satisfies Palette;\n// palette['bg'] is still '#fff' (literal), not string"
         },
         {
-          "id": 3,
+          "id": 8,
           "question": "What is CONST TYPE PARAMETERS in TypeScript 5.0+?",
           "answer": "const type parameters lock generic types to their most specific literal types. Prevents widening. Useful for tuple builders, precise metadata, type-level functions."
         },
         {
-          "id": 4,
+          "id": 9,
           "question": "What are MODULE DECLARATION and TYPE-ONLY IMPORTS?",
           "answer": "Module declaration extends global types or declares external modules. Type-only imports (import type {}) are removed at runtime, reducing bundle size. Use for: declaration files (.d.ts), extending libs, tree-shaking.",
           "example": "// Extend global Window\ndeclare global {\n  interface Window {\n    gtag: any;\n    myApp: { version: string };\n  }\n}\n\n// Type-only imports (removed from compiled JS)\nimport type { User } from './types';\nimport { parse } from 'uuid';  // included in JS\n\n// Declare module\ndeclare module 'express' {\n  interface Request {\n    user?: User;\n  }\n}\n\n// Now: req.user is typed!"
+        },
+        {
+          "id": 10,
+          "question": "What are declaration files (.d.ts) and when to write them?",
+          "answer": "Declaration files describe the types of existing JavaScript modules for TypeScript consumers. Write .d.ts when a library has no types or when you expose JS code to TS to provide type safety and better IDE support.",
+          "example": "// mylib.d.ts\ndeclare module 'mylib' {\n  export function doThing(x: string): Promise<number>;\n  export interface Options { verbose?: boolean; }\n}\n\n// Then in TS code:\nimport { doThing } from 'mylib';\nawait doThing('input'); // typed"
+        },
+        {
+          "id": 11,
+          "question": "What are project references and composite projects in TypeScript?",
+          "answer": "Project references let you split a large codebase into multiple tsconfig projects that compile separately and reference each other. Composite projects enable faster incremental builds and correct type checking across project boundaries.",
+          "example": "// tsconfig.json (root)\n{\n  \"files\": [],\n  \"references\": [ { \"path\": \"./packages/core\" }, { \"path\": \"./packages/app\" } ]\n}\n\n// packages/core/tsconfig.json\n{ \"compilerOptions\": { \"composite\": true, \"outDir\": \"lib\" } }"
+        },
+        {
+          "id": 12,
+          "question": "How do tsconfig paths and moduleResolution help with imports?",
+          "answer": "`paths` and `baseUrl` in tsconfig allow custom path aliases, reducing long relative imports. `moduleResolution` controls how modules are resolved (node vs classic). Ensure your bundler (webpack/ts-node) is configured to honor paths.",
+          "example": "// tsconfig.json\n{\n  \"compilerOptions\": {\n    \"baseUrl\": \"./src\",\n    \"paths\": {\n      \"@app/*\": [\"src/*\"]\n    }\n  }\n}\n\n// usage\nimport { utils } from '@app/utils';"
+        },
+        {
+          "id": 13,
+          "question": "What are distributive conditional types and common pitfalls?",
+          "answer": "Conditional types distribute over unions by default, which can be powerful but surprising. Use parentheses or wrap types in tuples to avoid distribution when not desired.",
+          "example": "// Distributive\ntype ToArray<T> = T extends any ? T[] : never;\ntype A = ToArray<string | number>; // string[] | number[] (distributed)\n\n// Prevent distribution\ntype NoDist<T> = [T] extends [any] ? T[] : never;\ntype B = NoDist<string | number>; // (string | number)[]"
+        },
+        {
+          "id": 14,
+          "question": "How can you improve TypeScript build performance?",
+          "answer": "Use incremental compilation (\"incremental\": true), project references, isolatedModules for faster transpilation, and enable skipLibCheck to avoid rechecking deps. Use `tsc --build` for composite projects and watch mode for iterative development.",
+          "example": "// tsconfig.json\n{\n  \"compilerOptions\": {\n    \"incremental\": true,\n    \"tsBuildInfoFile\": '.tsbuildinfo',\n    \"skipLibCheck\": true\n  }\n}\n\n// Build all projects\ntsc -b -v"
+        },
+        {
+          "id": 15,
+          "question": "What is advanced template literal inference (pattern matching types)?",
+          "answer": "TS can infer parts of template literal types using `infer` inside conditional types to extract segments. Useful for parsing string patterns at the type level and building strongly-typed APIs around them.",
+          "example": "type ExtractRoute<S> = S extends `/${infer Segment}/${infer Rest}` ? Segment : never;\ntype R = ExtractRoute<'/users/123/posts'>; // 'users'"
         }
       ]
     },
@@ -2077,18 +2143,48 @@
       "questions": [
         {
           "id": 1,
+          "question": "What is IAM and why follow the principle of least privilege?",
+          "answer": "AWS Identity and Access Management (IAM) controls who can do what in your AWS account. Least privilege means granting only the permissions required for a task, reducing blast radius and improving security.",
+          "example": "// Best practices:\n• Use IAM roles for EC2/Lambda instead of long-lived keys\n• Create granular policies (allow only specific actions on specific resources)\n• Enable MFA for privileged users\n• Use groups and role chaining for temporary elevated access"
+        },
+        {
+          "id": 2,
+          "question": "What is a VPC and what are subnets, route tables, and security groups?",
+          "answer": "A VPC is an isolated virtual network in AWS. Subnets partition the VPC into IP ranges (public/private). Route tables control traffic routing. Security groups are stateful firewalls for instances; NACLs are stateless at subnet level.",
+          "example": "VPC design: public subnet (NAT/ALB) + private subnet (EC2/Lambda)\npublic subnet route -> Internet Gateway\nprivate subnet route -> NAT Gateway for outbound internet\nSecurity group: allow 443 from ALB, deny all else"
+        },
+        {
+          "id": 3,
+          "question": "What are compute options in AWS (EC2 vs Lambda) and when to use each?",
+          "answer": "EC2 provides full VM control for long-running or stateful workloads. Lambda is serverless for short-lived, event-driven tasks with automatic scaling and pay-per-execution. Choose based on control, cost model, and runtime constraints.",
+          "example": "Use EC2 for legacy apps, custom OS dependencies, or long-running jobs. Use Lambda for background jobs, webhooks, image processing, small APIs."
+        },
+        {
+          "id": 4,
+          "question": "What is S3 and basic durability/consistency guarantees?",
+          "answer": "Amazon S3 is object storage with high durability (11 nines) and regional availability. It provides strong read-after-write consistency for new objects and eventual consistency for overwrite/delete in some older docs (now mostly strong).",
+          "example": "Use S3 for static assets, backups, and data lakes. Configure lifecycle rules, versioning, and encryption (SSE-S3, SSE-KMS)."
+        },
+        {
+          "id": 5,
+          "question": "What is CloudWatch and why monitor metrics/logs/traces?",
+          "answer": "CloudWatch collects metrics, logs, and traces for observability. Monitoring enables alerting, autoscaling, root-cause analysis, and SLO tracking. Combine CloudWatch metrics with logs and X-Ray traces for full-picture debugging.",
+          "example": "Create alarms on CPU/RPS/Errors, forward logs to CloudWatch Logs, use CloudWatch Logs Insights to query, and enable X-Ray for distributed tracing."
+        },
+        {
+          "id": 6,
           "question": "What is SNS and SQS and what's the difference?",
           "answer": "SNS (Simple Notification Service) is publish-subscribe messaging. SQS (Simple Queue Service) is message queuing. SNS: one message → many subscribers (fanout). SQS: producer → queue → consumer (point-to-point). Both for decoupling systems.",
           "example": "SNS (Pub/Sub):\n• Topic: 'order-created'\n• Publishers: OrderService\n• Subscribers: EmailService, SMSService, AnalyticsService\n• All get the same message simultaneously\n\nSQS (Queue):\n• Queue: 'email-queue'\n• Producer: sends message\n• Consumer: polls queue, processes\n• Message deleted after processing\n• Multiple consumers: distribute load\n\nCombined Pattern:\n• SNS: order-created event\n• Fanout to SQS queues\n• Email service polls email-queue\n• SMS service polls sms-queue\n• Independent scaling"
         },
         {
-          "id": 2,
+          "id": 7,
           "question": "What is CodeDeploy and CI/CD pipeline on AWS?",
           "answer": "CodeDeploy automates EC2 deployments. CodePipeline orchestrates: commit → build → deploy. CodeBuild compiles and packages. Enables: zero-downtime deployments, automated testing, rollback on failure.",
           "example": "CI/CD Pipeline:\n1. Developer pushes to GitHub\n2. CodePipeline triggered\n3. CodeBuild:\n   - npm install && npm test\n   - Build artifacts\n4. CodeDeploy to EC2:\n   - Stop app\n   - Copy new code\n   - Start app\n5. All auto, minutes to production\n\nZero-Downtime (Blue-Green):\n• Blue: current version (running)\n• Green: new version (staging)\n• Test green\n• Switch traffic\n• Quick rollback if issues"
         },
         {
-          "id": 3,
+          "id": 8,
           "question": "What is API Gateway and how do you secure it?",
           "answer": "API Gateway accepts HTTP requests, routes to Lambda/EC2, returns responses. Handles: routing, throttling, CORS, auth, logging, caching. Secure with: API keys, authorization (Lambda), WAF, VPC link, mTLS.",
           "example": "API Gateway Setup:\n1. Create REST API\n2. Define resource: POST /users\n3. Integration: Lambda function\n4. Method Request: require API key\n5. Response: 200, 400, 500\n\nAuthorization:\n• API Key: X-API-Key header\n• Lambda authorizer: custom validation\n• JWT: validate bearer token\n• AWS IAM: Signature Version 4\n\nWAF Integration:\n• Block malicious IPs\n• Rate limiting: 2000 req/5 min\n• SQL injection detection\n• XSS protection\n\nCORS:\nMethod Response:\n- Access-Control-Allow-Origin: *\n- Access-Control-Allow-Methods: GET, POST"
