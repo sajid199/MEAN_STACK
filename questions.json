@@ -1703,6 +1703,343 @@
           "example": "Learning Routine:\n\nDaily (15 min):\n• Angular GitHub releases\n• Twitter: @angular, @mgechev\n• RSS feeds (dev.to, css-tricks)\n\nWeekly (1-2 hours):\n• YouTube: Fireship, Academind\n• Read one in-depth article on new features\n\nMonthly:\n• Team tech talk (I present something new)\n• One new side project using new features\n• Angular 16 features I've adopted:\n  - Standalone components\n  - Signals (replacing some NgRx)\n  - Input required validation\n  - Self-closing component tags\n  - esbuild for faster builds"
         }
       ]
+    },
+    {
+      "id": "sql",
+      "name": "SQL",
+      "icon": "🗄️",
+      "color": "#336791",
+      "textColor": "#ffffff",
+      "questions": [
+        {
+          "id": 1,
+          "question": "What is SQL and what are the main categories of SQL commands?",
+          "answer": "SQL (Structured Query Language) is used to manage relational databases. Main categories: DDL (CREATE, ALTER, DROP), DML (INSERT, UPDATE, DELETE, SELECT), DCL (GRANT, REVOKE), and TCL (COMMIT, ROLLBACK). SQL is universal across databases like MySQL, PostgreSQL, Oracle, SQL Server.",
+          "example": "-- DDL: Define structure\nCREATE TABLE users (\n  id INT PRIMARY KEY,\n  name VARCHAR(100),\n  email VARCHAR(100)\n);\n\n-- DML: Manipulate data\nINSERT INTO users VALUES (1, 'Alice', 'alice@gmail.com');\nSELECT * FROM users WHERE id = 1;\nUPDATE users SET name='Bob' WHERE id=1;\nDELETE FROM users WHERE id=1;"
+        },
+        {
+          "id": 2,
+          "question": "What are the differences between INNER JOIN, LEFT JOIN, RIGHT JOIN, and FULL OUTER JOIN?",
+          "answer": "INNER JOIN returns only matching rows from both tables. LEFT JOIN returns all rows from left table + matching from right (nulls for unmatched). RIGHT JOIN returns all from right + matching from left. FULL OUTER JOIN returns all rows from both tables (nulls for unmatched).",
+          "example": "-- Assume: users(id, name), orders(id, user_id, amount)\n\n-- INNER JOIN: only matching\nSELECT u.name, o.amount FROM users u\nINNER JOIN orders o ON u.id = o.user_id;\n\n-- LEFT JOIN: all users, even without orders\nSELECT u.name, COALESCE(o.amount, 0) FROM users u\nLEFT JOIN orders o ON u.id = o.user_id;\n\n-- FULL OUTER JOIN: all from both\nSELECT u.name, o.amount FROM users u\nFULL OUTER JOIN orders o ON u.id = o.user_id;"
+        },
+        {
+          "id": 3,
+          "question": "What is a PRIMARY KEY vs FOREIGN KEY?",
+          "answer": "A PRIMARY KEY uniquely identifies each row in a table (NOT NULL, UNIQUE). A FOREIGN KEY references a PRIMARY KEY in another table, establishing relationships. Together they enable data integrity and prevent orphaned records.",
+          "example": "-- Table 1: departments (parent)\nCREATE TABLE departments (\n  id INT PRIMARY KEY,\n  name VARCHAR(100)\n);\n\n-- Table 2: employees (child)\nCREATE TABLE employees (\n  id INT PRIMARY KEY,\n  name VARCHAR(100),\n  dept_id INT,\n  FOREIGN KEY (dept_id) REFERENCES departments(id)\n);\n\n-- Foreign key ensures dept_id always references valid dept"
+        },
+        {
+          "id": 4,
+          "question": "What are indexes and how do they improve performance?",
+          "answer": "An index is a data structure that sorts table data by one or more columns, enabling faster searches. Without indexes, SQL must scan every row (table scan). With indexes, it uses B-tree lookup (logarithmic time). Trade-off: faster reads, slower writes (index must be updated).",
+          "example": "-- Create index\nCREATE INDEX idx_email ON users(email);\n\n-- This query is now FAST (index lookup)\nSELECT * FROM users WHERE email = 'alice@gmail.com';\n\n-- Without index, it scans all rows (slow on big tables)\nSELECT COUNT(*) FROM users; -- full table scan\n\n-- Composite index (multiple columns)\nCREATE INDEX idx_user_date ON orders(user_id, order_date);\nSELECT * FROM orders WHERE user_id=5 AND order_date>'2024-01-01';"
+        },
+        {
+          "id": 5,
+          "question": "What is a SUBQUERY vs JOIN? When to use each?",
+          "answer": "A subquery (nested SELECT) queries one table within another query. A JOIN combines multiple tables in one query. JOINs are typically faster for simple relationships. Subqueries are easier for conditional logic (WHERE IN, WHERE EXISTS) and complex nested scenarios.",
+          "example": "-- SUBQUERY: return matching users\nSELECT * FROM users WHERE id IN (\n  SELECT user_id FROM orders WHERE amount > 100\n);\n\n-- JOIN: equivalent but usually faster\nSELECT DISTINCT u.* FROM users u\nJOIN orders o ON u.id = o.user_id\nWHERE o.amount > 100;\n\n-- Subquery with CORRELATED (references outer query):\nSELECT name FROM users u\nWHERE EXISTS (\n  SELECT 1 FROM orders WHERE user_id = u.id\n);"
+        },
+        {
+          "id": 6,
+          "question": "What is the difference between WHERE and HAVING?",
+          "answer": "WHERE filters rows BEFORE grouping (operates on individual rows). HAVING filters rows AFTER grouping (operates on aggregate results). WHERE can use any column; HAVING uses aggregate functions like COUNT(), SUM(), AVG().",
+          "example": "-- WHERE: filter before grouping\nSELECT dept_id, COUNT(*) as emp_count\nFROM employees\nWHERE salary > 50000  -- filters before COUNT\nGROUP BY dept_id;\n\n-- HAVING: filter after grouping\nSELECT dept_id, COUNT(*) as emp_count\nFROM employees\nGROUP BY dept_id\nHAVING COUNT(*) > 5;  -- only depts with 5+ employees\n\n-- Both together\nSELECT dept_id, AVG(salary) avg_sal\nFROM employees\nWHERE hire_date > '2020-01-01'\nGROUP BY dept_id\nHAVING AVG(salary) > 60000;"
+        },
+        {
+          "id": 7,
+          "question": "What are ACID properties in databases?",
+          "answer": "ACID ensures reliable transactions: Atomicity (all-or-nothing, no partial updates), Consistency (valid state before and after), Isolation (concurrent transactions don't interfere), Durability (committed data survives failures). Essential for data integrity.",
+          "example": "-- Example: Transfer $100 from account A to B\n\nBEGIN TRANSACTION;  -- Start transaction\n\nUPDATE accounts SET balance = balance - 100 WHERE id = 'A';\nUPDATE accounts SET balance = balance + 100 WHERE id = 'B';\n\nCOMMIT;  -- All-or-nothing: both succeed or both fail\n\n-- If power fails between UPDATE statements:\n-- Without ACID: A loses $100, B doesn't gain (data corruption!)\n-- With ACID (ROLLBACK): Both updates undo, data consistent"
+        },
+        {
+          "id": 8,
+          "question": "What is NORMALIZATION and why is it important?",
+          "answer": "Normalization organizes data to eliminate redundancy and improve integrity (1NF, 2NF, 3NF, BCNF). Benefits: reduces data duplication, prevents update anomalies, ensures consistency. Trade-off: more tables = more JOINs = slightly slower queries.",
+          "example": "-- NOT NORMALIZED (repeating groups)\nstudent_id | subject1 | grade1 | subject2 | grade2\n1          | Math     | A      | English  | B\n\n-- NORMALIZED (1NF)\nstudent_id | subject_id | grade\n1          | 1 (Math)   | A\n1          | 2 (English)| B\n\n-- Prevents: what if student takes 10 subjects? Need 10 columns!\n-- Improves: updating grade doesn't duplicate data"
+        },
+        {
+          "id": 9,
+          "question": "What is the difference between UNION, UNION ALL, and INTERSECT?",
+          "answer": "UNION combines results from two queries, removing duplicates (slower). UNION ALL combines and keeps duplicates (faster). INTERSECT returns only rows that appear in BOTH queries. Both queries must have same number and type of columns.",
+          "example": "-- Table 1: sales_2024, Table 2: sales_2023\n\n-- UNION: all sales, unique (removes duplicates)\nSELECT id, product FROM sales_2024\nUNION\nSELECT id, product FROM sales_2023;\n\n-- UNION ALL: faster, keeps duplicates\nSELECT id, product FROM sales_2024\nUNION ALL\nSELECT id, product FROM sales_2023;\n\n-- INTERSECT: only products sold in BOTH years\nSELECT product FROM sales_2024\nINTERSECT\nSELECT product FROM sales_2023;"
+        },
+        {
+          "id": 10,
+          "question": "What is a VIEW and what are its advantages?",
+          "answer": "A VIEW is a virtual table based on a SELECT query. Advantages: simplifies complex queries, provides data security (show only certain columns), logical abstraction, easier maintenance. Changes to underlying tables auto-reflect in views.",
+          "example": "-- Create view: hide sensitive columns\nCREATE VIEW employee_public AS\nSELECT id, name, department FROM employees\nWHERE status = 'active';\n\n-- Query the view like a table\nSELECT * FROM employee_public; -- never sees salary!\n\n-- View with aggregation\nCREATE VIEW sales_summary AS\nSELECT product, COUNT(*) total_sold, SUM(amount) revenue\nFROM orders\nGROUP BY product;\n\nSELECT * FROM sales_summary WHERE revenue > 10000;"
+        },
+        {
+          "id": 11,
+          "question": "What is a STORED PROCEDURE and when would you use one?",
+          "answer": "A stored procedure is precompiled SQL code stored in the database. Advantages: reusability, reduced network traffic (execute on server), encapsulates complex logic, better security, faster execution. Used for business logic, data validation, batch processing.",
+          "example": "-- Create stored procedure\nCREATE PROCEDURE transfer_money(\n  from_account INT,\n  to_account INT,\n  amount DECIMAL\n) AS\nBEGIN\n  BEGIN TRANSACTION;\n  UPDATE accounts SET balance = balance - amount WHERE id = from_account;\n  UPDATE accounts SET balance = balance + amount WHERE id = to_account;\n  COMMIT;\nEND;\n\n-- Execute\nCALL transfer_money(1, 2, 100);\n\n-- Advantages:\n-- 1. Logic executes on server (faster)\n-- 2. ACID transaction guaranteed\n-- 3. Reusable from multiple apps"
+        },
+        {
+          "id": 12,
+          "question": "What is a TRIGGER and provide a real-world example?",
+          "answer": "A TRIGGER is database code that automatically executes in response to events (INSERT, UPDATE, DELETE). Used for: enforcing business rules, maintaining audit logs, preventing invalid data, cascading updates. Fires BEFORE or AFTER the event.",
+          "example": "-- Auto-update updated_at timestamp\nCREATE TRIGGER update_user_timestamp\nBEFORE UPDATE ON users\nFOR EACH ROW\nBEGIN\n  SET NEW.updated_at = NOW();\nEND;\n\n-- Prevent salary decreases\nCREATE TRIGGER prevent_salary_decrease\nBEFORE UPDATE ON employees\nFOR EACH ROW\nBEGIN\n  IF NEW.salary < OLD.salary THEN\n    SIGNAL SQLSTATE '45000'\n    SET MESSAGE_TEXT = 'Salary cannot decrease!';\n  END IF;\nEND;\n\n-- Log all deletions to audit table\nCREATE TRIGGER log_employee_delete\nAFTER DELETE ON employees\nFOR EACH ROW\nBEGIN\n  INSERT INTO audit_log (action, old_data)\n  VALUES ('DELETE', OLD.id);\nEND;"
+        },
+        {
+          "id": 13,
+          "question": "What is a TRANSACTION and how do you handle ROLLBACK?",
+          "answer": "A transaction is a group of SQL statements that must complete as one atomic unit. BEGIN/START starts it, COMMIT saves changes, ROLLBACK undoes all changes. Use SAVEPOINT for partial rollback. Essential for multi-step operations to maintain data integrity.",
+          "example": "-- Transaction: transfer money\nBEGIN TRANSACTION;\nSAVEPOINT sp1;\n\n  UPDATE account_A SET balance = balance - 100;\n  UPDATE account_B SET balance = balance + 100;\n\nCOMMIT;  -- Success! Both updates saved\n\n-- With error handling:\nBEGIN TRANSACTION;\n  INSERT INTO orders VALUES (100, 1, 500);\n  \n  IF error THEN\n    ROLLBACK;  -- Undo all changes\n  ELSE\n    COMMIT;    -- Save changes\n  END IF;\n\n-- Savepoint for partial rollback:\nBEGIN;\n  INSERT INTO X VALUES (...);\n  SAVEPOINT sp1;\n  INSERT INTO Y VALUES (...);  -- This fails\n  ROLLBACK TO sp1;  -- Undo Y, keep X\n  COMMIT;  -- Only X is saved"
+        },
+        {
+          "id": 14,
+          "question": "What is query optimization and common techniques?",
+          "answer": "Query optimization improves execution speed. Techniques: add indexes on WHERE/JOIN columns, avoid SELECT *, use EXPLAIN to analyze plans, denormalize if needed, use LIMIT for pagination, rewrite subqueries as JOINs, cache results. Always profile before and after optimization.",
+          "example": "-- SLOW: full table scan\nSELECT * FROM users WHERE email = 'alice@gmail.com';\n\n-- FAST: add index\nCREATE INDEX idx_email ON users(email);\n\n-- SLOW: SELECT * unnecessary\nSELECT * FROM large_table LIMIT 100000;\n\n-- FAST: only needed columns\nSELECT id, name FROM large_table LIMIT 100000;\n\n-- SLOW: subquery\nSELECT * FROM users WHERE id IN (\n  SELECT user_id FROM orders WHERE amount > 1000\n);\n\n-- FAST: JOIN\nSELECT DISTINCT u.* FROM users u\nJOIN orders o ON u.id = o.user_id\nWHERE o.amount > 1000;\n\n-- Analyze query plan\nEXPLAIN SELECT * FROM users WHERE email = 'alice@gmail.com';"
+        },
+        {
+          "id": 15,
+          "question": "What is a WINDOW FUNCTION and provide examples?",
+          "answer": "Window functions perform calculations across rows related to current row (ROW_NUMBER, RANK, DENSE_RANK, LAG, LEAD, SUM/AVG OVER). Don't collapse rows like GROUP BY. Useful for: ranking, running totals, comparisons with previous row.",
+          "example": "-- Sample: sales data\nSELECT\n  employee_id, month, sales,\n  ROW_NUMBER() OVER (PARTITION BY employee_id ORDER BY month) as month_num,\n  RANK() OVER (ORDER BY sales DESC) as sales_rank,\n  LAG(sales) OVER (ORDER BY month) as prev_month_sales,\n  SUM(sales) OVER (PARTITION BY employee_id ORDER BY month ROWS BETWEEN 2 PRECEDING AND CURRENT ROW) as moving_sum\nFROM sales;\n\n-- Output per row (not collapsed like GROUP BY):\nemployee_id | month | sales | month_num | sales_rank | prev_month_sales | moving_sum\n1           | Jan   | 100   | 1         | 3          | NULL             | 100\n1           | Feb   | 150   | 2         | 1          | 100              | 250"
+        }
+      ]
+    },
+    {
+      "id": "typescript",
+      "name": "TypeScript",
+      "icon": "📘",
+      "color": "#3178c6",
+      "textColor": "#ffffff",
+      "questions": [
+        {
+          "id": 1,
+          "question": "What is TypeScript and why should you use it over JavaScript?",
+          "answer": "TypeScript is a superset of JavaScript that adds static type checking, compiled before runtime. Benefits: catch errors early (type safety), better IDE autocomplete, self-documenting code, refactoring safety, better for large projects. Compiled to plain JavaScript for browser execution.",
+          "example": "// JavaScript (error only caught at runtime)\nfunction add(a, b) {\n  return a + b;\n}\nadd('5', 3); // '53' - oops! Should be 8\n\n// TypeScript (error caught at compile time)\nfunction add(a: number, b: number): number {\n  return a + b;\n}\nadd('5', 3); // Error: Argument of type 'string' is not assignable to 'number'\nadd(5, 3);   // OK: returns 8"
+        },
+        {
+          "id": 2,
+          "question": "What are the basic types in TypeScript?",
+          "answer": "Basic types: string, number, boolean, any (skip type check), unknown (type-safe any), void (no return), null, undefined, never (unreachable code). Complex types: arrays, tuples, enums, unions. Arrays can be typed: string[], Array<number>.",
+          "example": "// Primitive types\nconst name: string = 'Alice';\nconst age: number = 25;\nconst active: boolean = true;\n\n// Arrays\nconst numbers: number[] = [1, 2, 3];\nconst items: Array<string> = ['a', 'b'];\n\n// Union (multiple types)\nconst id: string | number = 123;  // can be either\nid = 'ABC123';  // both valid\n\n// Tuple (fixed length, specific types)\nconst tuple: [string, number] = ['Alice', 25];\n\n// Enum\nenum Status { Active, Inactive, Pending }\nconst userStatus: Status = Status.Active;"
+        },
+        {
+          "id": 3,
+          "question": "What is an INTERFACE and how is it different from a TYPE?",
+          "answer": "Both define object shapes. Interface is extendable (can merge declarations), used for objects and contracts. Type is more flexible (union, primitives), used for any type. Performance: same (erased at compile time). Best practice: use interfaces for objects, types for unions.",
+          "example": "// Interface: object shape, extendable\ninterface User {\n  name: string;\n  email: string;\n}\n\ninterface User {\n  age: number;  // merges with above\n}\n\n// Type: any shape, unions\ntype ID = string | number;\ntype Response = { status: 200 } | { status: 404; error: string };\n\n// Classes implement interfaces\nclass Person implements User {\n  constructor(public name: string, public email: string, public age: number) {}\n}\n\n// Interface inheritance\ninterface Admin extends User {\n  role: string;\n}"
+        },
+        {
+          "id": 4,
+          "question": "What are GENERICS and how do you use them?",
+          "answer": "Generics allow you to write reusable code that works with different types. Defined with <T> placeholder. Used in functions, classes, interfaces. Essential for utility functions (Array, Promise) and custom data structures.",
+          "example": "// Generic function\nfunction identity<T>(value: T): T {\n  return value;\n}\n\nidentity('hello');      // T = string\nidentity(123);          // T = number\n\n// Generic with constraints\nfunction getProperty<T, K extends keyof T>(obj: T, key: K): T[K] {\n  return obj[key];  // K must be a key of T\n}\n\ngetProperty({ name: 'Alice', age: 25 }, 'name');  // OK\ngetProperty({ name: 'Alice', age: 25 }, 'email'); // Error!\n\n// Generic class\nclass Container<T> {\n  constructor(private value: T) {}\n  getValue(): T { return this.value; }\n}\n\nconst numContainer = new Container<number>(42);\nconst strContainer = new Container<string>('hello');"
+        },
+        {
+          "id": 5,
+          "question": "What is UTILITY TYPES in TypeScript? Give examples.",
+          "answer": "Built-in generic types that transform types: Partial (optional properties), Required (required properties), Readonly (immutable), Pick (select properties), Omit (exclude properties), Record, Exclude, Extract, ReturnType, InstanceType, etc.",
+          "example": "interface User {\n  name: string;\n  email: string;\n  age: number;\n}\n\n// Partial: all properties optional\ntype UserPartial = Partial<User>;\n// Result: { name?: string; email?: string; age?: number; }\n\n// Pick: select specific properties\ntype UserPreview = Pick<User, 'name' | 'email'>;\n// Result: { name: string; email: string; }\n\n// Omit: exclude properties\ntype UserPublic = Omit<User, 'email'>;\n// Result: { name: string; age: number; }\n\n// Record: map keys to values\ntype Permissions = Record<'read' | 'write' | 'delete', boolean>;\n// Result: { read: boolean; write: boolean; delete: boolean; }\n\n// ReturnType: extract function return type\nfunction getUser(): User { ... }\ntype UserType = ReturnType<typeof getUser>;  // User"
+        },
+        {
+          "id": 6,
+          "question": "What is a UNION TYPE vs INTERSECTION TYPE?",
+          "answer": "Union (|) means OR - accept one of multiple types. Intersection (&) means AND - must have all properties. Unions narrow down to specific type in code. Intersections combine all properties.",
+          "example": "// Union: can be either type\ntype Result = string | number;\nconst x: Result = 'hello';  // OK\nconst y: Result = 42;       // OK\nconst z: Result = true;     // Error!\n\n// After type guard (narrowing)\nfunction process(val: Result) {\n  if (typeof val === 'string') {\n    console.log(val.toUpperCase());  // safe: is string\n  } else {\n    console.log(val.toFixed(2));  // safe: is number\n  }\n}\n\n// Intersection: has properties of both types\ninterface A { x: number; }\ninterface B { y: string; }\ntype Combined = A & B;\n\nconst obj: Combined = {\n  x: 1,      // required by A\n  y: 'hello' // required by B\n};"
+        },
+        {
+          "id": 7,
+          "question": "What is STRICT MODE and why is it important?",
+          "answer": "Strict mode enables strict type checking in tsconfig.json (strict: true). Includes: noImplicitAny (no 'any' inference), strictNullChecks (null/undefined flagged), strictFunctionTypes (function param checking), etc. Catches more bugs at compile time.",
+          "example": "// With strict: false (lenient)\nfunction greet(name) {  // OK: implicitly 'any'\n  console.log(name);\n}\n\ngreet(null);  // OK: null allowed\ngreet();      // OK: undefined allowed\n\n// With strict: true (strict)\nfunction greet(name: string) {  // Required: explicit type\n  console.log(name);\n}\n\ngreet(null);  // Error: not assignable to string\ngreet();      // Error: missing argument\n\n// Better code with strict:\nfunction greet(name: string | null) {\n  if (name) {\n    console.log(name.toUpperCase());\n  }\n}"
+        },
+        {
+          "id": 8,
+          "question": "What are DECORATORS and how are they used in Angular?",
+          "answer": "Decorators are functions prefixed with @ that modify classes, methods, or properties. In Angular: @Component (defines component), @Input/@Output (data binding), @Injectable (dependency injection), @Directive, @Pipe. Enabled with experimentalDecorators: true in tsconfig.json.",
+          "example": "import { Component, Input, Output, EventEmitter } from '@angular/core';\n\n@Component({\n  selector: 'app-user',\n  template: '<p>{{name}}</p>'\n})\nexport class UserComponent {\n  @Input() name: string;      // receive data from parent\n  @Output() clicked = new EventEmitter<void>();\n  \n  onClick() {\n    this.clicked.emit();  // send event to parent\n  }\n}\n\n// Custom decorator\nfunction Logger() {\n  return function(target: any, key: string) {\n    const original = target[key];\n    target[key] = function(...args: any[]) {\n      console.log(`Calling ${key}`);\n      return original.apply(this, args);\n    };\n  };\n}\n\nclass MyClass {\n  @Logger()\n  myMethod() {}\n}"
+        },
+        {
+          "id": 9,
+          "question": "What is TYPE NARROWING and explain TYPE GUARDS?",
+          "answer": "Type narrowing refines a union type to a specific type within a code block. Type guards are techniques to narrow: typeof (primitives), instanceof (classes), truthiness, equality (===), custom predicates (is keyword).",
+          "example": "type Input = string | number | boolean;\n\nfunction process(input: Input) {\n  // Type guard: typeof\n  if (typeof input === 'string') {\n    console.log(input.toUpperCase());  // narrowed to string\n  } else if (typeof input === 'number') {\n    console.log(input.toFixed(2));  // narrowed to number\n  } else {\n    console.log(input ? 'truthy' : 'falsy');  // narrowed to boolean\n  }\n}\n\n// Custom type guard\nfunction isUser(obj: any): obj is User {\n  return obj && typeof obj.name === 'string';\n}\n\nfunction greet(obj: any) {\n  if (isUser(obj)) {\n    console.log(obj.name);  // safe: UserType confirmed\n  }\n}\n\n// instanceof for classes\nif (error instanceof TypeError) {\n  console.log('Type error:', error.message);\n}"
+        },
+        {
+          "id": 10,
+          "question": "What is DECLARATION MERGING and where is it used?",
+          "answer": "Declaration merging allows multiple declarations of the same interface/namespace to combine. Used for extending built-in types (Window, Array) or libraries. Interfaces and namespaces merge naturally; types don't merge.",
+          "example": "// Extend Window global\ndeclare global {\n  interface Window {\n    myApp: any;\n  }\n}\n\nwindow.myApp = { version: '1.0' };  // now allowed\n\n// Merge interfaces\ninterface Pet {\n  name: string;\n}\n\ninterface Pet {\n  age: number;\n}\n\nconst dog: Pet = { name: 'Buddy', age: 5 };  // has both properties\n\n// Merge namespace with interface\ninterface User {\n  id: number;\n}\n\nnamespace User {\n  export const roles = ['admin', 'user', 'guest'];\n}\n\nconst user: User = { id: 1 };\nconst role = User.roles[0];  // 'admin'"
+        },
+        {
+          "id": 11,
+          "question": "What are CONDITIONAL TYPES?",
+          "answer": "Conditional types allow you to select one type or another based on a condition. Syntax: T extends U ? X : Y. Used for making flexible type definitions that adapt based on input type. Essential for advanced utility types.",
+          "example": "// Simple conditional type\ntype IsString<T> = T extends string ? true : false;\n\ntype A = IsString<'hello'>;     // true\ntype B = IsString<number>;      // false\n\n// Practical example: extract array type\ntype Flatten<T> = T extends Array<infer U> ? U : T;\n\ntype Str = Flatten<string[]>;     // string\ntype Num = Flatten<number>;       // number\n\n// Real world: function return types\ntype Awaited<T> = T extends Promise<infer U> ? U : T;\n\ntype Result1 = Awaited<Promise<string>>;  // string\ntype Result2 = Awaited<number>;           // number"
+        },
+        {
+          "id": 12,
+          "question": "What is MAPPED TYPES?",
+          "answer": "Mapped types transform existing types into new types using [K in Keys] syntax. Used to generate similar types (getters, setters) from existing ones. Powerful for DRY (Don't Repeat Yourself) type definitions.",
+          "example": "interface User {\n  name: string;\n  email: string;\n  age: number;\n}\n\n// Make all properties readonly\ntype ReadonlyUser = {\n  readonly [K in keyof User]: User[K];\n};\n// Result: { readonly name: string; readonly email: string; readonly age: number; }\n\n// Make all properties getters\ntype Getters<T> = {\n  [K in keyof T as `get${Capitalize<string & K>}`]: () => T[K];\n};\n\ntype UserGetters = Getters<User>;\n// Result: { getName: () => string; getEmail: () => string; getAge: () => number; }\n\n// Make all properties nullable\ntype Nullable<T> = {\n  [K in keyof T]: T[K] | null;\n};\n\ntype NullableUser = Nullable<User>;\n// Result: { name: string | null; email: string | null; age: number | null; }"
+        }
+      ]
+    },
+    {
+      "id": "aws",
+      "name": "AWS",
+      "icon": "☁️",
+      "color": "#ff9900",
+      "textColor": "#000000",
+      "questions": [
+        {
+          "id": 1,
+          "question": "What is AWS and what are the main service categories?",
+          "answer": "AWS (Amazon Web Services) is cloud computing with 200+ services. Main categories: Compute (EC2, Lambda), Storage (S3, EBS), Database (RDS, DynamoDB), Networking (VPC, CloudFront), Security (IAM, KMS), Analytics (Redshift, Athena), AI/ML. Pay-as-you-go pricing.",
+          "example": "Key AWS Services:\n\nCompute:\n• EC2: Virtual machines\n• Lambda: Serverless functions\n• ECS/EKS: Container orchestration\n\nStorage:\n• S3: Object storage (files, images, backups)\n• EBS: Block storage (attached to EC2)\n• Glacier: Cold storage\n\nDatabase:\n• RDS: Relational (MySQL, PostgreSQL)\n• DynamoDB: NoSQL (key-value)\n• ElastiCache: In-memory caching\n\nNetworking:\n• VPC: Virtual private network\n• CloudFront: CDN (content delivery)\n• Route 53: DNS\n\nSecurity:\n• IAM: Identity & access management\n• KMS: Encryption\n• Secrets Manager: API key storage"
+        },
+        {
+          "id": 2,
+          "question": "What is EC2 and when would you use it?",
+          "answer": "EC2 (Elastic Compute Cloud) provides virtual machines (instances) that you configure and manage. Choose: instance type (t2.micro, m5.large), OS (Linux, Windows), storage, network. Use when you need full control, custom software, or can't use serverless. Auto Scaling for load balancing.",
+          "example": "Launch EC2 Instance:\n1. Choose AMI (Amazon Machine Image): Ubuntu 22.04\n2. Choose instance type: t2.micro (1GB RAM, 1 vCPU)\n3. Configure: VPC, subnet, security group\n4. Attach storage: 20GB EBS volume\n5. Create key pair for SSH access\n\nSSH into instance:\nssh -i key.pem ec2-user@44.233.45.67\n\nAuto Scaling:\n• Min 1, Max 5 instances\n• Scale up when CPU > 70%\n• Scale down when CPU < 30%\n• Load balancer distributes traffic\n\nCosts: ~$10/month for t2.micro (free tier eligible)"
+        },
+        {
+          "id": 3,
+          "question": "What is Lambda and what are its advantages?",
+          "answer": "Lambda runs code without managing servers. You upload code, AWS handles scaling, infrastructure. Pay only for execution time. Ideal for: background jobs, API endpoints, data processing, scheduled tasks. Triggers: API Gateway, S3, DynamoDB, CloudWatch, SNS.",
+          "example": "Node.js Lambda Function:\nconst handler = async (event, context) => {\n  console.log('Event:', event);\n  return {\n    statusCode: 200,\n    body: JSON.stringify({ message: 'Hello from Lambda!' })\n  };\n};\n\nmodule.exports = { handler };\n\nTrigger with API Gateway:\n• POST /api/process → Lambda executes\n• Event contains request data (body, querystring)\n• Response returned to client\n\nScheduled Task (CloudWatch Events):\n• Run every day at 2 AM\n• Backup database, clean temp files\n• No servers, no monitoring\n\nCosts: Free tier 1M requests/month + 400,000 GB-seconds\nThen: $0.20 per 1M requests, $0.0000166667 per GB-second"
+        },
+        {
+          "id": 4,
+          "question": "What is S3 and what are common use cases?",
+          "answer": "S3 (Simple Storage Service) stores files (objects) in buckets with unlimited storage. Highly available, durable (99.99%), scalable. Use cases: website hosting, file backups, log storage, image/video hosting, CDN origin. Permissions: public/private, IAM policies.",
+          "example": "S3 Bucket Operations:\n\nCreate bucket:\naws s3 mb s3://my-app-bucket\n\nUpload file:\naws s3 cp app.zip s3://my-app-bucket/\n\nMake file public:\naws s3 cp photo.jpg s3://my-app-bucket/ --acl public-read\n\nList contents:\naws s3 ls s3://my-app-bucket/\n\nVersioning & Lifecycle:\n• Enable versioning: keep history\n• Move old files to Glacier (cheap)\n• Auto-delete after 90 days\n\nStatic Website Hosting:\n• S3 bucket → index.html\n• CloudFront CDN → caching\n• Route 53 → custom domain\n\nCosts: $0.023 per GB stored\nTransfer out: $0.09 per GB (expensive!)"
+        },
+        {
+          "id": 5,
+          "question": "What is RDS and how is it different from self-managed databases?",
+          "answer": "RDS (Relational Database Service) is managed MySQL, PostgreSQL, Oracle, SQL Server. AWS handles: patching, backups, replication, high availability. You manage: schema, queries, users. Easier than EC2 + Database but less control. Multi-AZ for disaster recovery.",
+          "example": "RDS PostgreSQL Setup:\n1. Create DB instance: postgres 14.5\n2. Instance class: db.t3.micro (1GB RAM)\n3. Storage: 20GB SSD, auto-scaling enabled\n4. Multi-AZ: Yes (standby in different AZ)\n5. Backup: daily, 7 day retention\n\nConnect:\npsql -h postgres-db.c34f5g3d4kl.us-east-1.rds.amazonaws.com \\\n     -U admin -d mydb\n\nAdvantages vs Self-Managed:\n✓ Automated backups & snapshots\n✓ Automatic failover (Multi-AZ)\n✓ Read replicas for scaling reads\n✓ Automatic patching (zero downtime)\n✓ Monitoring & alerts included\n✗ Less control (no root access)\n✗ Higher cost than EC2\n\nCosts: ~$30/month for db.t3.micro"
+        },
+        {
+          "id": 6,
+          "question": "What is DynamoDB and when would you use it over RDS?",
+          "answer": "DynamoDB is managed NoSQL (key-value/document) database. Serverless, auto-scaling, millisecond latency. Use when: massive scale (millions QPS), variable load, simple queries. NOT suitable for: complex JOINs, transactions, flexible schema. Pay for: read/write capacity or on-demand.",
+          "example": "DynamoDB vs RDS:\n\nUSE DYNAMODB when:\n• Massive scale (millions users)\n• Simple queries (get by ID, scan)\n• Unpredictable traffic (auto-scales)\n• Real-time analytics\n• Mobile apps (offline sync)\n\nUSE RDS when:\n• Complex business logic (JOINs)\n• Need ACID transactions\n• Relational data (users, orders)\n• Consistent, predictable load\n• Full SQL needed\n\nDynamoDB Table Example:\nTable: Users\nPartition Key: user_id\nSort Key: created_at\n\nQueries:\n// Get user by ID (fast!)\nget({ user_id: '123' })\n\n// Get user's posts by date\nquery({ user_id: '123', created_at > '2024-01-01' })\n\n// Scan all (slow!)\nscan() -- avoid on large tables\n\nCosts: On-demand ($1.25/M reads, $6.25/M writes)\nor Provisioned (e.g., $0.27/hour for 100 RCU)"
+        },
+        {
+          "id": 7,
+          "question": "What is IAM and why is it critical for security?",
+          "answer": "IAM (Identity & Access Management) controls who can access what in AWS. Create users, groups, roles with policies (JSON). Principle of least privilege: give minimum permissions needed. MFA for extra security. Enables: auditability, cost control, security.",
+          "example": "IAM Best Practices:\n\n1. Never use root account for daily work\n2. Create IAM user for each person\n3. Use groups for permissions\n4. Attach policy example:\n{\n  \"Version\": \"2012-10-17\",\n  \"Statement\": [\n    {\n      \"Effect\": \"Allow\",\n      \"Action\": \"s3:GetObject\",\n      \"Resource\": \"arn:aws:s3:::bucket-name/*\"\n    }\n  ]\n}\n\n5. Enable MFA for root & all users\n6. Use roles for applications (instead of access keys)\n7. Rotate access keys every 90 days\n8. Use AWS Secrets Manager for API keys\n9. Enable CloudTrail to audit access\n10. Review permissions quarterly\n\nRole for Lambda:\n• Create execution role with permissions\n• Assume role policy allows Lambda to use it\n• Attach policy (S3, DynamoDB access, logs)\n• Lambda assumes role automatically"
+        },
+        {
+          "id": 8,
+          "question": "What is VPC and why do you need it?",
+          "answer": "VPC (Virtual Private Cloud) is your isolated network in AWS. Configure: subnets (public/private), route tables, internet gateway, NAT gateway, security groups, NACLs. Use for: multi-tier architecture, security, network segmentation, hybrid clouds.",
+          "example": "VPC Architecture:\n\nVPC: 10.0.0.0/16\n├── Public Subnet (10.0.1.0/24)\n│   ├── Internet Gateway (IGW)\n│   └── EC2 (web server) - has public IP\n├── Private Subnet (10.0.2.0/24)\n│   └── RDS Database (no internet access)\n└── NAT Gateway (in public subnet)\n    └── EC2 (app server) - accesses internet via NAT\n\nSecurity Groups (firewall):\n• Inbound: Allow port 443 (HTTPS)\n• Outbound: Allow all\n\nNetwork ACLs:\n• Stateless rules\n• Apply to subnets\n\nRoute Table (Public):\nDestination: 0.0.0.0/0 → Target: IGW\n(send internet traffic to IGW)\n\nRoute Table (Private):\nDestination: 0.0.0.0/0 → Target: NAT Gateway\n(send traffic via NAT, safe)"
+        },
+        {
+          "id": 9,
+          "question": "What is CloudFront and how does it improve performance?",
+          "answer": "CloudFront is AWS CDN (Content Delivery Network) that caches content at 600+ edge locations worldwide. Users download from nearest edge (low latency). Reduces origin server load. Integrates with S3, EC2, ALB. DDoS protection included.",
+          "example": "CloudFront Setup:\n\n1. Create distribution\n2. Origin: S3 bucket or EC2\n3. Behavior:\n   - Path: /api/* → origin (no cache)\n   - Path: /*.{js,css,jpg} → cache 365 days\n   - Others → cache 3600 seconds\n4. CNAME: cdn.example.com\n5. SSL certificate (ACM)\n\nCaching Logic:\n• First user requests image.jpg\n• CloudFront checks edge location\n• Not found: fetch from S3, cache it\n• Next users: served from edge (fast!)\n\nInvalidation:\n• Change image.jpg, create invalidation\n• Purge from all edges\n• Costs: $0.005 per path invalidated\n\nBenefits:\n✓ 50-90% faster for users globally\n✓ Reduces origin bandwidth costs\n✓ DDoS protection (AWS Shield)\n✓ WAF integration (block malicious)\n✓ Access logs, real-time metrics\n\nCosts: $0.085 per GB transferred (varies by region)"
+        },
+        {
+          "id": 10,
+          "question": "What is Auto Scaling and how do you implement it?",
+          "answer": "Auto Scaling automatically increases/decreases EC2 instances based on demand (CPU, memory, custom metrics). Uses launch templates, target groups, scaling policies. Ensures: high availability, optimal costs, better performance.",
+          "example": "Auto Scaling Group Setup:\n\n1. Create Launch Template:\n   - AMI: Ubuntu 22.04\n   - Instance type: t3.micro\n   - Security group, key pair\n   - User data script (install app)\n\n2. Create Auto Scaling Group:\n   - Min instances: 2\n   - Max instances: 10\n   - Desired capacity: 3\n   - VPC, subnets (multi-AZ)\n\n3. Scaling Policy (Target Tracking):\n   - Target: CPU = 70%\n   - If > 70% for 3 minutes → add instance\n   - If < 30% for 5 minutes → remove instance\n\n4. Load Balancer:\n   - ALB distributes traffic\n   - Health check every 30 sec\n   - Unhealthy instance → terminate, new one launched\n\nCLI Example:\naws autoscaling set-desired-capacity \\\n  --auto-scaling-group-name web-asg \\\n  --desired-capacity 5\n\nBenefits:\n✓ Handles traffic spikes\n✓ Reduces costs during low traffic\n✓ Self-healing (replaces failed instances)\n✓ Zero downtime deployments"
+        },
+        {
+          "id": 11,
+          "question": "What is CloudWatch and how do you use it for monitoring?",
+          "answer": "CloudWatch monitors AWS resources and applications. Collects metrics (CPU, memory, requests), logs streams, and alarms. Set thresholds to trigger actions (SNS, Lambda, Auto Scaling). Dashboard for visualization. Essential for operational excellence.",
+          "example": "CloudWatch Monitoring:\n\n1. Metrics (collected automatically):\n   - EC2: CPUUtilization, NetworkIn, DiskReadBytes\n   - Lambda: Duration, Errors, Throttles\n   - RDS: CPUUtilization, DatabaseConnections\n\n2. Create Alarm:\n   - Metric: EC2 CPUUtilization\n   - Threshold: > 80% for 5 minutes\n   - Action: Send email, trigger Lambda, scale up\n\n3. CloudWatch Logs:\n   - EC2, Lambda, RDS send logs\n   - Search logs: filter by error, timestamp\n   - Insights queries (like SQL)\n\n4. Dashboard:\n   - Visualize metrics in real-time\n   - Add custom metrics (app performance)\n   - Drill down for troubleshooting\n\n5. Custom Metrics (from application):\nconst cloudwatch = new AWS.CloudWatch();\ncloudwatch.putMetricData({\n  Namespace: 'MyApp',\n  MetricData: [{\n    MetricName: 'ProcessingTime',\n    Value: 250,  // milliseconds\n    Unit: 'Milliseconds'\n  }]\n});\n\nCosts: $0.10 per custom metric\n$0.30 per alarm"
+        },
+        {
+          "id": 13,
+          "question": "What are AGGREGATE FUNCTIONS in SQL?",
+          "answer": "Aggregate functions compute across multiple rows: COUNT (number of rows), SUM (total), AVG (average), MIN/MAX (smallest/largest). Always used with GROUP BY or on entire table. Return single value. NULL values ignored (except COUNT(*)).",
+          "example": "-- Aggregate functions\nSELECT\n  COUNT(*) as total_orders,\n  SUM(amount) as total_sales,\n  AVG(amount) as avg_order,\n  MIN(amount) as smallest,\n  MAX(amount) as largest\nFROM orders;\n\n-- With GROUP BY\nSELECT\n  customer_id,\n  COUNT(*) as order_count,\n  SUM(amount) as total_spent\nFROM orders\nGROUP BY customer_id\nORDER BY total_spent DESC;"
+        },
+        {
+          "id": 14,
+          "question": "What is CASE statement in SQL?",
+          "answer": "CASE statement provides conditional logic in queries. CASE WHEN condition THEN value format. Use for: categorizing data, computing conditional values, custom sorting. Equivalent to if/else in programming.",
+          "example": "-- Simple CASE\nSELECT\n  name,\n  CASE\n    WHEN salary >= 100000 THEN 'High'\n    WHEN salary >= 50000 THEN 'Medium'\n    ELSE 'Low'\n  END as salary_range\nFROM employees;\n\n-- Create custom columns for reports\nSELECT\n  customer_id,\n  CASE\n    WHEN order_count > 10 THEN 'VIP'\n    WHEN order_count > 5 THEN 'Loyal'\n    ELSE 'Standard'\n  END as customer_tier\nFROM customers;"
+        },
+        {
+          "id": 15,
+          "question": "What is the DISTINCT keyword and COUNT(DISTINCT)?",
+          "answer": "DISTINCT removes duplicate rows from results. COUNT(DISTINCT column) counts unique values. Useful for: finding unique customers, checking data cardinality, removing duplicates from reports."
+        },
+        {
+          "id": 16,
+          "question": "What are CONSTRAINTS in SQL?",
+          "answer": "Constraints enforce data integrity: PRIMARY KEY (unique identifier), FOREIGN KEY (referential integrity), UNIQUE (no duplicates), NOT NULL (required), CHECK (custom validation), DEFAULT (default value). Defined at column or table level.",
+          "example": "CREATE TABLE users (\n  id INT PRIMARY KEY AUTO_INCREMENT,\n  email VARCHAR(100) UNIQUE NOT NULL,\n  age INT CHECK (age >= 18),\n  dept_id INT FOREIGN KEY REFERENCES departments(id),\n  status VARCHAR(20) DEFAULT 'active',\n  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP\n);\n\n-- Constraints prevent invalid data:\nINSERT INTO users (email, age) VALUES ('alice@gmail.com', 16);  -- FAILS (age < 18)\nINSERT INTO users (email) VALUES ('bob@gmail.com');  -- FAILS (age NOT NULL missing)"
+        }
+      ]
+    },
+    {
+      "id": "typescript-advanced",
+      "name": "TypeScript Advanced",
+      "icon": "📗",
+      "color": "#3178c6",
+      "textColor": "#ffffff",
+      "questions": [
+        {
+          "id": 1,
+          "question": "What are TEMPLATE LITERAL TYPES?",
+          "answer": "Template literal types use string template syntax to create type unions. Powerful for type-safe paths, variations of strings, discriminating unions. Combined with `as const` for precise string types.",
+          "example": "type Method = 'GET' | 'POST' | 'PUT' | 'DELETE';\ntype Path = `/api/${'users' | 'posts' | 'comments'}`;\n\ntype ApiRoute = `${Method} ${Path}`;\n// Creates: 'GET /api/users' | 'GET /api/posts' | ... (24 combinations)\n\nfunction request(route: ApiRoute) { }\nrequest('GET /api/users');     // ✓ OK\nrequest('PATCH /api/users');   // ✗ Error\n\n// Database column types\ntype Column = 'name' | 'email' | 'age';\ntype ColumnGetters = `get${Capitalize<Column>}`;\n// Result: 'getName' | 'getEmail' | 'getAge'"
+        },
+        {
+          "id": 2,
+          "question": "What is SATISFIES keyword in TypeScript 4.9+?",
+          "answer": "satisfies checks that a value satisfies a type without changing its inferred type. Different from `as` which changes the type. Validates structure while preserving literal types and inference.",
+          "example": "// Without satisfies: loses literal types\nconst config = {\n  api: 'https://api.example.com',\n  timeout: 5000\n} as const;\ntype Config = typeof config;  // never (weird!)\n\n// With satisfies: preserves types\nconst config = {\n  api: 'https://api.example.com',\n  timeout: 5000\n} satisfies { api: string; timeout: number };\n// Type is: { api: 'https://api.example.com'; timeout: 5000 }\n\n// Validates palette without losing color literals\ntype Palette = Record<'bg' | 'fg', string>;\nconst palette = {\n  bg: '#fff',\n  fg: '#000'\n} satisfies Palette;\n// palette['bg'] is still '#fff' (literal), not string"
+        },
+        {
+          "id": 3,
+          "question": "What is CONST TYPE PARAMETERS in TypeScript 5.0+?",
+          "answer": "const type parameters lock generic types to their most specific literal types. Prevents widening. Useful for tuple builders, precise metadata, type-level functions."
+        },
+        {
+          "id": 4,
+          "question": "What are MODULE DECLARATION and TYPE-ONLY IMPORTS?",
+          "answer": "Module declaration extends global types or declares external modules. Type-only imports (import type {}) are removed at runtime, reducing bundle size. Use for: declaration files (.d.ts), extending libs, tree-shaking.",
+          "example": "// Extend global Window\ndeclare global {\n  interface Window {\n    gtag: any;\n    myApp: { version: string };\n  }\n}\n\n// Type-only imports (removed from compiled JS)\nimport type { User } from './types';\nimport { parse } from 'uuid';  // included in JS\n\n// Declare module\ndeclare module 'express' {\n  interface Request {\n    user?: User;\n  }\n}\n\n// Now: req.user is typed!"
+        }
+      ]
+    },
+    {
+      "id": "aws-advanced",
+      "name": "AWS Advanced",
+      "icon": "☁️",
+      "color": "#ff9900",
+      "textColor": "#000000",
+      "questions": [
+        {
+          "id": 1,
+          "question": "What is SNS and SQS and what's the difference?",
+          "answer": "SNS (Simple Notification Service) is publish-subscribe messaging. SQS (Simple Queue Service) is message queuing. SNS: one message → many subscribers (fanout). SQS: producer → queue → consumer (point-to-point). Both for decoupling systems.",
+          "example": "SNS (Pub/Sub):\n• Topic: 'order-created'\n• Publishers: OrderService\n• Subscribers: EmailService, SMSService, AnalyticsService\n• All get the same message simultaneously\n\nSQS (Queue):\n• Queue: 'email-queue'\n• Producer: sends message\n• Consumer: polls queue, processes\n• Message deleted after processing\n• Multiple consumers: distribute load\n\nCombined Pattern:\n• SNS: order-created event\n• Fanout to SQS queues\n• Email service polls email-queue\n• SMS service polls sms-queue\n• Independent scaling"
+        },
+        {
+          "id": 2,
+          "question": "What is CodeDeploy and CI/CD pipeline on AWS?",
+          "answer": "CodeDeploy automates EC2 deployments. CodePipeline orchestrates: commit → build → deploy. CodeBuild compiles and packages. Enables: zero-downtime deployments, automated testing, rollback on failure.",
+          "example": "CI/CD Pipeline:\n1. Developer pushes to GitHub\n2. CodePipeline triggered\n3. CodeBuild:\n   - npm install && npm test\n   - Build artifacts\n4. CodeDeploy to EC2:\n   - Stop app\n   - Copy new code\n   - Start app\n5. All auto, minutes to production\n\nZero-Downtime (Blue-Green):\n• Blue: current version (running)\n• Green: new version (staging)\n• Test green\n• Switch traffic\n• Quick rollback if issues"
+        },
+        {
+          "id": 3,
+          "question": "What is API Gateway and how do you secure it?",
+          "answer": "API Gateway accepts HTTP requests, routes to Lambda/EC2, returns responses. Handles: routing, throttling, CORS, auth, logging, caching. Secure with: API keys, authorization (Lambda), WAF, VPC link, mTLS.",
+          "example": "API Gateway Setup:\n1. Create REST API\n2. Define resource: POST /users\n3. Integration: Lambda function\n4. Method Request: require API key\n5. Response: 200, 400, 500\n\nAuthorization:\n• API Key: X-API-Key header\n• Lambda authorizer: custom validation\n• JWT: validate bearer token\n• AWS IAM: Signature Version 4\n\nWAF Integration:\n• Block malicious IPs\n• Rate limiting: 2000 req/5 min\n• SQL injection detection\n• XSS protection\n\nCORS:\nMethod Response:\n- Access-Control-Allow-Origin: *\n- Access-Control-Allow-Methods: GET, POST"
+        }
+      ]
     }
   ]
 }
