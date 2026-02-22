@@ -1,0 +1,1666 @@
+{
+  "topics": [
+    {
+      "id": "javascript",
+      "name": "JavaScript",
+      "icon": "⚡",
+      "color": "#f7df1e",
+      "textColor": "#1a1a1a",
+      "questions": [
+        {
+          "id": 1,
+          "question": "What is JavaScript and why is it used?",
+          "answer": "JavaScript is a lightweight, interpreted programming language that runs in the browser and on servers (via Node.js). It makes web pages interactive — like form validation, animations, and dynamic content updates.",
+          "example": "// Simple example\ndocument.getElementById('btn').addEventListener('click', function() {\n  alert('Hello! JavaScript is working!');\n});"
+        },
+        {
+          "id": 2,
+          "question": "What is the difference between var, let, and const?",
+          "answer": "var is function-scoped and can be re-declared. let is block-scoped and can be updated but not re-declared. const is block-scoped and cannot be updated or re-declared after assignment.",
+          "example": "var x = 10;    // function-scoped, can re-declare\nlet y = 20;    // block-scoped, can update\nconst z = 30;  // block-scoped, cannot change\n\nif(true) {\n  var x = 100;  // same x (function scope)\n  let y = 200;  // different y (block scope)\n}"
+        },
+        {
+          "id": 3,
+          "question": "What is hoisting in JavaScript?",
+          "answer": "Hoisting is JavaScript's behavior of moving variable and function declarations to the top of their scope before execution. var variables are hoisted as 'undefined', while let/const are hoisted but not initialized (temporal dead zone).",
+          "example": "console.log(name); // undefined (hoisted)\nvar name = 'John';\n\ngreet(); // Works! Function is fully hoisted\nfunction greet() {\n  console.log('Hello!');\n}"
+        },
+        {
+          "id": 4,
+          "question": "What is a closure in JavaScript?",
+          "answer": "A closure is a function that remembers variables from its outer scope even after the outer function has finished executing. It's like the inner function carries a backpack of variables from where it was created.",
+          "example": "function counter() {\n  let count = 0;  // outer variable\n  return function() {\n    count++;        // inner function remembers count\n    return count;\n  };\n}\nconst inc = counter();\nconsole.log(inc()); // 1\nconsole.log(inc()); // 2"
+        },
+        {
+          "id": 5,
+          "question": "What is the difference between == and ===?",
+          "answer": "== (loose equality) compares values after type conversion. === (strict equality) compares both value AND type without conversion. Always prefer === to avoid unexpected bugs.",
+          "example": "console.log(1 == '1');   // true (type coercion)\nconsole.log(1 === '1');  // false (different types)\nconsole.log(null == undefined);  // true\nconsole.log(null === undefined); // false"
+        },
+        {
+          "id": 6,
+          "question": "What are arrow functions and how are they different from regular functions?",
+          "answer": "Arrow functions are a shorter syntax for writing functions. Key difference: they don't have their own 'this' — they inherit 'this' from the surrounding context. Great for callbacks.",
+          "example": "// Regular function\nfunction add(a, b) { return a + b; }\n\n// Arrow function\nconst add = (a, b) => a + b;\n\n// 'this' difference\nconst obj = {\n  name: 'John',\n  greet: function() {\n    setTimeout(() => {\n      console.log(this.name); // 'John' - inherits this\n    }, 100);\n  }\n};"
+        },
+        {
+          "id": 7,
+          "question": "What is event bubbling and event capturing?",
+          "answer": "Event bubbling: when an event fires on an element, it bubbles UP through its parent elements. Event capturing: event flows DOWN from the root to the target. You can stop bubbling using event.stopPropagation().",
+          "example": "document.getElementById('child').addEventListener('click', (e) => {\n  console.log('Child clicked');\n  e.stopPropagation(); // stops bubbling up\n});\ndocument.getElementById('parent').addEventListener('click', () => {\n  console.log('Parent clicked'); // won't fire if stopped\n});"
+        },
+        {
+          "id": 8,
+          "question": "What is a Promise in JavaScript?",
+          "answer": "A Promise represents the eventual result of an async operation. It can be in 3 states: Pending (waiting), Fulfilled (success), or Rejected (error). It avoids 'callback hell' and makes async code readable.",
+          "example": "const fetchData = new Promise((resolve, reject) => {\n  setTimeout(() => resolve('Data received!'), 1000);\n});\n\nfetchData\n  .then(data => console.log(data))  // 'Data received!'\n  .catch(err => console.log(err));"
+        },
+        {
+          "id": 9,
+          "question": "What is async/await?",
+          "answer": "async/await is syntactic sugar over Promises that makes async code look synchronous and readable. An async function always returns a Promise. await pauses execution until the Promise resolves.",
+          "example": "async function getUser() {\n  try {\n    const response = await fetch('/api/user'); // waits here\n    const user = await response.json();\n    console.log(user);\n  } catch (error) {\n    console.log('Error:', error);\n  }\n}\ngetUser();"
+        },
+        {
+          "id": 10,
+          "question": "What is the event loop in JavaScript?",
+          "answer": "JavaScript is single-threaded. The event loop manages async operations by checking the call stack and callback queue. When the stack is empty, it picks tasks from the queue. This is how JS handles async without blocking.",
+          "example": "console.log('1. Start');\nsetTimeout(() => console.log('3. Timeout'), 0);\nPromise.resolve().then(() => console.log('2. Promise'));\nconsole.log('4. End');\n// Output: 1, 4, 2, 3\n// Microtasks (Promises) run before macrotasks (setTimeout)"
+        },
+        {
+          "id": 11,
+          "question": "What is prototypal inheritance?",
+          "answer": "Every JavaScript object has a hidden __proto__ link pointing to another object (its prototype). When you access a property, JS looks up the prototype chain until it finds it or reaches null. This is how inheritance works in JS.",
+          "example": "function Animal(name) { this.name = name; }\nAnimal.prototype.speak = function() {\n  return `${this.name} makes a sound`;\n};\nconst dog = new Animal('Rex');\nconsole.log(dog.speak()); // 'Rex makes a sound'\nconsole.log(dog.__proto__ === Animal.prototype); // true"
+        },
+        {
+          "id": 12,
+          "question": "What is the difference between null and undefined?",
+          "answer": "undefined means a variable is declared but not assigned a value (JS sets it automatically). null is an intentional assignment of 'no value' — you explicitly set something to null to indicate emptiness.",
+          "example": "let a;           // undefined - JS assigned it\nlet b = null;    // null - you chose to make it empty\n\nconsole.log(typeof undefined); // 'undefined'\nconsole.log(typeof null);      // 'object' (historical JS bug)"
+        },
+        {
+          "id": 13,
+          "question": "What are higher-order functions?",
+          "answer": "Higher-order functions either take a function as an argument or return a function. They enable functional programming patterns. Common examples: map(), filter(), reduce().",
+          "example": "const numbers = [1, 2, 3, 4, 5];\n\n// map - transforms each element\nconst doubled = numbers.map(n => n * 2); // [2,4,6,8,10]\n\n// filter - keeps matching elements\nconst evens = numbers.filter(n => n % 2 === 0); // [2,4]\n\n// reduce - accumulates to one value\nconst sum = numbers.reduce((acc, n) => acc + n, 0); // 15"
+        },
+        {
+          "id": 14,
+          "question": "What is destructuring in JavaScript?",
+          "answer": "Destructuring lets you extract values from arrays or properties from objects into individual variables in a clean, readable way.",
+          "example": "// Object destructuring\nconst user = { name: 'Alice', age: 25, city: 'NYC' };\nconst { name, age } = user;\nconsole.log(name); // 'Alice'\n\n// Array destructuring\nconst [first, second, ...rest] = [1, 2, 3, 4, 5];\nconsole.log(first); // 1\nconsole.log(rest);  // [3, 4, 5]"
+        },
+        {
+          "id": 15,
+          "question": "What is the spread operator (...)?",
+          "answer": "The spread operator expands an iterable (array/object) into individual elements. It's used to copy arrays/objects, merge them, or pass array items as function arguments.",
+          "example": "// Merge objects\nconst a = { x: 1 };\nconst b = { y: 2 };\nconst merged = { ...a, ...b }; // { x:1, y:2 }\n\n// Copy array\nconst arr = [1, 2, 3];\nconst copy = [...arr, 4, 5]; // [1,2,3,4,5]\n\n// Function args\nMath.max(...[1, 5, 3]); // 5"
+        },
+        {
+          "id": 16,
+          "question": "What is the difference between call(), apply(), and bind()?",
+          "answer": "All three let you set 'this' for a function. call() invokes immediately with args listed. apply() invokes immediately with args as array. bind() returns a new function with 'this' set, to call later.",
+          "example": "function greet(greeting) {\n  return `${greeting}, ${this.name}`;\n}\nconst user = { name: 'Bob' };\n\ngreet.call(user, 'Hello');      // 'Hello, Bob'\ngreet.apply(user, ['Hi']);      // 'Hi, Bob'\nconst bound = greet.bind(user); // returns new fn\nbound('Hey');                   // 'Hey, Bob'"
+        },
+        {
+          "id": 17,
+          "question": "What is memoization?",
+          "answer": "Memoization is an optimization technique where you cache the results of expensive function calls and return the cached result when the same inputs occur again. It trades memory for speed.",
+          "example": "function memoize(fn) {\n  const cache = {};\n  return function(...args) {\n    const key = JSON.stringify(args);\n    if (cache[key]) return cache[key]; // return cached\n    cache[key] = fn(...args);          // compute & store\n    return cache[key];\n  };\n}\nconst slowFn = memoize(n => n * n);\nslowFn(4); // computes: 16\nslowFn(4); // from cache: 16"
+        },
+        {
+          "id": 18,
+          "question": "What are generator functions?",
+          "answer": "Generator functions use function* and yield. They can pause and resume execution, producing values one at a time. Unlike regular functions they don't run to completion immediately.",
+          "example": "function* counter() {\n  let i = 0;\n  while (true) {\n    yield i++;  // pause here each time\n  }\n}\nconst gen = counter();\nconsole.log(gen.next().value); // 0\nconsole.log(gen.next().value); // 1\nconsole.log(gen.next().value); // 2"
+        },
+        {
+          "id": 19,
+          "question": "What is a WeakMap and when would you use it?",
+          "answer": "WeakMap holds key-value pairs where keys must be objects. Unlike Map, it holds weak references — if the key object is garbage collected, the entry is automatically removed. Good for storing private data linked to objects.",
+          "example": "const privateData = new WeakMap();\nfunction createUser(name) {\n  const user = {};\n  privateData.set(user, { name, password: '1234' });\n  return user;\n}\nconst u = createUser('Alice');\nconsole.log(privateData.get(u).name); // 'Alice'"
+        },
+        {
+          "id": 20,
+          "question": "What is the difference between synchronous and asynchronous code?",
+          "answer": "Synchronous code runs line by line — each line waits for the previous to finish. Asynchronous code doesn't block — it starts a task and moves on, processing the result when it's ready (via callbacks, promises, async/await).",
+          "example": "// Synchronous - blocks\nconsole.log('1');\nconst result = heavyCalc(); // waits here\nconsole.log('2');\n\n// Asynchronous - non-blocking\nconsole.log('1');\nfetch('/api').then(r => console.log('3 - data'));\nconsole.log('2'); // runs before fetch completes\n// Output: 1, 2, 3"
+        },
+        {
+          "id": 21,
+          "question": "What is localStorage vs sessionStorage?",
+          "answer": "Both store key-value data in the browser. localStorage persists even after closing the browser (no expiry). sessionStorage is cleared when the tab/session closes. Both store strings only.",
+          "example": "// localStorage - persists\nlocalStorage.setItem('user', 'Alice');\nconsole.log(localStorage.getItem('user')); // 'Alice'\n\n// sessionStorage - tab only\nsessionStorage.setItem('token', 'abc123');\nconsole.log(sessionStorage.getItem('token')); // 'abc123'\n// Cleared when tab closes"
+        },
+        {
+          "id": 22,
+          "question": "What is JSON and how do you use it in JavaScript?",
+          "answer": "JSON (JavaScript Object Notation) is a lightweight data format for storing and exchanging data. JSON.stringify() converts JS object to JSON string. JSON.parse() converts JSON string back to JS object.",
+          "example": "const user = { name: 'Alice', age: 25 };\n\n// Convert to JSON string\nconst json = JSON.stringify(user);\n// '{\"name\":\"Alice\",\"age\":25}'\n\n// Convert back to object\nconst parsed = JSON.parse(json);\nconsole.log(parsed.name); // 'Alice'"
+        },
+        {
+          "id": 23,
+          "question": "What is the DOM and how do you manipulate it?",
+          "answer": "DOM (Document Object Model) is a tree structure representing the HTML page. JavaScript can read and modify DOM elements to change the page dynamically — add/remove elements, change styles, update content.",
+          "example": "// Select elements\nconst el = document.getElementById('title');\nconst items = document.querySelectorAll('.item');\n\n// Modify\nel.textContent = 'New Title';\nel.style.color = 'red';\n\n// Create & add\nconst div = document.createElement('div');\ndiv.textContent = 'New element';\ndocument.body.appendChild(div);"
+        },
+        {
+          "id": 24,
+          "question": "What is debouncing and throttling?",
+          "answer": "Debouncing delays function execution until after a pause (e.g., search input — wait until user stops typing). Throttling limits function calls to once per interval (e.g., scroll/resize handler). Both optimize performance.",
+          "example": "// Debounce - waits for pause\nfunction debounce(fn, delay) {\n  let timer;\n  return function(...args) {\n    clearTimeout(timer);\n    timer = setTimeout(() => fn(...args), delay);\n  };\n}\nconst search = debounce(query => fetchResults(query), 300);\ninput.addEventListener('input', e => search(e.target.value));"
+        },
+        {
+          "id": 25,
+          "question": "What are ES6 modules (import/export)?",
+          "answer": "ES6 modules allow splitting code into separate files. export makes functions/variables available. import brings them in. Named exports can export multiple things; default export exports one main thing per file.",
+          "example": "// math.js - named exports\nexport const add = (a, b) => a + b;\nexport const PI = 3.14;\n\n// utils.js - default export\nexport default function greet(name) {\n  return `Hello, ${name}`;\n}\n\n// main.js - import\nimport greet from './utils.js';\nimport { add, PI } from './math.js';"
+        },
+        {
+          "id": 26,
+          "question": "What is 'this' keyword in JavaScript?",
+          "answer": "'this' refers to the object that is executing the current function. Its value depends on HOW the function is called. In a method, it's the object. In a regular function, it's the global object. In arrow functions, it's inherited from parent.",
+          "example": "const obj = {\n  name: 'Alice',\n  greet() {\n    console.log(this.name); // 'Alice' - obj\n  },\n  greetArrow: () => {\n    console.log(this.name); // undefined - window/global\n  }\n};\nobj.greet();\nobj.greetArrow();"
+        },
+        {
+          "id": 27,
+          "question": "What is the difference between map() and forEach()?",
+          "answer": "map() returns a NEW array with transformed values — use when you need the result. forEach() just iterates without returning anything — use when you only need side effects like logging or updating UI.",
+          "example": "const numbers = [1, 2, 3];\n\n// map - returns new array\nconst doubled = numbers.map(n => n * 2); // [2, 4, 6]\n\n// forEach - returns undefined\nconst result = numbers.forEach(n => n * 2); // undefined\nnumbers.forEach(n => console.log(n)); // just logs"
+        },
+        {
+          "id": 28,
+          "question": "What is the Fetch API?",
+          "answer": "The Fetch API provides a modern way to make HTTP requests from the browser. It returns a Promise. It replaces the older XMLHttpRequest and integrates naturally with async/await.",
+          "example": "async function getUsers() {\n  try {\n    const response = await fetch('https://api.example.com/users');\n    if (!response.ok) throw new Error('Network error');\n    const users = await response.json();\n    console.log(users);\n  } catch (err) {\n    console.error(err);\n  }\n}\ngetUsers();"
+        },
+        {
+          "id": 29,
+          "question": "What is optional chaining (?.)?",
+          "answer": "Optional chaining allows safely accessing nested object properties without throwing an error if an intermediate value is null or undefined. It short-circuits and returns undefined instead of throwing.",
+          "example": "const user = {\n  name: 'Alice',\n  address: {\n    city: 'NYC'\n  }\n};\n\nconsole.log(user?.address?.city);    // 'NYC'\nconsole.log(user?.phone?.number);    // undefined (no error!)\nconsole.log(user?.getName?.());      // undefined (no error!)"
+        },
+        {
+          "id": 30,
+          "question": "What is nullish coalescing (??)?",
+          "answer": "The ?? operator returns the right side only when the left side is null or undefined (NOT for 0, false, or empty string — unlike ||). Great for setting default values.",
+          "example": "const a = null ?? 'default';     // 'default'\nconst b = undefined ?? 'default'; // 'default'\nconst c = 0 ?? 'default';         // 0 (not null/undefined)\nconst d = '' ?? 'default';        // '' (not null/undefined)\nconst e = 0 || 'default';         // 'default' (|| is different)"
+        },
+        {
+          "id": 31,
+          "question": "What is a Symbol in JavaScript?",
+          "answer": "Symbol is a primitive type that creates a guaranteed unique identifier. Every Symbol() call creates a new, unique value. Useful for creating unique object property keys that won't clash.",
+          "example": "const id1 = Symbol('id');\nconst id2 = Symbol('id');\nconsole.log(id1 === id2); // false - always unique!\n\nconst obj = {};\nobj[id1] = 'User123';\nconsole.log(obj[id1]); // 'User123'"
+        },
+        {
+          "id": 32,
+          "question": "What is the difference between slice() and splice()?",
+          "answer": "slice() copies a portion of an array without modifying the original (non-destructive). splice() modifies the original array by removing, replacing, or inserting elements (destructive).",
+          "example": "const arr = [1, 2, 3, 4, 5];\n\n// slice - non-destructive\nconst part = arr.slice(1, 3); // [2, 3]\nconsole.log(arr); // [1,2,3,4,5] - unchanged\n\n// splice - modifies original\narr.splice(1, 2, 'a', 'b'); // removes 2 at idx 1, inserts 'a','b'\nconsole.log(arr); // [1,'a','b',4,5]"
+        },
+        {
+          "id": 33,
+          "question": "What is currying in JavaScript?",
+          "answer": "Currying transforms a function that takes multiple arguments into a chain of functions that each take one argument. It helps create reusable, partial function applications.",
+          "example": "// Regular function\nconst add = (a, b) => a + b;\n\n// Curried version\nconst curriedAdd = a => b => a + b;\n\nconst add5 = curriedAdd(5); // partial application\nconsole.log(add5(3)); // 8\nconsole.log(add5(10)); // 15\nconsole.log(curriedAdd(2)(3)); // 5"
+        },
+        {
+          "id": 34,
+          "question": "What is a Set in JavaScript?",
+          "answer": "A Set stores unique values of any type. Duplicates are automatically ignored. Great for removing duplicates from arrays or checking membership.",
+          "example": "const set = new Set([1, 2, 2, 3, 3, 3]);\nconsole.log(set); // Set {1, 2, 3} - no duplicates\n\n// Remove duplicates from array\nconst arr = [1, 1, 2, 3, 3];\nconst unique = [...new Set(arr)]; // [1, 2, 3]\n\nset.add(4); set.has(2); set.delete(1);"
+        },
+        {
+          "id": 35,
+          "question": "What is a Map in JavaScript?",
+          "answer": "A Map stores key-value pairs where keys can be ANY type (unlike objects where keys are strings). It maintains insertion order and has useful methods like size, has(), get(), set(), delete().",
+          "example": "const map = new Map();\nmap.set('name', 'Alice');\nmap.set(1, 'number key');\nmap.set(true, 'boolean key');\n\nconsole.log(map.get('name')); // 'Alice'\nconsole.log(map.size);        // 3\nconsole.log(map.has(1));      // true"
+        },
+        {
+          "id": 36,
+          "question": "What is template literals?",
+          "answer": "Template literals use backticks (`) instead of quotes. They support multi-line strings, embedded expressions with ${}, and tagged templates. Much cleaner than string concatenation.",
+          "example": "const name = 'Alice';\nconst age = 25;\n\n// Old way\nconst old = 'Hello ' + name + ', you are ' + age;\n\n// Template literal\nconst modern = `Hello ${name}, you are ${age}`;\n\n// Multi-line\nconst multi = `Line 1\nLine 2\nLine 3`;"
+        },
+        {
+          "id": 37,
+          "question": "What is the difference between deep copy and shallow copy?",
+          "answer": "Shallow copy copies only top-level properties — nested objects are still referenced. Deep copy creates a completely independent copy of all nested levels. Changing a nested property in a deep copy doesn't affect the original.",
+          "example": "const original = { a: 1, b: { c: 2 } };\n\n// Shallow copy - nested still shared\nconst shallow = { ...original };\nshallow.b.c = 99;\nconsole.log(original.b.c); // 99 - affected!\n\n// Deep copy - fully independent\nconst deep = JSON.parse(JSON.stringify(original));\ndeep.b.c = 99;\nconsole.log(original.b.c); // 2 - safe!"
+        },
+        {
+          "id": 38,
+          "question": "What is event delegation?",
+          "answer": "Event delegation attaches ONE event listener to a parent element to handle events from many children, using event bubbling. More efficient than adding listeners to each child, and works for dynamically added elements.",
+          "example": "// Without delegation - many listeners\n// buttons.forEach(btn => btn.addEventListener('click', handler));\n\n// With delegation - one listener\ndocument.getElementById('list').addEventListener('click', (e) => {\n  if (e.target.matches('li')) {\n    console.log('Clicked:', e.target.textContent);\n  }\n});"
+        },
+        {
+          "id": 39,
+          "question": "What is a pure function?",
+          "answer": "A pure function always returns the same output for the same inputs and has no side effects (doesn't modify external variables, make API calls, etc.). They're predictable, testable, and easy to reason about.",
+          "example": "// Pure function - same input = same output, no side effects\nconst add = (a, b) => a + b;\nadd(2, 3); // always 5\n\n// Impure function - depends on external state\nlet total = 0;\nconst addToTotal = (n) => { total += n; }; // modifies external var"
+        },
+        {
+          "id": 40,
+          "question": "What is the difference between Object.freeze() and const?",
+          "answer": "const prevents reassignment of the variable reference. Object.freeze() prevents modification of the object's properties. A const object can still have its properties changed unless frozen.",
+          "example": "const obj = { name: 'Alice' };\nobj.name = 'Bob'; // Allowed! const doesn't freeze\n// obj = {}; // Error! Can't reassign const\n\nconst frozen = Object.freeze({ name: 'Alice' });\nfrozen.name = 'Bob'; // Silently fails\nconsole.log(frozen.name); // 'Alice'"
+        },
+        {
+          "id": 41,
+          "question": "What is IIFE (Immediately Invoked Function Expression)?",
+          "answer": "An IIFE is a function that runs immediately after being defined. It creates a private scope, avoiding polluting the global namespace. Common in older code before modules were available.",
+          "example": "(function() {\n  const privateVar = 'secret';\n  console.log('Runs immediately!');\n  // privateVar not accessible outside\n})();\n\n// Arrow IIFE\n(() => {\n  console.log('Arrow IIFE!');\n})();"
+        },
+        {
+          "id": 42,
+          "question": "What is the typeof operator?",
+          "answer": "typeof returns a string indicating the type of a value. Useful for type checking before performing operations. Note: typeof null returns 'object' — a historical bug in JavaScript.",
+          "example": "typeof 42;          // 'number'\ntypeof 'hello';     // 'string'\ntypeof true;        // 'boolean'\ntypeof undefined;   // 'undefined'\ntypeof null;        // 'object' (JS bug!)\ntypeof {};          // 'object'\ntypeof [];          // 'object'\ntypeof function(){}; // 'function'"
+        },
+        {
+          "id": 43,
+          "question": "What is the difference between Array.from() and Array.of()?",
+          "answer": "Array.from() creates an array from array-like or iterable objects (like NodeLists, strings, Sets). Array.of() creates an array from its arguments — avoids the confusing behavior of Array() constructor.",
+          "example": "Array.from('hello');        // ['h','e','l','l','o']\nArray.from({length: 3}, (_, i) => i); // [0, 1, 2]\nArray.from(new Set([1,2,3])); // [1, 2, 3]\n\nArray.of(3);    // [3] - array with one item\nnew Array(3);   // [,,] - empty array of length 3!"
+        },
+        {
+          "id": 44,
+          "question": "What is Promise.all() vs Promise.allSettled()?",
+          "answer": "Promise.all() runs multiple promises in parallel but FAILS if any one fails. Promise.allSettled() waits for ALL promises to complete regardless of success or failure, returning all results.",
+          "example": "// Promise.all - fails fast\ntry {\n  const [a, b] = await Promise.all([fetchA(), fetchB()]);\n} catch (e) { /* if either fails, caught here */ }\n\n// Promise.allSettled - all results\nconst results = await Promise.allSettled([fetchA(), fetchB()]);\nresults.forEach(r => {\n  if (r.status === 'fulfilled') console.log(r.value);\n  else console.log(r.reason);\n});"
+        },
+        {
+          "id": 45,
+          "question": "What is Object.keys(), Object.values(), Object.entries()?",
+          "answer": "These static methods help iterate over objects. keys() returns array of property names. values() returns array of property values. entries() returns array of [key, value] pairs.",
+          "example": "const user = { name: 'Alice', age: 25, city: 'NYC' };\n\nObject.keys(user);    // ['name', 'age', 'city']\nObject.values(user);  // ['Alice', 25, 'NYC']\nObject.entries(user); // [['name','Alice'],['age',25],...]\n\n// Useful for iteration\nObject.entries(user).forEach(([key, val]) => {\n  console.log(`${key}: ${val}`);\n});"
+        },
+        {
+          "id": 46,
+          "question": "What is the difference between for...of and for...in?",
+          "answer": "for...of iterates over iterable VALUES (arrays, strings, sets). for...in iterates over object KEYS/property names. Use for...of for arrays, for...in for objects.",
+          "example": "const arr = [10, 20, 30];\nfor (const val of arr) {\n  console.log(val); // 10, 20, 30 (values)\n}\n\nconst obj = { a: 1, b: 2 };\nfor (const key in obj) {\n  console.log(key); // 'a', 'b' (keys)\n}"
+        },
+        {
+          "id": 47,
+          "question": "What is try/catch/finally?",
+          "answer": "try/catch handles errors gracefully. Code in try runs normally. If an error occurs, catch handles it. finally always runs regardless of success or error — good for cleanup like closing connections.",
+          "example": "function divide(a, b) {\n  try {\n    if (b === 0) throw new Error('Cannot divide by zero');\n    return a / b;\n  } catch (error) {\n    console.log('Error:', error.message);\n    return null;\n  } finally {\n    console.log('Always runs - cleanup here');\n  }\n}"
+        },
+        {
+          "id": 48,
+          "question": "What is the difference between findIndex() and indexOf()?",
+          "answer": "indexOf() finds the index of a specific primitive value. findIndex() accepts a callback function and finds the index of the first element that satisfies the condition — great for objects.",
+          "example": "const nums = [5, 12, 8, 130, 44];\nnums.indexOf(8);  // 2 - finds exact value\n\nconst users = [{id:1, name:'A'}, {id:2, name:'B'}];\nusers.findIndex(u => u.id === 2); // 1 - find by condition"
+        },
+        {
+          "id": 49,
+          "question": "What is a tagged template literal?",
+          "answer": "A tagged template is a template literal prefixed with a function. The function receives the string parts and interpolated values as arguments, giving you control over how the string is assembled.",
+          "example": "function highlight(strings, ...values) {\n  return strings.reduce((result, str, i) => {\n    return result + str + (values[i] ? `<b>${values[i]}</b>` : '');\n  }, '');\n}\n\nconst name = 'Alice';\nconst age = 25;\nconsole.log(highlight`Name: ${name}, Age: ${age}`);\n// 'Name: <b>Alice</b>, Age: <b>25</b>'"
+        },
+        {
+          "id": 50,
+          "question": "What is the Proxy object in JavaScript?",
+          "answer": "A Proxy wraps an object and intercepts operations (get, set, delete, etc.) allowing you to add custom behavior. Used for validation, logging, reactivity systems (like Vue 3).",
+          "example": "const handler = {\n  get(target, key) {\n    console.log(`Getting ${key}`);\n    return target[key];\n  },\n  set(target, key, value) {\n    if (typeof value !== 'string') throw TypeError('String only!');\n    target[key] = value;\n    return true;\n  }\n};\nconst proxy = new Proxy({}, handler);"
+        },
+        {
+          "id": 51,
+          "question": "What are default parameters in JavaScript?",
+          "answer": "Default parameters allow you to set fallback values for function parameters if no argument is passed or undefined is passed. They make functions more robust without needing manual checks.",
+          "example": "function greet(name = 'Guest', greeting = 'Hello') {\n  return `${greeting}, ${name}!`;\n}\nconsole.log(greet());           // 'Hello, Guest!'\nconsole.log(greet('Alice'));    // 'Hello, Alice!'\nconsole.log(greet('Bob', 'Hi')); // 'Hi, Bob!'"
+        },
+        {
+          "id": 52,
+          "question": "What is the difference between function declaration and function expression?",
+          "answer": "Function declarations are hoisted (can be called before defined). Function expressions are not hoisted. Arrow functions and named functions assigned to variables are expressions.",
+          "example": "// Declaration - hoisted, can call before definition\nhello(); // Works!\nfunction hello() { console.log('Hello'); }\n\n// Expression - not hoisted\n// greet(); // Error! Cannot call before assignment\nconst greet = function() { console.log('Hi'); };\ngreet(); // Works here"
+        },
+        {
+          "id": 53,
+          "question": "What is the arguments object?",
+          "answer": "Inside regular functions (not arrow), the arguments object contains all passed arguments as an array-like object, even if not defined in parameters. Arrow functions don't have their own arguments object.",
+          "example": "function sum() {\n  let total = 0;\n  for (let val of arguments) {\n    total += val;\n  }\n  return total;\n}\nconsole.log(sum(1, 2, 3, 4)); // 10\n\n// Modern alternative: rest params\nconst sumModern = (...args) => args.reduce((a, b) => a + b, 0);"
+        },
+        {
+          "id": 54,
+          "question": "What is Array.flat() and flatMap()?",
+          "answer": "flat() flattens nested arrays into a single array by specified depth. flatMap() combines map() and flat(1) — maps each element and flattens the result one level deep.",
+          "example": "const nested = [1, [2, 3], [4, [5, 6]]];\nnested.flat();    // [1, 2, 3, 4, [5, 6]]\nnested.flat(2);   // [1, 2, 3, 4, 5, 6] - depth 2\n\nconst sentences = ['Hello World', 'Good Morning'];\nsentences.flatMap(s => s.split(' '));\n// ['Hello', 'World', 'Good', 'Morning']"
+        },
+        {
+          "id": 55,
+          "question": "What is the difference between Array.some() and Array.every()?",
+          "answer": "some() returns true if AT LEAST ONE element passes the test. every() returns true if ALL elements pass the test. Both short-circuit (stop early when result is determined).",
+          "example": "const nums = [1, 2, 3, 4, 5];\n\n// some - at least one\nnums.some(n => n > 4);  // true (5 > 4)\nnums.some(n => n > 10); // false\n\n// every - all must pass\nnums.every(n => n > 0); // true\nnums.every(n => n > 2); // false (1 and 2 fail)"
+        },
+        {
+          "id": 56,
+          "question": "What is Object.assign()?",
+          "answer": "Object.assign() copies properties from one or more source objects to a target object. It returns the modified target. Good for merging objects or creating shallow copies.",
+          "example": "const target = { a: 1 };\nconst source = { b: 2, c: 3 };\nObject.assign(target, source);\nconsole.log(target); // { a:1, b:2, c:3 }\n\n// Shallow clone\nconst clone = Object.assign({}, target);\n\n// Merge multiple\nconst merged = Object.assign({}, obj1, obj2, obj3);"
+        },
+        {
+          "id": 57,
+          "question": "What is Array.reduce() — explain with a real example?",
+          "answer": "reduce() processes each array element left-to-right, accumulating a single result. Takes a callback with (accumulator, currentValue) and an initial value. Very versatile — can replace many other methods.",
+          "example": "const orders = [\n  { item: 'Coffee', price: 3.5 },\n  { item: 'Cake', price: 5.0 },\n  { item: 'Tea', price: 2.5 }\n];\n// Get total price\nconst total = orders.reduce((sum, order) => sum + order.price, 0);\nconsole.log(total); // 11\n\n// Group by\nconst grouped = orders.reduce((acc, o) => {\n  (acc[o.price > 4 ? 'expensive' : 'cheap'] ||= []).push(o);\n  return acc;\n}, {});"
+        },
+        {
+          "id": 58,
+          "question": "What is the difference between class and prototype in JavaScript?",
+          "answer": "Classes are syntactic sugar over prototype-based inheritance. They look like OOP classes from Java/C# but under the hood they use prototypes. Classes are cleaner and more readable but behave the same way.",
+          "example": "// Prototype-based\nfunction Person(name) { this.name = name; }\nPerson.prototype.greet = function() { return `Hi, ${this.name}`; };\n\n// Class syntax (ES6) - same behavior, cleaner\nclass Person {\n  constructor(name) { this.name = name; }\n  greet() { return `Hi, ${this.name}`; }\n}"
+        },
+        {
+          "id": 59,
+          "question": "What are getters and setters in JavaScript?",
+          "answer": "Getters and setters are special methods that look like properties. get runs when you read a property. set runs when you assign to it. Used to add validation or computed properties.",
+          "example": "class Circle {\n  constructor(radius) { this._radius = radius; }\n  \n  get radius() { return this._radius; }\n  set radius(val) {\n    if (val < 0) throw Error('Negative radius!');\n    this._radius = val;\n  }\n  get area() { return Math.PI * this._radius ** 2; }\n}\nconst c = new Circle(5);\nconsole.log(c.area); // 78.5"
+        },
+        {
+          "id": 60,
+          "question": "What is the difference between throw and return in error handling?",
+          "answer": "return exits a function and returns a value normally. throw signals that something went wrong, creating an exception that propagates up the call stack until caught by try/catch.",
+          "example": "function divide(a, b) {\n  if (b === 0) throw new Error('Divide by zero!'); // exception!\n  return a / b; // normal exit\n}\n\ntry {\n  console.log(divide(10, 2)); // 5\n  console.log(divide(10, 0)); // throws!\n} catch(e) {\n  console.log(e.message); // 'Divide by zero!'\n}"
+        },
+        {
+          "id": 61,
+          "question": "What is the Temporal Dead Zone (TDZ)?",
+          "answer": "TDZ is the period between entering a block scope and the point where let/const variables are declared. Accessing them during this period throws a ReferenceError. This is why let/const feel 'not hoisted'.",
+          "example": "// var - accessible (undefined) before declaration\nconsole.log(a); // undefined\nvar a = 5;\n\n// let/const - TDZ error!\nconsole.log(b); // ReferenceError!\nlet b = 10;\n// b is 'hoisted' but in TDZ until this line"
+        },
+        {
+          "id": 62,
+          "question": "What is the difference between function scope and block scope?",
+          "answer": "var is function-scoped — accessible anywhere within the function. let/const are block-scoped — only accessible within the { } block they're defined in (if statement, loop, etc.).",
+          "example": "function test() {\n  if (true) {\n    var x = 10;  // function-scoped\n    let y = 20;  // block-scoped\n  }\n  console.log(x); // 10 - accessible\n  console.log(y); // ReferenceError!\n}"
+        },
+        {
+          "id": 63,
+          "question": "What is the globalThis object?",
+          "answer": "globalThis provides a standard way to access the global object across environments. In browsers it's window, in Node.js it's global, in web workers it's self. globalThis works everywhere.",
+          "example": "// Works in any JavaScript environment\nconsole.log(globalThis === window);  // true in browser\nconsole.log(globalThis === global);  // true in Node.js\n\n// Set global variable safely\nglobalThis.myApp = { version: '1.0' };\nconsole.log(myApp.version); // '1.0'"
+        },
+        {
+          "id": 64,
+          "question": "What is method chaining?",
+          "answer": "Method chaining calls multiple methods in a sequence on the same object by having each method return 'this'. Makes code more concise and readable — common in jQuery, Lodash, and builder patterns.",
+          "example": "// Array method chaining\nconst result = [1, 2, 3, 4, 5, 6]\n  .filter(n => n % 2 === 0)  // [2, 4, 6]\n  .map(n => n * 10)          // [20, 40, 60]\n  .reduce((a, b) => a + b);  // 120\n\n// Custom chainable class\nclass Builder {\n  constructor() { this.items = []; }\n  add(item) { this.items.push(item); return this; }\n  build() { return this.items.join(', '); }\n}"
+        },
+        {
+          "id": 65,
+          "question": "What is the difference between setTimeout and setInterval?",
+          "answer": "setTimeout runs a function ONCE after a specified delay. setInterval runs a function repeatedly at a specified interval until cleared. Both are asynchronous and go through the event loop.",
+          "example": "// setTimeout - runs once after 2 seconds\nconst t = setTimeout(() => console.log('Once!'), 2000);\nclearTimeout(t); // cancel it\n\n// setInterval - runs every 1 second\nconst i = setInterval(() => {\n  console.log('Tick:', new Date().getSeconds());\n}, 1000);\nsetTimeout(() => clearInterval(i), 5000); // stop after 5s"
+        },
+        {
+          "id": 66,
+          "question": "What is the difference between Array.find() and Array.filter()?",
+          "answer": "find() returns the FIRST matching element (or undefined). filter() returns ALL matching elements as a new array. Use find() when you want one item, filter() when you want all matches.",
+          "example": "const users = [\n  { id: 1, name: 'Alice' },\n  { id: 2, name: 'Bob' },\n  { id: 3, name: 'Alice' }\n];\n\nusers.find(u => u.name === 'Alice');\n// { id:1, name:'Alice' } - first match only\n\nusers.filter(u => u.name === 'Alice');\n// [{id:1,...}, {id:3,...}] - all matches"
+        },
+        {
+          "id": 67,
+          "question": "What is event.preventDefault()?",
+          "answer": "event.preventDefault() stops the default browser behavior of an event — like preventing form submission, link navigation, or context menu opening. The event still fires, just the default action is cancelled.",
+          "example": "// Prevent form from submitting\ndocument.getElementById('form').addEventListener('submit', (e) => {\n  e.preventDefault(); // stops page refresh\n  validate(e.target); // do custom validation\n});\n\n// Prevent link navigation\na.addEventListener('click', (e) => {\n  e.preventDefault();\n  handleSPA(a.href); // handle in JS instead\n});"
+        },
+        {
+          "id": 68,
+          "question": "What is short-circuit evaluation?",
+          "answer": "JavaScript evaluates logical expressions left to right and stops (short-circuits) as soon as the result is determined. With &&, if left is falsy, right is never evaluated. With ||, if left is truthy, right is never evaluated.",
+          "example": "// && short-circuit: right side only runs if left is truthy\nuser && user.profile && user.profile.name; // safe access\nisLoggedIn && loadData(); // only loads if logged in\n\n// || short-circuit: right side only runs if left is falsy\nconst name = user.name || 'Guest'; // default value\nconst port = process.env.PORT || 3000;"
+        },
+        {
+          "id": 69,
+          "question": "What is the difference between synchronous and asynchronous iteration?",
+          "answer": "Regular for...of loop works with synchronous iterables. for await...of works with async iterables — useful for streaming data, reading files line by line, or paginated API responses.",
+          "example": "// Async iteration\nasync function processStream() {\n  const stream = getDataStream();\n  for await (const chunk of stream) {\n    console.log('Processing:', chunk);\n    await processChunk(chunk);\n  }\n}\n\n// Works with async generators\nasync function* paginate(url) {\n  let page = 1;\n  while (true) {\n    const data = await fetch(`${url}?page=${page++}`);\n    yield await data.json();\n  }\n}"
+        },
+        {
+          "id": 70,
+          "question": "What is the difference between Object.create() and new keyword?",
+          "answer": "new calls a constructor function and sets prototype automatically. Object.create() creates a new object with the specified prototype, giving you more control over inheritance without a constructor.",
+          "example": "// new keyword\nfunction Person(name) { this.name = name; }\nconst p = new Person('Alice');\n\n// Object.create - set prototype explicitly\nconst personProto = {\n  greet() { return `Hi, ${this.name}`; }\n};\nconst p2 = Object.create(personProto);\np2.name = 'Bob';\nconsole.log(p2.greet()); // 'Hi, Bob'"
+        },
+        {
+          "id": 71,
+          "question": "What is String.prototype.trim(), trimStart(), trimEnd()?",
+          "answer": "trim() removes whitespace from both ends of a string. trimStart() removes only from the beginning. trimEnd() removes only from the end. Essential for cleaning user input.",
+          "example": "const messy = '   Hello World   ';\n\nmessy.trim();      // 'Hello World'\nmessy.trimStart(); // 'Hello World   '\nmessy.trimEnd();   // '   Hello World'\n\n// Common use: clean form input\nconst email = input.value.trim().toLowerCase();"
+        },
+        {
+          "id": 72,
+          "question": "What is Array.includes() vs indexOf()?",
+          "answer": "Both check if a value exists in an array. includes() returns a boolean and handles NaN correctly. indexOf() returns the position (-1 if not found) but cannot find NaN.",
+          "example": "const arr = [1, 2, NaN, 3];\n\narr.includes(2);   // true\narr.includes(NaN); // true ✓\narr.includes(5);   // false\n\narr.indexOf(2);    // 1\narr.indexOf(NaN);  // -1 ✗ (can't find NaN)\narr.indexOf(5);    // -1"
+        },
+        {
+          "id": 73,
+          "question": "What is the difference between class private fields and convention-based private?",
+          "answer": "Convention: properties starting with _ are 'private by convention' but still accessible. True private fields use # prefix — they're genuinely inaccessible outside the class (ES2022).",
+          "example": "class BankAccount {\n  #balance = 0;  // truly private\n  _owner = '';   // 'private' by convention only\n\n  constructor(owner, balance) {\n    this._owner = owner;\n    this.#balance = balance;\n  }\n  \n  getBalance() { return this.#balance; }\n}\nconst acc = new BankAccount('Alice', 1000);\nacc.#balance; // SyntaxError - truly private!\nacc._owner;   // 'Alice' - accessible (just convention)"
+        },
+        {
+          "id": 74,
+          "question": "What is the AbortController?",
+          "answer": "AbortController allows you to cancel fetch requests or any async operation. You create a controller, pass its signal to fetch, and call abort() to cancel. Essential for cleaning up when a component unmounts.",
+          "example": "const controller = new AbortController();\n\nfetch('/api/data', { signal: controller.signal })\n  .then(r => r.json())\n  .then(data => console.log(data))\n  .catch(err => {\n    if (err.name === 'AbortError') console.log('Cancelled');\n  });\n\n// Cancel the request\ncontroller.abort();"
+        },
+        {
+          "id": 75,
+          "question": "What is the difference between microtasks and macrotasks?",
+          "answer": "Microtasks (Promises, queueMicrotask) have higher priority and run after current task completes but BEFORE the next macrotask. Macrotasks (setTimeout, setInterval, I/O) run after all microtasks are drained.",
+          "example": "console.log('1 - sync');\nsetTimeout(() => console.log('4 - macrotask'), 0);\nPromise.resolve().then(() => console.log('3 - microtask'));\nconsole.log('2 - sync');\n\n// Output: 1, 2, 3, 4\n// Promises (microtasks) always beat setTimeout (macrotask)"
+        },
+        {
+          "id": 76,
+          "question": "What is the Intersection Observer API?",
+          "answer": "Intersection Observer detects when an element enters or leaves the viewport. Used for lazy loading images, infinite scroll, and triggering animations when elements become visible — without costly scroll event listeners.",
+          "example": "const observer = new IntersectionObserver((entries) => {\n  entries.forEach(entry => {\n    if (entry.isIntersecting) {\n      entry.target.src = entry.target.dataset.src; // lazy load\n      observer.unobserve(entry.target); // stop watching\n    }\n  });\n}, { threshold: 0.5 });\n\ndocument.querySelectorAll('img[data-src]')\n  .forEach(img => observer.observe(img));"
+        },
+        {
+          "id": 77,
+          "question": "What is structuredClone()?",
+          "answer": "structuredClone() is a modern built-in way to create a deep clone of an object. Unlike JSON.parse/stringify, it handles Dates, Maps, Sets, circular references, and more.",
+          "example": "const original = {\n  date: new Date(),\n  map: new Map([['key', 'value']]),\n  nested: { arr: [1, 2, 3] }\n};\n\nconst clone = structuredClone(original);\nclone.nested.arr.push(4);\nconsole.log(original.nested.arr); // [1,2,3] - unaffected\nconsole.log(clone.date instanceof Date); // true ✓"
+        },
+        {
+          "id": 78,
+          "question": "What is the difference between Array.sort() behavior for numbers vs strings?",
+          "answer": "By default, sort() converts elements to strings and sorts lexicographically. This breaks number sorting! For numbers, always provide a comparator function.",
+          "example": "// Default sort (lexicographic) - WRONG for numbers\n[10, 2, 30, 1].sort(); // [1, 10, 2, 30] - wrong!\n\n// Correct number sort with comparator\n[10, 2, 30, 1].sort((a, b) => a - b); // [1, 2, 10, 30] ✓\n[10, 2, 30, 1].sort((a, b) => b - a); // [30, 10, 2, 1] desc\n\n// String sort\n['Banana', 'Apple', 'Cherry'].sort(); // ['Apple','Banana','Cherry']"
+        },
+        {
+          "id": 79,
+          "question": "What is the Blob API?",
+          "answer": "Blob (Binary Large Object) represents raw binary data. Used for file downloads, uploading files, creating URLs for media content, and working with binary data like images from APIs.",
+          "example": "// Create a downloadable file from JS\nconst data = 'Hello, World!';\nconst blob = new Blob([data], { type: 'text/plain' });\nconst url = URL.createObjectURL(blob);\n\nconst link = document.createElement('a');\nlink.href = url;\nlink.download = 'hello.txt';\nlink.click();\nURL.revokeObjectURL(url); // cleanup"
+        },
+        {
+          "id": 80,
+          "question": "What is the difference between == null and typeof x === 'undefined'?",
+          "answer": "== null is a concise check that catches both null AND undefined (due to loose equality). typeof x === 'undefined' only catches undefined. Use == null when you want to handle both cases together.",
+          "example": "let a = null;\nlet b = undefined;\nlet c = 0;\n\n// == null catches both null and undefined\nconsole.log(a == null); // true\nconsole.log(b == null); // true\nconsole.log(c == null); // false ✓\n\n// Strict check - undefined only\nconsole.log(typeof b === 'undefined'); // true\nconsole.log(typeof a === 'undefined'); // false"
+        }
+      ]
+    },
+    {
+      "id": "css",
+      "name": "CSS",
+      "icon": "🎨",
+      "color": "#264de4",
+      "textColor": "#ffffff",
+      "questions": [
+        {
+          "id": 1,
+          "question": "What is the CSS Box Model?",
+          "answer": "Every HTML element is a box made of 4 layers: Content (actual content), Padding (space inside border), Border (the edge), and Margin (space outside the element). Understanding this is fundamental for layout.",
+          "example": ".box {\n  width: 200px;      /* content width */\n  padding: 20px;     /* inside space */\n  border: 2px solid black;\n  margin: 10px;      /* outside space */\n  /* Total width = 200 + 40 + 4 = 244px (default box-sizing) */\n}\n\n/* Fix with border-box */\n* { box-sizing: border-box; /* padding included in width */ }"
+        },
+        {
+          "id": 2,
+          "question": "What is Flexbox and when do you use it?",
+          "answer": "Flexbox is a 1-dimensional layout system for arranging items in rows or columns. Perfect for navigation bars, centering content, evenly distributing items, and aligning elements along one axis.",
+          "example": ".container {\n  display: flex;\n  justify-content: space-between; /* horizontal alignment */\n  align-items: center;            /* vertical alignment */\n  gap: 16px;\n}\n\n/* Center anything perfectly */\n.center {\n  display: flex;\n  justify-content: center;\n  align-items: center;\n}"
+        },
+        {
+          "id": 3,
+          "question": "What is CSS Grid and when do you use it?",
+          "answer": "CSS Grid is a 2-dimensional layout system for rows AND columns simultaneously. Best for page-level layouts, card grids, and any complex 2D arrangement. Use Flexbox for 1D, Grid for 2D.",
+          "example": ".grid {\n  display: grid;\n  grid-template-columns: repeat(3, 1fr); /* 3 equal columns */\n  gap: 20px;\n}\n\n/* Responsive grid */\n.auto-grid {\n  display: grid;\n  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));\n}"
+        },
+        {
+          "id": 4,
+          "question": "What is specificity in CSS?",
+          "answer": "Specificity determines which CSS rule wins when multiple rules apply to the same element. It's calculated as (inline, IDs, classes, elements). Higher specificity wins. !important overrides everything (use sparingly).",
+          "example": "/* Specificity: (0,0,0,1) - element */\np { color: black; }\n\n/* Specificity: (0,0,1,0) - class - wins */\n.text { color: blue; }\n\n/* Specificity: (0,1,0,0) - ID - wins over class */\n#main { color: red; }\n\n/* Inline style - (1,0,0,0) - highest */\n<p style=\"color: green\">"
+        },
+        {
+          "id": 5,
+          "question": "What is the difference between display: none, visibility: hidden, and opacity: 0?",
+          "answer": "display:none removes element from layout (takes no space). visibility:hidden hides visually but keeps space. opacity:0 fully transparent but space kept and still interactive. All three hide visually but behave differently.",
+          "example": ".hidden-1 { display: none; }      /* gone from layout, no space */\n.hidden-2 { visibility: hidden; }  /* invisible, space kept */\n.hidden-3 { opacity: 0; }          /* transparent, still clickable! */\n\n/* Use cases */\n/* Tooltip hiding: visibility (keeps layout stable) */\n/* Modal close: display none (remove from DOM flow) */\n/* Fade animation: opacity (can transition) */"
+        },
+        {
+          "id": 6,
+          "question": "What is CSS positioning? (static, relative, absolute, fixed, sticky)",
+          "answer": "static: default normal flow. relative: offset from normal position (reference for absolute children). absolute: positioned relative to nearest positioned ancestor. fixed: relative to viewport. sticky: toggles between relative and fixed on scroll.",
+          "example": ".parent { position: relative; }\n\n/* Absolute - positioned inside .parent */\n.child {\n  position: absolute;\n  top: 0; right: 0; /* top-right corner of parent */\n}\n\n/* Sticky header */\n.header {\n  position: sticky;\n  top: 0; /* sticks when scrolled to top */\n  z-index: 100;\n}"
+        },
+        {
+          "id": 7,
+          "question": "What are CSS custom properties (variables)?",
+          "answer": "CSS custom properties (--variable-name) store reusable values in CSS. Defined with -- prefix, accessed with var(). They cascade and inherit, making theming and maintenance much easier.",
+          "example": ":root {\n  --primary-color: #007bff;\n  --font-size-base: 16px;\n  --spacing-md: 1rem;\n}\n\n.button {\n  background: var(--primary-color);\n  padding: var(--spacing-md);\n  font-size: var(--font-size-base);\n}\n\n/* Dark mode overrides */\n[data-theme='dark'] { --primary-color: #4da3ff; }"
+        },
+        {
+          "id": 8,
+          "question": "What is the difference between em and rem?",
+          "answer": "em is relative to the parent element's font size (can compound). rem is relative to the root (html) element's font size — more predictable. Use rem for global sizing, em for component-relative sizing.",
+          "example": "html { font-size: 16px; }\n\n.parent { font-size: 20px; }\n.child {\n  font-size: 1.5em; /* 1.5 × 20px = 30px (relative to parent) */\n}\n\n.element {\n  font-size: 1.5rem; /* 1.5 × 16px = 24px (relative to root) */\n  padding: 1rem;     /* always 16px regardless of parent */\n}"
+        },
+        {
+          "id": 9,
+          "question": "What are CSS media queries?",
+          "answer": "Media queries apply CSS rules based on device characteristics like screen width, height, orientation, or print. They're the foundation of responsive design.",
+          "example": "/* Mobile first - base styles */\n.container { width: 100%; }\n\n/* Tablet */\n@media (min-width: 768px) {\n  .container { max-width: 720px; }\n}\n\n/* Desktop */\n@media (min-width: 1200px) {\n  .container { max-width: 1140px; }\n}\n\n/* Dark mode preference */\n@media (prefers-color-scheme: dark) {\n  body { background: #1a1a1a; }\n}"
+        },
+        {
+          "id": 10,
+          "question": "What is z-index and how does it work?",
+          "answer": "z-index controls the stacking order of positioned elements (non-static). Higher z-index appears in front. It only works on positioned elements (relative, absolute, fixed, sticky). Stacking contexts matter!",
+          "example": ".modal-overlay {\n  position: fixed;\n  z-index: 1000;\n}\n.modal {\n  position: relative;\n  z-index: 1001;\n}\n.tooltip {\n  position: absolute;\n  z-index: 9999;\n}\n/* Note: z-index only works with positioned elements! */\n/* Static elements ignore z-index */"
+        },
+        {
+          "id": 11,
+          "question": "What is CSS transition vs animation?",
+          "answer": "Transitions animate between two states smoothly, triggered by events (hover, class change). Animations use @keyframes for complex multi-step sequences and can play automatically on loop.",
+          "example": "/* Transition - simple state change */\n.button {\n  transition: background 0.3s ease, transform 0.2s;\n}\n.button:hover { background: blue; transform: scale(1.05); }\n\n/* Animation - complex sequence */\n@keyframes pulse {\n  0%, 100% { transform: scale(1); }\n  50% { transform: scale(1.1); }\n}\n.pulsing { animation: pulse 1s ease infinite; }"
+        },
+        {
+          "id": 12,
+          "question": "What is the difference between padding and margin?",
+          "answer": "Padding is inside the element — space between content and border. Background color fills padding. Margin is outside the element — space between elements. Margins can collapse (adjacent margins merge).",
+          "example": ".card {\n  padding: 20px;  /* inner breathing room */\n  margin: 10px;   /* outer spacing from other elements */\n  background: #f0f0f0; /* fills content + padding area */\n}\n\n/* Margin collapse: two 20px margins = 20px (not 40px) */\n.item-1 { margin-bottom: 20px; }\n.item-2 { margin-top: 20px; } /* only 20px gap total! */"
+        },
+        {
+          "id": 13,
+          "question": "What are pseudo-classes and pseudo-elements?",
+          "answer": "Pseudo-classes (:hover, :focus, :nth-child) select elements based on state or position. Pseudo-elements (::before, ::after, ::placeholder) create virtual elements or target specific parts of elements.",
+          "example": "/* Pseudo-classes */\na:hover { color: blue; }\ninput:focus { border-color: blue; }\nli:nth-child(odd) { background: #f5f5f5; }\n.item:first-child { font-weight: bold; }\n\n/* Pseudo-elements */\np::first-letter { font-size: 2em; }\n.card::before {\n  content: '★';\n  color: gold;\n}"
+        },
+        {
+          "id": 14,
+          "question": "What is the float property and how to clear floats?",
+          "answer": "Float was used for text wrapping and layouts before Flexbox/Grid. Floated elements are removed from normal flow, which can cause parent collapse. Use clearfix or overflow:hidden to contain floats.",
+          "example": "/* Float - for text wrapping around images */\nimg {\n  float: left;\n  margin: 0 16px 8px 0;\n}\n\n/* Clear float - modern clearfix */\n.clearfix::after {\n  content: '';\n  display: block;\n  clear: both;\n}\n\n/* Or just use overflow */\n.parent { overflow: hidden; } /* contains floated children */"
+        },
+        {
+          "id": 15,
+          "question": "What is CSS inheritance?",
+          "answer": "Some CSS properties automatically inherit from parent to child (text-related: color, font, line-height). Others don't (layout: width, margin, padding, border). You can force inheritance with 'inherit' or reset with 'initial'.",
+          "example": "body {\n  font-family: Arial;\n  color: #333;\n  /* These inherit to all children */\n}\n\np {\n  /* Automatically inherits font-family and color */\n  color: inherit; /* explicitly inherit (useful override) */\n  border: inherit; /* force inherit (border doesn't inherit by default) */\n}"
+        },
+        {
+          "id": 16,
+          "question": "What is the difference between block, inline, and inline-block?",
+          "answer": "Block elements take full width and start on a new line (div, p, h1). Inline elements flow with text, can't set width/height (span, a). Inline-block flows with text BUT allows width/height settings.",
+          "example": "/* Block - full width, new line */\ndiv { display: block; }\n\n/* Inline - in text flow, can't set size */\nspan { display: inline; }\n\n/* Inline-block - in text flow, can set size */\n.nav-item {\n  display: inline-block;\n  width: 100px;\n  padding: 10px;\n  /* great for navigation items */\n}"
+        },
+        {
+          "id": 17,
+          "question": "What is CSS calc()?",
+          "answer": "calc() lets you perform math with mixed CSS units in property values. You can mix px, %, em, vh, etc. Very useful for responsive layouts.",
+          "example": ".sidebar { width: 250px; }\n.main {\n  width: calc(100% - 250px - 2rem);\n  /* full width minus sidebar minus gap */\n}\n\n.hero {\n  height: calc(100vh - 80px);\n  /* viewport height minus header */\n}\n\n.grid-item {\n  width: calc(33.333% - 20px); /* equal thirds with gap */\n}"
+        },
+        {
+          "id": 18,
+          "question": "What is the CSS cascade?",
+          "answer": "The cascade determines which rules win when multiple CSS rules apply. Priority order: !important → inline styles → ID selectors → class/pseudo-class → element selectors → browser defaults. Last rule wins for equal specificity.",
+          "example": "/* 4. Browser default */\np { color: black; }\n\n/* 3. External stylesheet */\n.text { color: blue; }\n\n/* 2. Inline style wins over external */\n<p style=\"color: green\">\n\n/* 1. !important wins over everything (use sparingly!) */\n.override { color: red !important; }"
+        },
+        {
+          "id": 19,
+          "question": "What is responsive design and how do you achieve it with CSS?",
+          "answer": "Responsive design makes websites look good on all screen sizes. Achieved through: fluid layouts (%, fr, vw), media queries, flexible images (max-width: 100%), CSS Grid auto-fit/auto-fill, and mobile-first approach.",
+          "example": "/* Mobile first base */\n.grid {\n  display: grid;\n  grid-template-columns: 1fr; /* single column */\n}\n\n/* Tablet */\n@media (min-width: 768px) {\n  .grid { grid-template-columns: 1fr 1fr; }\n}\n\n/* Desktop */\n@media (min-width: 1200px) {\n  .grid { grid-template-columns: repeat(4, 1fr); }\n}"
+        },
+        {
+          "id": 20,
+          "question": "What is object-fit and when do you use it?",
+          "answer": "object-fit controls how an image/video fits within its container. Like background-size but for img elements. Options: cover (fill, crop), contain (fit, letterbox), fill (stretch), none (original size).",
+          "example": ".thumbnail {\n  width: 300px;\n  height: 200px;\n  object-fit: cover;    /* fills box, crops excess */\n  object-position: center; /* crop from center */\n}\n\n.logo {\n  width: 200px;\n  height: 100px;\n  object-fit: contain;  /* fits inside, letterboxes */\n}"
+        },
+        {
+          "id": 21,
+          "question": "What are CSS transforms?",
+          "answer": "transform applies 2D and 3D visual transformations without affecting document flow. Common functions: translate (move), rotate, scale, skew. Great for animations and micro-interactions.",
+          "example": ".card:hover {\n  transform: translateY(-8px) scale(1.02);\n  /* lift effect on hover */\n}\n\n.spinner {\n  animation: spin 1s linear infinite;\n}\n@keyframes spin {\n  from { transform: rotate(0deg); }\n  to   { transform: rotate(360deg); }\n}\n\n/* 3D flip */\n.card:hover { transform: rotateY(180deg); }"
+        },
+        {
+          "id": 22,
+          "question": "What is will-change in CSS?",
+          "answer": "will-change tells the browser which properties will be animated, allowing it to optimize rendering by promoting the element to its own compositor layer BEFORE the animation. Use sparingly — overuse wastes memory.",
+          "example": "/* Good - hints browser to optimize for animation */\n.animated-element {\n  will-change: transform, opacity;\n}\n\n/* Add programmatically when needed, remove after */\nelement.style.willChange = 'transform';\n// After animation:\nelement.style.willChange = 'auto';\n\n/* Don't apply to too many elements - memory expensive */"
+        },
+        {
+          "id": 23,
+          "question": "What is the aspect-ratio property?",
+          "answer": "aspect-ratio maintains a specific width/height ratio. Great for responsive images, video containers, and cards without needing the old padding-top hack.",
+          "example": "/* Maintain 16:9 ratio */\n.video-container {\n  width: 100%;\n  aspect-ratio: 16 / 9;\n  background: black;\n}\n\n/* Square thumbnails */\n.thumbnail {\n  width: 200px;\n  aspect-ratio: 1; /* 1/1 = square */\n  object-fit: cover;\n}\n\n/* Old hack (no longer needed):\n  padding-top: 56.25%; */"
+        },
+        {
+          "id": 24,
+          "question": "What is CSS clamp()?",
+          "answer": "clamp(min, preferred, max) sets a value that scales between a minimum and maximum. Perfect for fluid typography and responsive sizing without media queries.",
+          "example": "/* Font size: min 16px, scales, max 32px */\nh1 {\n  font-size: clamp(1rem, 4vw, 2rem);\n  /* 16px on mobile, grows with viewport, capped at 32px */\n}\n\n.container {\n  width: clamp(280px, 90%, 1200px);\n  /* min 280px, prefer 90% width, max 1200px */\n}\n\n/* Eliminates many media queries! */"
+        },
+        {
+          "id": 25,
+          "question": "What is the difference between relative and absolute units in CSS?",
+          "answer": "Absolute units (px, pt, cm) are fixed. Relative units scale based on something else. em/rem scale with font size. vw/vh scale with viewport. % scales with parent. Use relative units for responsive design.",
+          "example": "/* Absolute - fixed */\n.fixed { font-size: 16px; width: 300px; }\n\n/* Relative to root font-size */\n.rem { font-size: 1.5rem; }\n\n/* Relative to parent */\n.percent { width: 50%; }\n\n/* Relative to viewport */\n.viewport {\n  height: 100vh; /* full screen height */\n  width: 50vw;   /* half screen width */\n}"
+        },
+        {
+          "id": 26,
+          "question": "What is BEM naming convention?",
+          "answer": "BEM (Block, Element, Modifier) is a CSS naming methodology. Block is the main component. Element is a part of the block (--). Modifier changes appearance/state (--).",
+          "example": "/* Block */\n.card { }\n\n/* Element (part of block) */\n.card__title { }\n.card__image { }\n.card__body { }\n\n/* Modifier (variation) */\n.card--featured { background: gold; }\n.card--disabled { opacity: 0.5; }\n.card__title--large { font-size: 2rem; }\n\n<!-- HTML -->\n<div class=\"card card--featured\">\n  <h2 class=\"card__title\">...</h2>\n</div>"
+        },
+        {
+          "id": 27,
+          "question": "What is CSS overflow property?",
+          "answer": "overflow controls what happens when content is bigger than its container. visible (default, spills out), hidden (clips), scroll (always shows scrollbar), auto (shows scrollbar only when needed).",
+          "example": ".box {\n  width: 200px;\n  height: 100px;\n}\n\n/* Common use cases */\n.clipped { overflow: hidden; }  /* crop content */\n.scrollable { overflow: auto; } /* scroll if needed */\n.x-scroll { overflow-x: auto; overflow-y: hidden; }\n\n/* Text truncation */\n.ellipsis {\n  overflow: hidden;\n  white-space: nowrap;\n  text-overflow: ellipsis;\n}"
+        },
+        {
+          "id": 28,
+          "question": "What is CSS Grid template areas?",
+          "answer": "grid-template-areas lets you name regions of your grid layout with ASCII-art-like syntax. Makes complex layouts intuitive and readable. Combine with named grid lines for powerful layouts.",
+          "example": ".layout {\n  display: grid;\n  grid-template-areas:\n    'header header header'\n    'sidebar main main'\n    'footer footer footer';\n  grid-template-rows: 60px 1fr 40px;\n}\n\n.header { grid-area: header; }\n.sidebar { grid-area: sidebar; }\n.main { grid-area: main; }\n.footer { grid-area: footer; }"
+        },
+        {
+          "id": 29,
+          "question": "What is the difference between CSS reset and normalize?",
+          "answer": "CSS Reset removes all browser default styles (aggressive, sets everything to 0). Normalize.css preserves useful browser defaults while making them consistent across browsers. Most developers prefer normalize.",
+          "example": "/* CSS Reset (aggressive) */\n* {\n  margin: 0;\n  padding: 0;\n  box-sizing: border-box;\n}\n\n/* Normalize approach (gentle) */\nh1 { font-size: 2em; margin: 0.67em 0; } /* consistent, not zero */\nbody { line-height: 1.15; }               /* slightly different than zero */\n\n/* Modern: CSS layers + custom baseline */"
+        },
+        {
+          "id": 30,
+          "question": "What are CSS logical properties?",
+          "answer": "Logical properties use start/end instead of left/right, making layouts work correctly for RTL (right-to-left) languages automatically. margin-inline-start instead of margin-left, etc.",
+          "example": "/* Physical (breaks in RTL) */\n.old { margin-left: 16px; padding-right: 8px; }\n\n/* Logical (RTL-aware) */\n.modern {\n  margin-inline-start: 16px; /* left in LTR, right in RTL */\n  padding-inline-end: 8px;\n  border-block-start: 1px solid; /* top border */\n}\n\n/* Great for international websites! */"
+        },
+        {
+          "id": 31,
+          "question": "What is the CSS gap property?",
+          "answer": "gap (previously grid-gap) adds spacing between Grid and Flexbox items without affecting outer edges. Much better than margins because it doesn't add extra space at edges.",
+          "example": "/* Flexbox gap */\n.flex-container {\n  display: flex;\n  gap: 16px; /* space between items */\n}\n\n/* Grid gap */\n.grid {\n  display: grid;\n  grid-template-columns: repeat(3, 1fr);\n  gap: 20px;        /* row and column gap */\n  row-gap: 10px;    /* or separately */\n  column-gap: 20px;\n}"
+        },
+        {
+          "id": 32,
+          "question": "What is the :root pseudo-class?",
+          "answer": ":root matches the root element of the document — the html element. Its specificity is higher than html selector. Primarily used to define CSS custom properties (variables) globally.",
+          "example": ":root {\n  /* Global design tokens */\n  --color-primary: #007bff;\n  --color-text: #333;\n  --font-body: 'Georgia', serif;\n  --spacing-unit: 8px;\n  --border-radius: 4px;\n  --shadow: 0 2px 8px rgba(0,0,0,0.1);\n}\n\n/* Higher specificity than 'html' selector */\n:root > body { /* ... */ }"
+        },
+        {
+          "id": 33,
+          "question": "What is CSS filter property?",
+          "answer": "filter applies graphical effects to elements: blur, brightness, contrast, grayscale, drop-shadow, saturate, and more. Works on images and any HTML element.",
+          "example": "/* Image effects */\nimg:hover { filter: brightness(1.2) saturate(1.3); }\n\n/* Grayscale and colorize on hover */\n.photo { filter: grayscale(100%); }\n.photo:hover { filter: grayscale(0%); transition: filter 0.5s; }\n\n/* Blur background (requires backdrop-filter) */\n.modal-overlay {\n  backdrop-filter: blur(4px);\n  /* blurs content behind the element */\n}"
+        },
+        {
+          "id": 34,
+          "question": "What are CSS counters?",
+          "answer": "CSS counters create automatic numbering purely in CSS using counter-reset, counter-increment, and counter(). Useful for numbering headings, ordered lists with custom styling.",
+          "example": ".numbered-list { counter-reset: item; }\n\n.numbered-list li {\n  counter-increment: item;\n  list-style: none;\n}\n\n.numbered-list li::before {\n  content: counter(item) '. ';\n  font-weight: bold;\n  color: blue;\n}\n\n/* Auto-number h2 headings */\nbody { counter-reset: section; }\nh2::before { counter-increment: section; content: counter(section) '. '; }"
+        },
+        {
+          "id": 35,
+          "question": "What is CSS scroll-behavior and scroll-snap?",
+          "answer": "scroll-behavior: smooth adds smooth scrolling when navigating to anchors. scroll-snap lets you create carousels and paged layouts where scrolling snaps to defined points.",
+          "example": "/* Smooth scroll */\nhtml { scroll-behavior: smooth; }\n\n/* Scroll snap - carousel */\n.carousel {\n  display: flex;\n  overflow-x: auto;\n  scroll-snap-type: x mandatory;\n}\n.slide {\n  min-width: 100%;\n  scroll-snap-align: start;\n  /* each slide snaps into place */\n}"
+        },
+        {
+          "id": 36,
+          "question": "What is @supports in CSS?",
+          "answer": "@supports lets you write CSS only if the browser supports a specific property. Like media queries but for feature detection. Allows progressive enhancement with newer CSS features.",
+          "example": "/* Fallback for all browsers */\n.layout { display: flex; }\n\n/* Enhanced grid for supporting browsers */\n@supports (display: grid) {\n  .layout {\n    display: grid;\n    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));\n  }\n}\n\n@supports (backdrop-filter: blur(10px)) {\n  .glass { backdrop-filter: blur(10px); }\n}"
+        },
+        {
+          "id": 37,
+          "question": "What is the CSS content property?",
+          "answer": "content is used with ::before and ::after pseudo-elements to insert generated content. Can be text, counters, quotes, images (url()), or even attribute values.",
+          "example": "/* Add decorative content */\n.card::before {\n  content: '★ Featured';\n  color: gold;\n}\n\n/* Show href in print */\n@media print {\n  a::after { content: ' (' attr(href) ')'; }\n}\n\n/* Custom quotes */\nq::before { content: '\\201C'; } /* \" */\nq::after  { content: '\\201D'; } /* \" */"
+        },
+        {
+          "id": 38,
+          "question": "What is the difference between min-width and max-width in media queries?",
+          "answer": "min-width: breakpoint applies styles from that width UPWARD (mobile-first). max-width: breakpoint applies styles from that width DOWNWARD (desktop-first). Mobile-first is recommended.",
+          "example": "/* Mobile-first (recommended) */\n/* Base: mobile styles */\n.box { font-size: 14px; }\n\n/* Tablet and UP */\n@media (min-width: 768px) { .box { font-size: 16px; } }\n\n/* Desktop-first */\n/* Base: desktop styles */\n.box { font-size: 20px; }\n\n/* Tablet and DOWN */\n@media (max-width: 767px) { .box { font-size: 14px; } }"
+        },
+        {
+          "id": 39,
+          "question": "What is the CSS outline property?",
+          "answer": "outline is similar to border but drawn outside the border box and doesn't affect layout. Important for accessibility — don't remove :focus outlines without providing an alternative. Supports outline-offset.",
+          "example": "/* Accessible focus style */\nbutton:focus-visible {\n  outline: 3px solid #005fcc;\n  outline-offset: 2px; /* space between element and outline */\n}\n\n/* Never do this without replacement! */\n/* *:focus { outline: none; } - breaks keyboard navigation */\n\n/* Custom focus */\ninput:focus {\n  outline: none; /* ok if you add border/shadow */\n  box-shadow: 0 0 0 3px rgba(0,123,255,0.4);\n}"
+        },
+        {
+          "id": 40,
+          "question": "What are CSS animations with @keyframes?",
+          "answer": "@keyframes defines animation steps from 0% (from) to 100% (to), or any percentage points between. Combined with animation property to specify duration, timing, delay, and iteration.",
+          "example": "@keyframes slideIn {\n  from { transform: translateX(-100%); opacity: 0; }\n  to   { transform: translateX(0); opacity: 1; }\n}\n\n.modal {\n  animation: slideIn 0.3s ease-out;\n  /* name | duration | timing | fillMode */\n  animation: fadeIn 0.5s ease forwards;\n  /* plays once and stays at end state */\n}"
+        },
+        {
+          "id": 41,
+          "question": "What is the CSS contain property?",
+          "answer": "contain tells the browser an element is independent from the rest of the page, enabling optimizations. Values: layout (contains layout changes), paint (contains paint), size, or strict/content for multiple.",
+          "example": ".card {\n  contain: layout paint;\n  /* Browser can optimize rendering */\n  /* Changes inside won't affect outside layout */\n}\n\n/* Useful for infinite scroll lists */\n.list-item {\n  contain: content;\n  /* Each item independent - better scrolling performance */\n}"
+        },
+        {
+          "id": 42,
+          "question": "What is the difference between nth-child and nth-of-type?",
+          "answer": ":nth-child(n) counts ALL sibling elements. :nth-of-type(n) counts only siblings of the same element type. Use nth-of-type when you have mixed element types.",
+          "example": "/* :nth-child - counts ALL children */\nli:nth-child(2) { color: red; } /* 2nd li among all children */\n\n/* :nth-of-type - counts only same-type */\np:nth-of-type(2) { color: blue; } /* 2nd <p>, skips non-p siblings */\n\n/* Useful patterns */\ntr:nth-child(even) { background: #f5f5f5; } /* zebra stripe table */\nli:nth-child(3n) { color: red; } /* every 3rd item */"
+        },
+        {
+          "id": 43,
+          "question": "What is pointer-events in CSS?",
+          "answer": "pointer-events controls whether an element can be the target of mouse/touch events. Setting to none makes element click-through (passes clicks to element below). Useful for overlays and disabled states.",
+          "example": "/* Disabled button - no interaction */\n.btn:disabled {\n  pointer-events: none;\n  opacity: 0.5;\n}\n\n/* Click-through overlay (let clicks reach elements below) */\n.decorative-overlay {\n  pointer-events: none;\n  position: absolute;\n  top: 0; left: 0;\n  background: linear-gradient(...);\n}"
+        },
+        {
+          "id": 44,
+          "question": "What is the CSS position: sticky and how does it work?",
+          "answer": "sticky is hybrid positioning — acts as relative until an element reaches a scroll threshold, then becomes fixed within its scroll container. The element must have top/left/bottom/right set to activate.",
+          "example": "/* Sticky header inside scrollable container */\n.table-header th {\n  position: sticky;\n  top: 0;           /* sticks at top */\n  background: white;\n  z-index: 1;\n}\n\n/* Sidebar that sticks */\n.sidebar {\n  position: sticky;\n  top: 80px; /* sticks 80px from top (after fixed header) */\n  max-height: calc(100vh - 80px);\n  overflow-y: auto;\n}"
+        },
+        {
+          "id": 45,
+          "question": "What is the CSS writing-mode property?",
+          "answer": "writing-mode controls the direction text flows — horizontal-tb (default, left-right, top-bottom), vertical-rl (top-bottom, right-left), vertical-lr. Used for East Asian typography and creative layouts.",
+          "example": "/* Vertical text for sidebar nav */\n.vertical-label {\n  writing-mode: vertical-rl;\n  text-orientation: mixed;\n  transform: rotate(180deg);\n}\n\n/* Japanese/Chinese text */\n.article-jp {\n  writing-mode: vertical-rl;\n  direction: rtl;\n}\n\n/* Creative rotated card */\n.tab { writing-mode: vertical-lr; }"
+        },
+        {
+          "id": 46,
+          "question": "What is the CSS isolation property?",
+          "answer": "isolation: isolate creates a new stacking context for an element without requiring a z-index. This prevents mix-blend-mode effects from leaking out and solves z-index conflicts.",
+          "example": ".card {\n  isolation: isolate; /* creates stacking context */\n  /* z-index of children won't affect elements outside */\n}\n\n/* Common problem: blend mode affects wrong elements */\n.thumbnail {\n  mix-blend-mode: multiply;\n}\n.thumbnail-wrapper {\n  isolation: isolate; /* confines blend to wrapper */\n}"
+        },
+        {
+          "id": 47,
+          "question": "What is font-display in @font-face?",
+          "answer": "font-display controls how custom fonts load. swap: shows system font immediately, swaps when loaded (best for text). optional: if font doesn't load fast, uses system font. block: hides text while loading (FOIT).",
+          "example": "@font-face {\n  font-family: 'MyFont';\n  src: url('myfont.woff2') format('woff2');\n  font-display: swap;\n  /* 'swap' - shows fallback text immediately */\n  /* 'optional' - doesn't wait for font */\n  /* 'block' - hides text until loaded (FOIT) */\n  /* 'fallback' - short block period, then fallback */\n}"
+        },
+        {
+          "id": 48,
+          "question": "What is the CSS overscroll-behavior property?",
+          "answer": "overscroll-behavior controls what happens when you scroll past a container's edge. Setting to contain prevents scroll chaining (prevents parent scrolling when child reaches edge — great for modals).",
+          "example": "/* Modal - prevent body scroll when overlay scrolls */\n.modal-body {\n  overflow-y: auto;\n  overscroll-behavior: contain;\n  /* stops scroll from propagating to page */\n}\n\n/* Chat window - stop page scroll */\n.chat-messages {\n  overflow-y: scroll;\n  overscroll-behavior-y: contain;\n}"
+        },
+        {
+          "id": 49,
+          "question": "What are CSS layers (@layer)?",
+          "answer": "CSS @layer lets you control cascade order explicitly by naming layers. Lower layers are overridden by higher layers regardless of selector specificity. Solves specificity battles in large codebases.",
+          "example": "@layer reset, base, components, utilities;\n\n@layer reset {\n  * { margin: 0; padding: 0; }\n}\n@layer components {\n  .btn { background: blue; padding: 8px 16px; }\n}\n@layer utilities {\n  .mt-4 { margin-top: 1rem; }\n  /* Utilities layer wins over components regardless of specificity! */\n}"
+        },
+        {
+          "id": 50,
+          "question": "What is the CSS color-scheme property?",
+          "answer": "color-scheme tells the browser which color schemes the element supports. Setting it allows native form controls (inputs, scrollbars) to automatically adapt to dark/light mode.",
+          "example": "/* Support both modes */\n:root {\n  color-scheme: light dark;\n}\n\n/* Force dark mode on specific element */\n.dark-panel {\n  color-scheme: dark;\n  /* native controls inside will be dark */\n  background: #1a1a1a;\n  color: white;\n}\n\n/* In meta tag: <meta name='color-scheme' content='dark light'> */"
+        }
+      ]
+    },
+    {
+      "id": "html",
+      "name": "HTML",
+      "icon": "🏗️",
+      "color": "#e34c26",
+      "textColor": "#ffffff",
+      "questions": [
+        {
+          "id": 1,
+          "question": "What is HTML and what does it stand for?",
+          "answer": "HTML stands for HyperText Markup Language. It's the standard language for creating web pages. It defines the structure and content using elements represented by tags. HyperText means documents can link to other documents.",
+          "example": "<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n  <meta charset=\"UTF-8\">\n  <title>My Page</title>\n</head>\n<body>\n  <h1>Hello World</h1>\n  <p>This is a paragraph.</p>\n  <a href=\"about.html\">About</a>\n</body>\n</html>"
+        },
+        {
+          "id": 2,
+          "question": "What is semantic HTML?",
+          "answer": "Semantic HTML uses tags that describe the meaning of their content, not just their appearance. Elements like header, nav, main, article, section, footer tell browsers and screen readers what the content IS, improving accessibility and SEO.",
+          "example": "<!-- Non-semantic (bad) -->\n<div class=\"header\"><div class=\"nav\"></div></div>\n<div class=\"main\"><div class=\"article\"></div></div>\n\n<!-- Semantic (good) -->\n<header>\n  <nav>...</nav>\n</header>\n<main>\n  <article>\n    <h1>Blog Post</h1>\n    <p>Content...</p>\n  </article>\n</main>\n<footer>...</footer>"
+        },
+        {
+          "id": 3,
+          "question": "What is the difference between div and span?",
+          "answer": "div is a block-level element — it creates a rectangular block taking full width, used for grouping sections. span is an inline element — stays in text flow, used for styling small parts of text without breaking flow.",
+          "example": "<!-- div - block, creates layout sections -->\n<div class=\"card\">\n  <h2>Title</h2>\n  <p>Content</p>\n</div>\n\n<!-- span - inline, styles within text -->\n<p>\n  The price is <span style=\"color:red;\">$99</span> only!\n  Click <span class=\"highlight\">here</span> to buy.\n</p>"
+        },
+        {
+          "id": 4,
+          "question": "What are HTML attributes? Name some important ones.",
+          "answer": "Attributes provide additional information about elements, written in the opening tag as name='value' pairs. They configure behavior, appearance, and accessibility.",
+          "example": "<!-- id - unique identifier -->\n<div id=\"main-content\">\n\n<!-- class - styling hook -->\n<p class=\"text-primary bold\">\n\n<!-- href - link destination -->\n<a href=\"https://example.com\" target=\"_blank\" rel=\"noopener\">\n\n<!-- alt - image description for screen readers -->\n<img src=\"logo.png\" alt=\"Company Logo\" width=\"200\">\n\n<!-- data-* - custom data -->\n<button data-user-id=\"42\" data-action=\"delete\">"
+        },
+        {
+          "id": 5,
+          "question": "What is the difference between id and class?",
+          "answer": "id is unique — only one element per page should have a given id. Use for specific elements and JS targeting. class is reusable — multiple elements can share the same class. Use for styling groups of elements.",
+          "example": "<!-- id - unique, one per page -->\n<header id=\"main-header\"> <!-- #main-header in CSS -->\n\n<!-- class - reusable on many elements -->\n<button class=\"btn btn-primary\">Save</button>\n<button class=\"btn btn-secondary\">Cancel</button>\n\n/* CSS */\n#main-header { background: navy; }  /* id - specific */\n.btn { padding: 8px 16px; }         /* class - reusable */"
+        },
+        {
+          "id": 6,
+          "question": "What is the difference between block and inline elements?",
+          "answer": "Block elements start on a new line and take full available width (div, p, h1-h6, ul, section). Inline elements flow within text, only as wide as their content (span, a, strong, em, img).",
+          "example": "<!-- Block elements -->\n<p>Paragraph starts new line</p>\n<h1>Heading starts new line</h1>\n<div>Div starts new line</div>\n\n<!-- Inline elements -->\n<p>\n  This text has <strong>bold</strong> and\n  <a href=\"#\">links</a> that stay inline.\n  Even <span>spans</span> stay in flow.\n</p>"
+        },
+        {
+          "id": 7,
+          "question": "What is the HTML head element and what goes inside it?",
+          "answer": "The head element contains metadata about the page — not displayed content, but essential information for browsers, SEO, and social sharing. Includes title, meta tags, CSS links, scripts, and favicons.",
+          "example": "<head>\n  <meta charset=\"UTF-8\">\n  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n  <meta name=\"description\" content=\"Page description for SEO\">\n  <meta property=\"og:title\" content=\"Social Share Title\">\n  <title>Page Title</title>\n  <link rel=\"stylesheet\" href=\"styles.css\">\n  <link rel=\"icon\" href=\"favicon.ico\">\n  <script src=\"analytics.js\" defer></script>\n</head>"
+        },
+        {
+          "id": 8,
+          "question": "What is the viewport meta tag?",
+          "answer": "The viewport meta tag tells the browser how to control the page's dimensions and scaling on mobile devices. Without it, mobile browsers zoom out to show the desktop version instead of the responsive version.",
+          "example": "<!-- Essential for responsive design -->\n<meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n<!-- width=device-width: match device screen width -->\n<!-- initial-scale=1.0: don't zoom in/out by default -->\n\n<!-- Without this, media queries won't work on mobile! -->\n<!-- Phone renders at ~980px and scales down -->"
+        },
+        {
+          "id": 9,
+          "question": "What are HTML forms and form elements?",
+          "answer": "HTML forms collect user input. The form tag wraps all inputs. Key attributes: action (where data is sent), method (GET/POST). Form elements include input, textarea, select, button, label, fieldset.",
+          "example": "<form action=\"/submit\" method=\"POST\">\n  <label for=\"name\">Name:</label>\n  <input type=\"text\" id=\"name\" name=\"name\" required>\n\n  <label for=\"email\">Email:</label>\n  <input type=\"email\" id=\"email\" name=\"email\">\n\n  <label for=\"role\">Role:</label>\n  <select id=\"role\" name=\"role\">\n    <option value=\"dev\">Developer</option>\n  </select>\n\n  <button type=\"submit\">Submit</button>\n</form>"
+        },
+        {
+          "id": 10,
+          "question": "What is the input type attribute and what types are available?",
+          "answer": "The type attribute of input defines what kind of data it accepts and how it's displayed. Different types provide built-in validation, mobile keyboard types, and UI controls — no JS needed!",
+          "example": "<input type=\"text\">      <!-- default text -->\n<input type=\"email\">     <!-- validates email format -->\n<input type=\"password\">  <!-- hides text -->\n<input type=\"number\">    <!-- numeric keyboard -->\n<input type=\"date\">      <!-- date picker -->\n<input type=\"checkbox\">  <!-- toggle -->\n<input type=\"radio\">     <!-- select one -->\n<input type=\"file\">      <!-- file upload -->\n<input type=\"range\">     <!-- slider -->\n<input type=\"color\">     <!-- color picker -->"
+        },
+        {
+          "id": 11,
+          "question": "What is the alt attribute on images and why is it important?",
+          "answer": "alt provides alternative text for images when they can't be displayed and for screen readers used by visually impaired users. Required for accessibility (WCAG), also improves SEO. Empty alt (alt='') for decorative images.",
+          "example": "<!-- Content image - descriptive alt -->\n<img src=\"team-photo.jpg\" alt=\"The Acme Corp team at our 2023 retreat\">\n\n<!-- Decorative image - empty alt (screen readers skip it) -->\n<img src=\"divider.png\" alt=\"\" role=\"presentation\">\n\n<!-- Icon with context -->\n<button>\n  <img src=\"search-icon.svg\" alt=\"Search\">\n</button>"
+        },
+        {
+          "id": 12,
+          "question": "What is the difference between href and src?",
+          "answer": "href (hyperlink reference) specifies the URL for links and resources that establish a relationship. src (source) specifies the URL of content to embed directly into the page — it downloads/runs immediately.",
+          "example": "<!-- href - link/reference (doesn't download/embed immediately) -->\n<a href=\"about.html\">About</a>\n<link href=\"styles.css\" rel=\"stylesheet\">\n\n<!-- src - embed content directly -->\n<img src=\"photo.jpg\">\n<script src=\"app.js\"></script>\n<iframe src=\"map.html\"></iframe>"
+        },
+        {
+          "id": 13,
+          "question": "What are HTML data attributes?",
+          "answer": "data-* attributes store custom data on HTML elements without using non-standard attributes. They don't affect display but can be accessed in CSS (via attr()) and JavaScript (via dataset).",
+          "example": "<!-- HTML -->\n<button \n  data-user-id=\"42\"\n  data-action=\"delete\"\n  data-product-name=\"Laptop\"\n>Delete</button>\n\n// JavaScript\nconst btn = document.querySelector('button');\nconsole.log(btn.dataset.userId);      // '42'\nconsole.log(btn.dataset.action);      // 'delete'\nconsole.log(btn.dataset.productName); // 'Laptop' (camelCase!)"
+        },
+        {
+          "id": 14,
+          "question": "What is the defer and async attribute on script tags?",
+          "answer": "Without attributes, scripts block HTML parsing. defer downloads in background and executes AFTER HTML is parsed, in order. async downloads in background and executes immediately when ready, possibly out of order.",
+          "example": "<!-- Blocks parsing - bad for performance -->\n<script src=\"heavy.js\"></script>\n\n<!-- async - downloads parallel, executes ASAP (order not guaranteed) -->\n<script src=\"analytics.js\" async></script>\n\n<!-- defer - downloads parallel, executes after HTML parsed (in order) -->\n<script src=\"app.js\" defer></script>\n\n<!-- Use defer for most scripts, async for independent scripts -->"
+        },
+        {
+          "id": 15,
+          "question": "What are ARIA attributes and why are they important?",
+          "answer": "ARIA (Accessible Rich Internet Applications) attributes add semantic meaning to HTML when native semantics are insufficient. They help screen readers understand dynamic content, roles, and states — critical for accessibility.",
+          "example": "<button aria-expanded=\"false\" aria-controls=\"menu\">\n  Menu ▼\n</button>\n<ul id=\"menu\" hidden>...</ul>\n\n<div role=\"alert\" aria-live=\"polite\">Form submitted!</div>\n\n<input \n  aria-required=\"true\"\n  aria-describedby=\"email-help\"\n>\n<p id=\"email-help\">We'll never share your email</p>"
+        },
+        {
+          "id": 16,
+          "question": "What is the difference between section, article, div, and aside?",
+          "answer": "section: thematic group of content with a heading. article: self-contained content that makes sense independently (blog post, news). div: generic non-semantic container. aside: secondary content tangentially related (sidebar, ad).",
+          "example": "<main>\n  <article>  <!-- standalone content -->\n    <header><h1>Blog Post Title</h1></header>\n    <section>  <!-- themed grouping within article -->\n      <h2>Introduction</h2>\n      <p>Content...</p>\n    </section>\n  </article>\n  <aside>  <!-- sidebar -->\n    <h3>Related Posts</h3>\n  </aside>\n</main>"
+        },
+        {
+          "id": 17,
+          "question": "What are void elements in HTML?",
+          "answer": "Void elements are self-closing tags that cannot have children or closing tags. They represent something complete by themselves. Examples: input, img, br, hr, meta, link, area, base, col.",
+          "example": "<!-- Void elements - no closing tag needed -->\n<input type=\"text\" placeholder=\"Name\">\n<img src=\"photo.jpg\" alt=\"Photo\">\n<br>  <!-- line break -->\n<hr>  <!-- horizontal rule -->\n<meta charset=\"UTF-8\">\n<link rel=\"stylesheet\" href=\"style.css\">\n\n<!-- NOT: <img></img> - incorrect for void elements -->"
+        },
+        {
+          "id": 18,
+          "question": "What is the HTML table structure?",
+          "answer": "Tables display tabular data in rows and columns. Proper structure: table, thead (header rows), tbody (data rows), tfoot (summary rows). Cells: th (header, bold+centered) and td (data). Never use tables for layout!",
+          "example": "<table>\n  <thead>\n    <tr>\n      <th scope=\"col\">Name</th>\n      <th scope=\"col\">Age</th>\n    </tr>\n  </thead>\n  <tbody>\n    <tr>\n      <td>Alice</td>\n      <td>25</td>\n    </tr>\n  </tbody>\n  <tfoot>\n    <tr><td colspan=\"2\">Total: 1 person</td></tr>\n  </tfoot>\n</table>"
+        },
+        {
+          "id": 19,
+          "question": "What is the difference between ol, ul, and dl?",
+          "answer": "ul (unordered list): bulleted list, order doesn't matter (nav items, features). ol (ordered list): numbered, order matters (steps, rankings). dl (description list): term-description pairs (glossary, FAQ, metadata).",
+          "example": "<!-- Unordered - order doesn't matter -->\n<ul>\n  <li>Milk</li>\n  <li>Eggs</li>\n</ul>\n\n<!-- Ordered - sequence matters -->\n<ol>\n  <li>Preheat oven to 350°</li>\n  <li>Mix ingredients</li>\n</ol>\n\n<!-- Description list -->\n<dl>\n  <dt>HTML</dt>\n  <dd>HyperText Markup Language</dd>\n</dl>"
+        },
+        {
+          "id": 20,
+          "question": "What is the HTML5 canvas element?",
+          "answer": "canvas provides a drawing surface for 2D graphics using JavaScript. Unlike SVG, it's pixel-based (raster) and drawn procedurally. Used for games, charts, image manipulation, and animations.",
+          "example": "<canvas id=\"myCanvas\" width=\"400\" height=\"300\"></canvas>\n\n<script>\nconst canvas = document.getElementById('myCanvas');\nconst ctx = canvas.getContext('2d');\n\n// Draw rectangle\nctx.fillStyle = 'blue';\nctx.fillRect(10, 10, 100, 50);\n\n// Draw circle\nctx.beginPath();\nctx.arc(200, 100, 50, 0, 2 * Math.PI);\nctx.fill();\n</script>"
+        },
+        {
+          "id": 21,
+          "question": "What is the difference between GET and POST methods in forms?",
+          "answer": "GET appends form data to URL as query string — visible in URL, bookmarkable, cached, limited size. Good for search. POST sends data in request body — not visible, more secure for sensitive data, no size limit. Good for login, file upload.",
+          "example": "<!-- GET - data in URL: search.html?q=javascript&sort=date -->\n<form method=\"GET\" action=\"/search\">\n  <input name=\"q\" type=\"search\">\n  <input name=\"sort\" type=\"hidden\" value=\"date\">\n  <button type=\"submit\">Search</button>\n</form>\n\n<!-- POST - data in body, not in URL -->\n<form method=\"POST\" action=\"/login\">\n  <input name=\"password\" type=\"password\">\n  <button type=\"submit\">Login</button>\n</form>"
+        },
+        {
+          "id": 22,
+          "question": "What is the HTML picture element?",
+          "answer": "picture provides multiple image sources for different scenarios — different resolutions, formats (WebP vs JPG), or art direction (different crop for mobile vs desktop). The browser picks the best source.",
+          "example": "<picture>\n  <!-- WebP for modern browsers -->\n  <source type=\"image/webp\" srcset=\"hero.webp\">\n  <!-- Different crop for mobile -->\n  <source media=\"(max-width: 600px)\" srcset=\"hero-mobile.jpg\">\n  <!-- Fallback for old browsers -->\n  <img src=\"hero.jpg\" alt=\"Hero image\">\n</picture>"
+        },
+        {
+          "id": 23,
+          "question": "What are HTML entities?",
+          "answer": "HTML entities encode special characters that have meaning in HTML (like < and >) or are hard to type. They start with & and end with ;. Essential for displaying reserved characters.",
+          "example": "&lt;   → <  (less than)\n&gt;   → >  (greater than)\n&amp;  → &  (ampersand)\n&quot; → \"  (double quote)\n&nbsp; →    (non-breaking space)\n&copy; → ©  (copyright)\n&mdash; → —  (em dash)\n\n<!-- Code example -->\n<p>Use &lt;div&gt; for containers</p>\n<!-- Displays: Use <div> for containers -->"
+        },
+        {
+          "id": 24,
+          "question": "What is the rel attribute on links?",
+          "answer": "rel defines the relationship between the current document and the linked resource. Critical for SEO, performance, and security.",
+          "example": "<!-- Stylesheet -->\n<link rel=\"stylesheet\" href=\"style.css\">\n\n<!-- Favicon -->\n<link rel=\"icon\" href=\"favicon.ico\">\n\n<!-- External links - security best practice -->\n<a href=\"example.com\" \n   target=\"_blank\" \n   rel=\"noopener noreferrer\">\n  External Link\n</a>\n<!-- noopener: prevents target from accessing window.opener -->\n<!-- noreferrer: hides referring URL -->"
+        },
+        {
+          "id": 25,
+          "question": "What is srcset on img element?",
+          "answer": "srcset provides multiple image sources for different screen resolutions and sizes. The browser picks the most appropriate one. Combine with sizes attribute for full responsive image optimization.",
+          "example": "<img \n  src=\"photo-800.jpg\"\n  srcset=\"photo-400.jpg 400w,\n          photo-800.jpg 800w,\n          photo-1600.jpg 1600w\"\n  sizes=\"(max-width: 600px) 400px,\n         (max-width: 1200px) 800px,\n         1600px\"\n  alt=\"Responsive photo\"\n>\n<!-- Browser picks best image for screen + resolution -->"
+        },
+        {
+          "id": 26,
+          "question": "What is the HTML details and summary elements?",
+          "answer": "details and summary create a native disclosure widget (accordion) without JavaScript. summary is the visible clickable heading. Clicking it toggles the rest of details content open/closed.",
+          "example": "<details>\n  <summary>What is your return policy?</summary>\n  <p>We offer a 30-day return policy for all items.\n  Items must be in original condition...</p>\n</details>\n\n<details open>  <!-- open attribute = expanded by default -->\n  <summary>Shipping Information</summary>\n  <p>Free shipping on orders over $50.</p>\n</details>"
+        },
+        {
+          "id": 27,
+          "question": "What is the HTML dialog element?",
+          "answer": "dialog is a native HTML modal/popup element. Supports showModal() for focus trapping and backdrop. Much better than div modals for accessibility — handles focus, Escape key, and screen readers automatically.",
+          "example": "<dialog id=\"myDialog\">\n  <h2>Confirm Delete</h2>\n  <p>Are you sure? This cannot be undone.</p>\n  <button onclick=\"this.closest('dialog').close()\">Cancel</button>\n  <button>Delete</button>\n</dialog>\n\n<button onclick=\"document.getElementById('myDialog').showModal()\">\n  Open Modal\n</button>"
+        },
+        {
+          "id": 28,
+          "question": "What is the HTML progress and meter elements?",
+          "answer": "progress shows completion of a task (loading bar). meter shows a scalar measurement within a known range (disk usage, rating). Both are semantic and accessible with screen readers.",
+          "example": "<!-- Progress bar - task completion -->\n<label>Upload progress:</label>\n<progress value=\"75\" max=\"100\">75%</progress>\n\n<!-- Indeterminate (spinning) -->\n<progress>Loading...</progress>\n\n<!-- Meter - measurement within range -->\n<label>Disk Usage:</label>\n<meter value=\"80\" min=\"0\" max=\"100\" \n       low=\"50\" high=\"80\" optimum=\"30\">\n  80%\n</meter>  <!-- turns red when > high value -->"
+        },
+        {
+          "id": 29,
+          "question": "What are the new HTML5 form validation attributes?",
+          "answer": "HTML5 added built-in form validation attributes, reducing the need for JavaScript validation. They provide browser-native error messages and prevent form submission when invalid.",
+          "example": "<form>\n  <input type=\"email\" required>\n  <!-- required - can't be empty -->\n  \n  <input type=\"text\" minlength=\"3\" maxlength=\"50\">\n  <!-- length constraints -->\n  \n  <input type=\"number\" min=\"0\" max=\"100\" step=\"5\">\n  <!-- range and step -->\n  \n  <input type=\"text\" pattern=\"[A-Za-z]{3}\">\n  <!-- regex pattern -->\n  \n  <!-- Custom message -->\n  <input required oninvalid=\"this.setCustomValidity('Please fill this!')\">\n</form>"
+        },
+        {
+          "id": 30,
+          "question": "What is the contenteditable attribute?",
+          "answer": "contenteditable makes any HTML element editable by the user — like a WYSIWYG editor. Used for rich text editors, inline editing features, and note-taking apps.",
+          "example": "<!-- Make a div editable -->\n<div contenteditable=\"true\" \n     style=\"border: 1px solid; padding: 10px;\"\n     id=\"editor\">\n  Click here to edit this text!\n</div>\n\n// Get content\nconst content = document.getElementById('editor').innerHTML;\n\n// Formatted text is preserved when user types"
+        },
+        {
+          "id": 31,
+          "question": "What is the tabindex attribute?",
+          "answer": "tabindex controls keyboard tab navigation order. tabindex=0 makes any element focusable in natural order. tabindex=-1 makes it focusable by JS only (not tab). Positive values set explicit order (avoid — use DOM order instead).",
+          "example": "<!-- Naturally focusable: a, button, input, select, textarea -->\n\n<!-- Make div keyboard focusable -->\n<div tabindex=\"0\" role=\"button\" onclick=\"...\">\n  Custom button\n</div>\n\n<!-- Focus with JS only (skip tab order) -->\n<div tabindex=\"-1\" id=\"error-summary\">Errors found...</div>\n// JavaScript:\ndocument.getElementById('error-summary').focus();"
+        },
+        {
+          "id": 32,
+          "question": "What is the difference between link and @import for stylesheets?",
+          "answer": "link tag in HTML is preferred — it's faster, loads in parallel with HTML, and doesn't require CSS parsing to trigger. @import in CSS blocks rendering until the imported file loads and doesn't support IE properly.",
+          "example": "<!-- link - preferred, loads in parallel -->\n<head>\n  <link rel=\"stylesheet\" href=\"styles.css\">\n  <link rel=\"stylesheet\" href=\"theme.css\">\n</head>\n\n/* @import - inside CSS, blocks rendering */\n@import url('theme.css');  /* loads sequentially = slower */\nbody { ... }\n\n/* Avoid @import in production - hurts performance */"
+        },
+        {
+          "id": 33,
+          "question": "What is the novalidate attribute on forms?",
+          "answer": "novalidate disables browser's built-in HTML5 validation, allowing you to handle validation entirely with JavaScript. Useful when you want custom error messages, specific validation timing, or complex multi-step validation.",
+          "example": "<form novalidate id=\"myForm\">\n  <input type=\"email\" id=\"email\" required>\n  <button type=\"submit\">Submit</button>\n</form>\n\ndocument.getElementById('myForm').addEventListener('submit', (e) => {\n  e.preventDefault();\n  const email = document.getElementById('email').value;\n  if (!isValidEmail(email)) {\n    showCustomError('Please enter a valid email');\n  }\n});"
+        },
+        {
+          "id": 34,
+          "question": "What are HTML comments and when to use them?",
+          "answer": "HTML comments (<!-- -->) are notes in the code that browsers ignore. Use for explaining complex sections, temporarily disabling code, or marking sections. Don't put sensitive info in comments — they're visible in page source!",
+          "example": "<!-- This is a comment -->\n\n<!-- Main navigation -->\n<nav>...</nav>\n\n<!-- TODO: Add search functionality here -->\n\n<!-- TEMPORARILY DISABLED:\n<section class=\"promo-banner\">\n  <p>Sale ends tomorrow!</p>\n</section>\n-->\n\n<!-- WARNING: Don't comment out sensitive info:\n  Admin password: never do this! -->"
+        },
+        {
+          "id": 35,
+          "question": "What is the preload link tag?",
+          "answer": "rel=preload tells the browser to fetch a resource early in the page load, before it's discovered in HTML/CSS. Critical for fonts, hero images, or key scripts that are needed immediately.",
+          "example": "<head>\n  <!-- Preload critical font -->\n  <link rel=\"preload\" href=\"font.woff2\" \n        as=\"font\" type=\"font/woff2\" crossorigin>\n  \n  <!-- Preload hero image -->\n  <link rel=\"preload\" href=\"hero.jpg\" as=\"image\">\n  \n  <!-- Preload key script -->\n  <link rel=\"preload\" href=\"critical.js\" as=\"script\">\n</head>\n<!-- 'as' tells browser what kind of resource for priority queueing -->"
+        },
+        {
+          "id": 36,
+          "question": "What is the difference between strong, b, em, and i?",
+          "answer": "strong: semantic strong importance (screen readers emphasize). b: bold with no special importance (keyword highlighting). em: semantic stress emphasis (changes meaning). i: italic with no special importance (technical terms, book titles).",
+          "example": "<!-- strong: important content -->\n<p><strong>Warning:</strong> This action cannot be undone.</p>\n\n<!-- b: stylistically bold (keywords, product names) -->\n<p>The <b>React</b> library is popular.</p>\n\n<!-- em: spoken emphasis (changes meaning) -->\n<p>I <em>never</em> said she stole it.</p>\n\n<!-- i: technical terms, foreign words -->\n<p>In <i>Homo sapiens</i>, Homo is the genus.</p>"
+        },
+        {
+          "id": 37,
+          "question": "What is the download attribute on anchor tags?",
+          "answer": "The download attribute on an anchor tag triggers a file download instead of navigating to the URL. You can optionally specify the filename. Works for same-origin URLs or blob URLs.",
+          "example": "<!-- Download with original filename -->\n<a href=\"/files/report.pdf\" download>Download Report</a>\n\n<!-- Download with custom filename -->\n<a href=\"/export?format=csv\" download=\"users-2024.csv\">\n  Export Users\n</a>\n\n// Programmatic download with Blob\nconst blob = new Blob(['Hello!'], { type: 'text/plain' });\nconst url = URL.createObjectURL(blob);\nconst a = document.createElement('a');\na.href = url; a.download = 'hello.txt'; a.click();"
+        },
+        {
+          "id": 38,
+          "question": "What is the hidden attribute?",
+          "answer": "The hidden attribute is a global HTML attribute that hides an element (adds display:none). More semantic than CSS hiding for content that shouldn't be shown. Can be toggled easily with JS.",
+          "example": "<!-- Semantically hidden -->\n<div id=\"error\" hidden>\n  <p>Error: Something went wrong!</p>\n</div>\n\n// Show with JavaScript\ndocument.getElementById('error').hidden = false;\n// or\ndocument.getElementById('error').removeAttribute('hidden');\n\n<!-- Note: hidden elements are still in DOM and accessible via JS -->"
+        },
+        {
+          "id": 39,
+          "question": "What is microdata and structured data in HTML?",
+          "answer": "Structured data (Schema.org) adds machine-readable meaning to HTML using special attributes. Search engines use it for rich search results (star ratings, prices, event dates, breadcrumbs).",
+          "example": "<!-- Schema.org Product markup -->\n<div itemscope itemtype=\"https://schema.org/Product\">\n  <h1 itemprop=\"name\">Coffee Mug</h1>\n  <img itemprop=\"image\" src=\"mug.jpg\" alt=\"Mug\">\n  <div itemprop=\"offers\" itemscope\n       itemtype=\"https://schema.org/Offer\">\n    <span itemprop=\"price\">$14.99</span>\n    <meta itemprop=\"availability\" content=\"InStock\">\n  </div>\n</div>"
+        },
+        {
+          "id": 40,
+          "question": "What is the role attribute and when is it used?",
+          "answer": "role from ARIA defines what an element IS to screen readers. Use when semantic HTML isn't possible — when you build custom components with div/span that behave like buttons, tabs, dialogs, etc.",
+          "example": "<!-- Don't use div as button (inaccessible) -->\n<div onclick=\"...\">Click me</div>\n\n<!-- Add role for accessibility -->\n<div role=\"button\" tabindex=\"0\"\n     onkeypress=\"handleKey(event)\"\n     onclick=\"handleClick()\">\n  Click me\n</div>\n\n<!-- Common roles -->\nrole=\"navigation\" role=\"main\" role=\"banner\"\nrole=\"alert\" role=\"dialog\" role=\"tab\"\n\n<!-- But prefer semantic HTML when possible! -->"
+        }
+      ]
+    },
+    {
+      "id": "nodejs",
+      "name": "Node.js",
+      "icon": "🟢",
+      "color": "#3c873a",
+      "textColor": "#ffffff",
+      "questions": [
+        {
+          "id": 1,
+          "question": "What is Node.js and how does it differ from browser JavaScript?",
+          "answer": "Node.js is a JavaScript runtime built on Chrome's V8 engine that runs JS outside the browser — on servers. Unlike browser JS, Node has no DOM/window, but has access to filesystem, network, OS, and can create web servers.",
+          "example": "// Browser JS - has window, DOM\ndocument.getElementById('title').textContent = 'Hello';\n\n// Node.js - no window/DOM, has fs, http, path\nconst fs = require('fs');\nconst http = require('http');\n\nfs.readFileSync('./data.txt'); // filesystem access (not in browser)\nhttp.createServer((req, res) => { res.end('Hello!'); }).listen(3000);"
+        },
+        {
+          "id": 2,
+          "question": "What is npm and package.json?",
+          "answer": "npm (Node Package Manager) is the default package manager for Node.js. package.json is a configuration file that lists your project's dependencies, scripts, metadata, and settings. It's the heart of every Node project.",
+          "example": "// package.json\n{\n  \"name\": \"my-app\",\n  \"version\": \"1.0.0\",\n  \"scripts\": {\n    \"start\": \"node index.js\",\n    \"dev\": \"nodemon index.js\",\n    \"test\": \"jest\"\n  },\n  \"dependencies\": {\n    \"express\": \"^4.18.0\",\n    \"mongoose\": \"^7.0.0\"\n  },\n  \"devDependencies\": {\n    \"nodemon\": \"^3.0.0\"\n  }\n}"
+        },
+        {
+          "id": 3,
+          "question": "What is the Node.js event loop?",
+          "answer": "Node.js is single-threaded but handles thousands of concurrent operations using the event loop. When async tasks (I/O, timers) complete, their callbacks are queued and processed one by one. This is why Node is non-blocking and efficient.",
+          "example": "console.log('1 - start');\n\n// Async I/O - doesn't block\nfs.readFile('big-file.txt', (err, data) => {\n  console.log('3 - file read done');\n});\n\nconsole.log('2 - continues immediately');\n// Output: 1, 2, 3\n// File read was happening in background while 2 printed"
+        },
+        {
+          "id": 4,
+          "question": "What is the difference between require() and import in Node.js?",
+          "answer": "require() is CommonJS (CJS) — the original Node.js module system, synchronous. import is ES Modules (ESM) — modern JavaScript standard, asynchronous. Node supports both, but mixing needs care.",
+          "example": "// CommonJS (require) - .js files by default\nconst express = require('express');\nconst { readFile } = require('fs/promises');\nmodule.exports = { myFunction };\n\n// ES Modules (import) - use .mjs or \"type\":\"module\" in package.json\nimport express from 'express';\nimport { readFile } from 'fs/promises';\nexport { myFunction };"
+        },
+        {
+          "id": 5,
+          "question": "What is the Node.js fs module?",
+          "answer": "fs (filesystem) module provides APIs to interact with the file system — read, write, delete, rename files and directories. Has sync (blocking) and async (callback/promise) versions.",
+          "example": "const fs = require('fs/promises');\n\n// Read file\nconst data = await fs.readFile('./data.txt', 'utf8');\n\n// Write file\nawait fs.writeFile('./output.txt', 'Hello World');\n\n// Append to file\nawait fs.appendFile('./log.txt', 'New log entry\\n');\n\n// Delete file\nawait fs.unlink('./temp.txt');\n\n// Create directory\nawait fs.mkdir('./uploads', { recursive: true });"
+        },
+        {
+          "id": 6,
+          "question": "What are Node.js streams?",
+          "answer": "Streams handle data piece by piece (chunks) instead of loading everything into memory. Perfect for large files, network data, and real-time processing. Types: Readable, Writable, Duplex (both), Transform (modify data).",
+          "example": "const fs = require('fs');\n\n// Instead of reading entire file into memory:\n// const data = fs.readFileSync('huge-file.csv'); // bad for large files\n\n// Stream it chunk by chunk:\nconst readStream = fs.createReadStream('huge-file.csv');\nconst writeStream = fs.createWriteStream('output.csv');\n\nreadStream.pipe(writeStream); // pipes data from read to write\n\nreadStream.on('data', chunk => console.log('Chunk received:', chunk.length));\nreadStream.on('end', () => console.log('Done!'));"
+        },
+        {
+          "id": 7,
+          "question": "What is the Node.js http module?",
+          "answer": "The built-in http module lets you create HTTP servers and make HTTP requests without any framework. Express and other frameworks are built on top of it.",
+          "example": "const http = require('http');\n\nconst server = http.createServer((req, res) => {\n  const { url, method } = req;\n  \n  if (url === '/' && method === 'GET') {\n    res.writeHead(200, { 'Content-Type': 'text/html' });\n    res.end('<h1>Hello World</h1>');\n  } else {\n    res.writeHead(404);\n    res.end('Not Found');\n  }\n});\n\nserver.listen(3000, () => console.log('Server running on port 3000'));"
+        },
+        {
+          "id": 8,
+          "question": "What is process.env and how do you use environment variables?",
+          "answer": "process.env is a Node.js object containing environment variables — configuration values from the OS environment. Used to store sensitive data (API keys, DB passwords) outside your code, and settings that change per environment.",
+          "example": "// Load .env file\nrequire('dotenv').config();\n\n// Access env variables\nconst PORT = process.env.PORT || 3000;\nconst DB_URL = process.env.DATABASE_URL;\nconst API_KEY = process.env.API_KEY;\n\n// .env file (never commit this!)\n// PORT=4000\n// DATABASE_URL=mongodb://localhost/mydb\n// API_KEY=sk_live_abc123\n\n// Different .env per environment (.env.development, .env.production)"
+        },
+        {
+          "id": 9,
+          "question": "What is EventEmitter in Node.js?",
+          "answer": "EventEmitter is Node's built-in pub/sub system. Objects can emit named events and listeners subscribe to them. The foundation of Node.js streams, servers, and many modules.",
+          "example": "const EventEmitter = require('events');\n\nclass PaymentService extends EventEmitter {\n  processPayment(amount) {\n    // ... process payment ...\n    this.emit('payment:success', { amount, timestamp: new Date() });\n  }\n}\n\nconst payment = new PaymentService();\npayment.on('payment:success', (data) => {\n  console.log(`Payment of $${data.amount} successful!`);\n  sendReceiptEmail(data);\n});\n\npayment.processPayment(99.99);"
+        },
+        {
+          "id": 10,
+          "question": "What is the path module in Node.js?",
+          "answer": "The path module handles file and directory paths correctly across different operating systems (Windows uses backslash, Unix uses forward slash). Always use path methods instead of string concatenation for paths.",
+          "example": "const path = require('path');\n\n// Join path segments safely\nconst filePath = path.join(__dirname, 'uploads', 'photo.jpg');\n// → '/home/user/app/uploads/photo.jpg'\n\n// Get directory, filename, extension\npath.dirname('/home/user/app/file.js');   // '/home/user/app'\npath.basename('/home/user/app/file.js');  // 'file.js'\npath.extname('/home/user/app/file.js');   // '.js'\n\n// Resolve absolute path\npath.resolve('..', 'config', 'settings.json');"
+        },
+        {
+          "id": 11,
+          "question": "What is middleware in Node.js context?",
+          "answer": "Middleware is a function that sits between the request and response, having access to both. It can execute code, modify req/res, end the request, or call the next middleware. The backbone of Express apps.",
+          "example": "// Custom logging middleware\nfunction logger(req, res, next) {\n  console.log(`${req.method} ${req.url} - ${new Date()}`);\n  next(); // MUST call next or request hangs!\n}\n\n// Authentication middleware\nfunction authenticate(req, res, next) {\n  const token = req.headers.authorization;\n  if (!token) return res.status(401).json({ error: 'Unauthorized' });\n  req.user = verifyToken(token); // attach to request\n  next();\n}"
+        },
+        {
+          "id": 12,
+          "question": "What is the difference between dependencies and devDependencies?",
+          "answer": "dependencies are packages needed in production (express, mongoose, jsonwebtoken). devDependencies are only needed during development (nodemon, jest, eslint, typescript). Use npm install --save-dev for dev deps.",
+          "example": "// Install production dependency\nnpm install express mongoose\n// or: npm install --save express\n\n// Install dev dependency\nnpm install --save-dev nodemon jest eslint typescript\n\n// package.json:\n{\n  \"dependencies\": {\n    \"express\": \"^4.18.0\"  // needed in production\n  },\n  \"devDependencies\": {\n    \"nodemon\": \"^3.0.0\"  // only for development\n  }\n}"
+        },
+        {
+          "id": 13,
+          "question": "What is the Node.js cluster module?",
+          "answer": "Node.js is single-threaded. The cluster module lets you create child processes (workers) that share the same server port, utilizing multiple CPU cores. Master process distributes incoming connections.",
+          "example": "const cluster = require('cluster');\nconst http = require('http');\nconst numCPUs = require('os').cpus().length;\n\nif (cluster.isMaster) {\n  console.log(`Master ${process.pid} starting ${numCPUs} workers`);\n  for (let i = 0; i < numCPUs; i++) cluster.fork();\n  cluster.on('exit', (worker) => {\n    console.log(`Worker ${worker.pid} died, restarting...`);\n    cluster.fork(); // restart dead worker\n  });\n} else {\n  http.createServer((req, res) => res.end('Hello')).listen(3000);\n}"
+        },
+        {
+          "id": 14,
+          "question": "What is async/await error handling in Node.js?",
+          "answer": "In Node.js, unhandled promise rejections crash the process in newer versions. Always wrap async operations in try/catch and handle errors at the application level with process.on('unhandledRejection').",
+          "example": "// Route handler with proper error handling\nasync function getUser(req, res, next) {\n  try {\n    const user = await User.findById(req.params.id);\n    if (!user) return res.status(404).json({ error: 'Not found' });\n    res.json(user);\n  } catch (error) {\n    next(error); // pass to Express error handler\n  }\n}\n\n// Global fallback\nprocess.on('unhandledRejection', (reason, promise) => {\n  console.error('Unhandled Rejection:', reason);\n  process.exit(1);\n});"
+        },
+        {
+          "id": 15,
+          "question": "What is the __dirname and __filename in Node.js?",
+          "answer": "__dirname is the absolute directory path of the current module file. __filename is the absolute path including the filename. Essential for building file paths that work regardless of where the app is run from.",
+          "example": "// In /home/user/myapp/routes/users.js\nconsole.log(__filename); // '/home/user/myapp/routes/users.js'\nconsole.log(__dirname);  // '/home/user/myapp/routes'\n\n// Build absolute paths\nconst uploadsDir = path.join(__dirname, '..', 'uploads');\n// → '/home/user/myapp/uploads'\n\n// Read a config file relative to current file\nconst config = require(path.join(__dirname, '../config/db.json'));\n\n// Note: __dirname undefined in ES Modules (import/export)"
+        },
+        {
+          "id": 16,
+          "question": "What is the Buffer class in Node.js?",
+          "answer": "Buffer handles raw binary data — data in bytes. Used when working with file I/O, network protocols, image processing, encryption. Buffers are fixed-size allocations of memory outside the V8 heap.",
+          "example": "// Create buffer from string\nconst buf = Buffer.from('Hello World', 'utf8');\nconsole.log(buf.toString('hex'));    // hexadecimal\nconsole.log(buf.toString('base64')); // base64\nconsole.log(buf.toString('utf8'));   // 'Hello World'\n\n// Create fixed size buffer\nconst buf2 = Buffer.alloc(10); // 10 bytes, filled with 0s\n\n// Convert to JSON\nconsole.log(buf.toJSON()); // { type: 'Buffer', data: [...] }"
+        },
+        {
+          "id": 17,
+          "question": "What is the child_process module?",
+          "answer": "child_process lets Node.js spawn child processes to run system commands, scripts, or other programs. Methods: exec (shell command), spawn (streaming), fork (another Node.js file with IPC channel).",
+          "example": "const { exec, spawn, fork } = require('child_process');\n\n// exec - run shell command\nexec('ls -la', (error, stdout, stderr) => {\n  console.log(stdout);\n});\n\n// spawn - stream output\nconst ls = spawn('ls', ['-la']);\nls.stdout.on('data', data => process.stdout.write(data));\n\n// fork - run another Node.js script\nconst worker = fork('./worker.js');\nworker.send({ task: 'compute' });\nworker.on('message', result => console.log(result));"
+        },
+        {
+          "id": 18,
+          "question": "What is error-first callback pattern in Node.js?",
+          "answer": "Error-first callbacks are Node.js convention: the first parameter of every async callback is an error object (null if no error). This ensures errors are always checked before using data.",
+          "example": "const fs = require('fs');\n\n// Error-first callback pattern\nfs.readFile('./data.txt', 'utf8', (error, data) => {\n  // Always check error FIRST\n  if (error) {\n    if (error.code === 'ENOENT') {\n      console.log('File not found');\n    } else {\n      console.error('Error:', error.message);\n    }\n    return; // stop execution\n  }\n  // Only use data if no error\n  console.log(data);\n});"
+        },
+        {
+          "id": 19,
+          "question": "What is the util.promisify() function?",
+          "answer": "util.promisify() converts old-style error-first callback functions into Promise-based functions. Allows using async/await with older Node.js APIs that use callbacks.",
+          "example": "const util = require('util');\nconst fs = require('fs');\n\n// Old callback style\nfs.readFile('./file.txt', 'utf8', (err, data) => { ... });\n\n// Promisify it\nconst readFile = util.promisify(fs.readFile);\n\n// Now use with async/await!\nasync function read() {\n  const data = await readFile('./file.txt', 'utf8');\n  console.log(data);\n}\n\n// Note: fs.promises is already promisified!\nconst { readFile: readFileP } = require('fs/promises');"
+        },
+        {
+          "id": 20,
+          "question": "What is the os module in Node.js?",
+          "answer": "The os module provides operating system information — CPU count, memory, platform, hostname. Useful for performance monitoring, health checks, and system-aware configuration.",
+          "example": "const os = require('os');\n\nconsole.log(os.platform()); // 'linux', 'win32', 'darwin'\nconsole.log(os.cpus().length); // number of CPU cores\nconsole.log(os.totalmem()); // total RAM in bytes\nconsole.log(os.freemem());  // available RAM in bytes\nconsole.log(os.hostname()); // computer name\nconsole.log(os.tmpdir());   // temp directory path\nconsole.log(os.uptime());   // system uptime in seconds"
+        }
+      ]
+    },
+    {
+      "id": "expressjs",
+      "name": "Express.js",
+      "icon": "🚂",
+      "color": "#000000",
+      "textColor": "#ffffff",
+      "questions": [
+        {
+          "id": 1,
+          "question": "What is Express.js and why is it used?",
+          "answer": "Express is a minimal, unopinionated web framework for Node.js. It simplifies creating HTTP servers, handling routes, managing middleware, and building REST APIs — without all the boilerplate of the raw http module.",
+          "example": "const express = require('express');\nconst app = express();\n\napp.use(express.json()); // parse JSON bodies\n\napp.get('/', (req, res) => {\n  res.json({ message: 'Hello World!' });\n});\n\napp.listen(3000, () => {\n  console.log('Server running on http://localhost:3000');\n});"
+        },
+        {
+          "id": 2,
+          "question": "What are Express route methods?",
+          "answer": "Express has methods matching HTTP verbs: get, post, put, patch, delete, all (all methods). Each takes a path pattern and one or more handler functions.",
+          "example": "const router = express.Router();\n\nrouter.get('/users', getAllUsers);      // get all\nrouter.get('/users/:id', getUserById);  // get one\nrouter.post('/users', createUser);      // create\nrouter.put('/users/:id', updateUser);   // update (full)\nrouter.patch('/users/:id', patchUser);  // update (partial)\nrouter.delete('/users/:id', deleteUser); // delete\n\n// All HTTP methods\nrouter.all('/admin/*', authenticate);"
+        },
+        {
+          "id": 3,
+          "question": "What is Express middleware and how does it work?",
+          "answer": "Middleware functions execute in order between request and response. Each has access to req, res, and next(). Calling next() passes control to the next middleware. Not calling next() ends the request cycle.",
+          "example": "const app = express();\n\n// Application-level middleware (all routes)\napp.use(express.json());\napp.use(cors());\napp.use(helmet());\n\n// Route-specific middleware\napp.get('/dashboard', authenticate, authorize('admin'), getdashboard);\n\n// Error middleware (4 params)\napp.use((err, req, res, next) => {\n  console.error(err.stack);\n  res.status(500).json({ error: err.message });\n});"
+        },
+        {
+          "id": 4,
+          "question": "What is the difference between req.params, req.query, and req.body?",
+          "answer": "req.params: URL path parameters (/users/:id). req.query: URL query string parameters (?page=1&limit=10). req.body: request body data (POST/PUT JSON/form data, needs parser middleware).",
+          "example": "// Route: GET /users/:id/posts?page=2&limit=10\napp.get('/users/:id/posts', (req, res) => {\n  console.log(req.params.id);    // '123' from /users/123/posts\n  console.log(req.query.page);   // '2' from ?page=2\n  console.log(req.query.limit);  // '10'\n});\n\n// Route: POST /users\napp.post('/users', (req, res) => {\n  console.log(req.body.name);  // from JSON body { name: 'Alice' }\n  console.log(req.body.email);\n});"
+        },
+        {
+          "id": 5,
+          "question": "How do you handle errors in Express?",
+          "answer": "Express has a special error-handling middleware with 4 parameters (err, req, res, next). For async routes, you need to catch errors and pass them to next(). Place error middleware LAST.",
+          "example": "// Async error handling utility\nconst asyncHandler = fn => (req, res, next) =>\n  Promise.resolve(fn(req, res, next)).catch(next);\n\n// Route\napp.get('/users/:id', asyncHandler(async (req, res) => {\n  const user = await User.findById(req.params.id);\n  if (!user) throw Object.assign(new Error('Not found'), {status: 404});\n  res.json(user);\n}));\n\n// Error handler - must have 4 params, must be LAST\napp.use((err, req, res, next) => {\n  res.status(err.status || 500).json({ error: err.message });\n});"
+        },
+        {
+          "id": 6,
+          "question": "What is Express Router?",
+          "answer": "express.Router() creates mini-application route handlers that can be mounted on main app. Helps organize routes by feature/resource and keeps code modular.",
+          "example": "// routes/users.js\nconst router = express.Router();\n\nrouter.get('/', getAllUsers);\nrouter.post('/', createUser);\nrouter.get('/:id', getUserById);\nrouter.put('/:id', updateUser);\nrouter.delete('/:id', deleteUser);\n\nmodule.exports = router;\n\n// app.js\nconst usersRouter = require('./routes/users');\nconst postsRouter = require('./routes/posts');\n\napp.use('/api/users', usersRouter);\napp.use('/api/posts', postsRouter);"
+        },
+        {
+          "id": 7,
+          "question": "How do you serve static files in Express?",
+          "answer": "express.static() middleware serves static files (HTML, CSS, JS, images) from a directory. One line of code turns a folder into a web server.",
+          "example": "const path = require('path');\n\n// Serve entire public folder\napp.use(express.static('public'));\n// Now: GET /css/style.css → serves public/css/style.css\n\n// With path prefix\napp.use('/static', express.static('public'));\n// Now: GET /static/image.jpg → serves public/image.jpg\n\n// With absolute path (safer)\napp.use(express.static(path.join(__dirname, 'public')));\n\n// Serve Angular/React build\napp.use(express.static(path.join(__dirname, 'dist')));"
+        },
+        {
+          "id": 8,
+          "question": "What is CORS and how do you handle it in Express?",
+          "answer": "CORS (Cross-Origin Resource Sharing) is a browser security policy that blocks web pages from making requests to a different domain. Express API on localhost:3000 can't be called from localhost:4200 without CORS headers.",
+          "example": "const cors = require('cors');\n\n// Allow all origins (development only)\napp.use(cors());\n\n// Specific configuration (production)\napp.use(cors({\n  origin: ['https://myapp.com', 'https://admin.myapp.com'],\n  methods: ['GET', 'POST', 'PUT', 'DELETE'],\n  allowedHeaders: ['Content-Type', 'Authorization'],\n  credentials: true  // allow cookies\n}));\n\n// Or per route\napp.get('/public', cors(), getPublicData);"
+        },
+        {
+          "id": 9,
+          "question": "How do you implement authentication with JWT in Express?",
+          "answer": "JWT (JSON Web Tokens) are used for stateless authentication. User logs in, server creates a signed token, client sends it with every request. Middleware verifies the token before protected routes.",
+          "example": "const jwt = require('jsonwebtoken');\n\n// Login route - create token\napp.post('/login', async (req, res) => {\n  const user = await User.findByCredentials(req.body);\n  const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: '7d' });\n  res.json({ token });\n});\n\n// Auth middleware\nconst auth = async (req, res, next) => {\n  const token = req.headers.authorization?.replace('Bearer ', '');\n  if (!token) return res.status(401).json({ error: 'No token' });\n  req.user = jwt.verify(token, process.env.JWT_SECRET);\n  next();\n};\n\napp.get('/profile', auth, (req, res) => res.json(req.user));"
+        },
+        {
+          "id": 10,
+          "question": "What is rate limiting and how do you implement it?",
+          "answer": "Rate limiting restricts how many requests a client can make in a time window. Protects API from abuse, DDoS, and brute force attacks.",
+          "example": "const rateLimit = require('express-rate-limit');\n\n// General API limit\nconst apiLimiter = rateLimit({\n  windowMs: 15 * 60 * 1000, // 15 minutes\n  max: 100,                  // 100 requests per window\n  message: 'Too many requests, try again later'\n});\n\n// Strict limit for auth routes\nconst loginLimiter = rateLimit({\n  windowMs: 60 * 1000, // 1 minute\n  max: 5,              // 5 login attempts per minute\n  message: 'Too many login attempts'\n});\n\napp.use('/api/', apiLimiter);\napp.use('/api/login', loginLimiter);"
+        },
+        {
+          "id": 11,
+          "question": "How do you handle file uploads in Express?",
+          "answer": "Express doesn't handle multipart/form-data (file uploads) natively. Use multer middleware — it parses multipart data and saves files to disk or memory.",
+          "example": "const multer = require('multer');\nconst path = require('path');\n\nconst storage = multer.diskStorage({\n  destination: './uploads/',\n  filename: (req, file, cb) => {\n    cb(null, `${Date.now()}-${file.originalname}`);\n  }\n});\n\nconst upload = multer({\n  storage,\n  limits: { fileSize: 5 * 1024 * 1024 }, // 5MB\n  fileFilter: (req, file, cb) => {\n    cb(null, file.mimetype.startsWith('image/')); // images only\n  }\n});\n\napp.post('/upload', upload.single('photo'), (req, res) => {\n  res.json({ file: req.file.filename });\n});"
+        },
+        {
+          "id": 12,
+          "question": "What is request validation in Express?",
+          "answer": "Input validation is critical for security and data integrity. Use express-validator or joi to validate and sanitize incoming request data before processing.",
+          "example": "const { body, validationResult } = require('express-validator');\n\nconst validateUser = [\n  body('name').trim().notEmpty().withMessage('Name required'),\n  body('email').isEmail().normalizeEmail().withMessage('Invalid email'),\n  body('password').isLength({ min: 8 }).withMessage('Min 8 chars'),\n  body('age').optional().isInt({ min: 0, max: 150 }),\n];\n\napp.post('/users', validateUser, (req, res) => {\n  const errors = validationResult(req);\n  if (!errors.isEmpty()) {\n    return res.status(400).json({ errors: errors.array() });\n  }\n  // proceed with clean, validated data\n});"
+        },
+        {
+          "id": 13,
+          "question": "How do you implement logging in Express?",
+          "answer": "Use morgan for HTTP request logging and winston/pino for application logging. Never use console.log in production — proper loggers have levels, formatting, and can write to files/services.",
+          "example": "const morgan = require('morgan');\nconst winston = require('winston');\n\n// HTTP request logging\napp.use(morgan('combined')); // Apache combined format\napp.use(morgan('dev'));      // Colored development format\n\n// Application logger\nconst logger = winston.createLogger({\n  level: 'info',\n  format: winston.format.json(),\n  transports: [\n    new winston.transports.File({ filename: 'error.log', level: 'error' }),\n    new winston.transports.File({ filename: 'combined.log' }),\n  ],\n});\n\nlogger.info('Server started', { port: 3000 });\nlogger.error('Database error', { error });"
+        },
+        {
+          "id": 14,
+          "question": "What is helmet and why should you use it?",
+          "answer": "Helmet is a collection of Express middleware that sets HTTP security headers. It protects against common web vulnerabilities like XSS, clickjacking, and more. Should be used in every production Express app.",
+          "example": "const helmet = require('helmet');\n\n// Use all defaults (recommended)\napp.use(helmet());\n\n// What helmet sets:\n// Content-Security-Policy (XSS protection)\n// X-Frame-Options: DENY (clickjacking protection)\n// X-Content-Type-Options: nosniff\n// Strict-Transport-Security (HTTPS only)\n// X-Download-Options\n// X-XSS-Protection\n\n// Customize\napp.use(helmet({\n  contentSecurityPolicy: { directives: { defaultSrc: [\"'self'\"] } }\n}));"
+        },
+        {
+          "id": 15,
+          "question": "How do you structure a large Express application?",
+          "answer": "Large Express apps use a layered architecture: Routes (HTTP layer) → Controllers (business logic) → Services (data logic) → Models (database). Separation of concerns makes code testable and maintainable.",
+          "example": "project/\n├── src/\n│   ├── routes/         # Route definitions (users.routes.js)\n│   ├── controllers/    # Request handling (users.controller.js)\n│   ├── services/       # Business logic (users.service.js)\n│   ├── models/         # Database models (User.model.js)\n│   ├── middleware/     # Custom middleware\n│   ├── config/         # Configuration\n│   └── utils/          # Utilities\n├── tests/\n├── .env\n├── package.json\n└── server.js"
+        },
+        {
+          "id": 16,
+          "question": "What is compression middleware and why is it used?",
+          "answer": "compression middleware gzip-compresses HTTP responses, significantly reducing response size (often 70-90% smaller). This reduces bandwidth usage and improves load times for clients.",
+          "example": "const compression = require('compression');\n\n// Enable gzip compression\napp.use(compression());\n\n// Selective compression\napp.use(compression({\n  filter: (req, res) => {\n    // Don't compress images (already compressed)\n    if (req.headers['x-no-compression']) return false;\n    return compression.filter(req, res);\n  },\n  level: 6,    // compression level (1-9)\n  threshold: 1024 // only compress if > 1KB\n}));"
+        },
+        {
+          "id": 17,
+          "question": "What are the HTTP status codes you commonly use in Express?",
+          "answer": "HTTP status codes communicate the result of requests. Using the right code is important for API clarity, client handling, and SEO.",
+          "example": "// 2xx Success\nres.status(200).json(data);         // OK - GET success\nres.status(201).json(newUser);      // Created - POST success\nres.status(204).send();             // No Content - DELETE success\n\n// 4xx Client Errors\nres.status(400).json({ error: 'Bad request' });\nres.status(401).json({ error: 'Unauthorized' });\nres.status(403).json({ error: 'Forbidden' });\nres.status(404).json({ error: 'Not found' });\nres.status(409).json({ error: 'Conflict' });\n\n// 5xx Server Errors\nres.status(500).json({ error: 'Internal server error' });"
+        },
+        {
+          "id": 18,
+          "question": "How do you implement pagination in Express API?",
+          "answer": "Pagination limits how many records are returned per request. Two common approaches: offset-based (page/limit) and cursor-based (for infinite scroll). Always include metadata in response.",
+          "example": "app.get('/api/posts', async (req, res) => {\n  const page = parseInt(req.query.page) || 1;\n  const limit = parseInt(req.query.limit) || 10;\n  const skip = (page - 1) * limit;\n  \n  const [posts, total] = await Promise.all([\n    Post.find().sort('-createdAt').skip(skip).limit(limit),\n    Post.countDocuments()\n  ]);\n  \n  res.json({\n    data: posts,\n    pagination: {\n      page, limit, total,\n      pages: Math.ceil(total / limit),\n      hasNext: page < Math.ceil(total / limit)\n    }\n  });\n});"
+        },
+        {
+          "id": 19,
+          "question": "What is express-session and when to use cookies vs JWT?",
+          "answer": "Sessions store user data server-side, giving a session ID in a cookie. JWT stores user data client-side in a token. Sessions need a store (Redis) for scale. JWT is stateless but can't be invalidated before expiry.",
+          "example": "const session = require('express-session');\nconst RedisStore = require('connect-redis').default;\n\napp.use(session({\n  secret: process.env.SESSION_SECRET,\n  store: new RedisStore({ client: redisClient }),\n  resave: false,\n  saveUninitialized: false,\n  cookie: {\n    secure: true,    // HTTPS only\n    httpOnly: true,  // no JS access\n    maxAge: 86400000 // 1 day\n  }\n}));\n\n// Use session\nreq.session.userId = user._id;\n// Later:\nif (!req.session.userId) return res.status(401).json({ error: 'Login required' });"
+        },
+        {
+          "id": 20,
+          "question": "How do you test Express API routes?",
+          "answer": "Use supertest to test Express routes without starting a server, combined with Jest for assertions. Write integration tests for routes and unit tests for services.",
+          "example": "const request = require('supertest');\nconst app = require('../app');\n\ndescribe('Users API', () => {\n  test('GET /api/users returns list', async () => {\n    const res = await request(app)\n      .get('/api/users')\n      .set('Authorization', `Bearer ${token}`);\n    \n    expect(res.status).toBe(200);\n    expect(res.body).toHaveProperty('data');\n    expect(Array.isArray(res.body.data)).toBe(true);\n  });\n\n  test('POST /api/users creates user', async () => {\n    const res = await request(app)\n      .post('/api/users')\n      .send({ name: 'Alice', email: 'alice@test.com' });\n    expect(res.status).toBe(201);\n  });\n});"
+        }
+      ]
+    },
+    {
+      "id": "angular",
+      "name": "Angular 16",
+      "icon": "🔺",
+      "color": "#dd0031",
+      "textColor": "#ffffff",
+      "questions": [
+        {
+          "id": 1,
+          "question": "What is Angular and what are its key features?",
+          "answer": "Angular is a TypeScript-based, component-driven MVC framework by Google for building large-scale web applications. Key features: components, dependency injection, TypeScript-first, CLI tooling, RxJS integration, and strong conventions for team consistency.",
+          "example": "// Angular app structure\nplatformBrowserDynamic().bootstrapModule(AppModule);\n\n// AppModule\n@NgModule({\n  declarations: [AppComponent],\n  imports: [BrowserModule, RouterModule, HttpClientModule],\n  providers: [UserService],\n  bootstrap: [AppComponent]\n})\nexport class AppModule {}"
+        },
+        {
+          "id": 2,
+          "question": "What is a component in Angular?",
+          "answer": "A component is the building block of Angular apps. It combines a TypeScript class (logic), HTML template (view), and CSS (styles). Components are declared with @Component decorator.",
+          "example": "@Component({\n  selector: 'app-user-card',       // HTML tag\n  templateUrl: './user-card.html',  // template file\n  styleUrls: ['./user-card.scss'],  // styles\n  // OR inline:\n  template: `<h2>{{user.name}}</h2>`,\n  styles: [`h2 { color: navy; }`]\n})\nexport class UserCardComponent {\n  @Input() user!: User;\n  @Output() onDelete = new EventEmitter<number>();\n}"
+        },
+        {
+          "id": 3,
+          "question": "What are Angular directives? Explain the types.",
+          "answer": "Directives extend HTML behavior. Structural directives change DOM structure (*ngIf, *ngFor, *ngSwitch). Attribute directives change element appearance/behavior (ngClass, ngStyle, custom). Component is technically a directive with a template.",
+          "example": "<!-- Structural directives -->\n<div *ngIf=\"isLoggedIn; else loginTemplate\">\n  Welcome, {{user.name}}\n</div>\n<ng-template #loginTemplate><button>Login</button></ng-template>\n\n<li *ngFor=\"let item of items; let i = index; trackBy: trackById\">\n  {{i + 1}}. {{item.name}}\n</li>\n\n<!-- Attribute directives -->\n<div [ngClass]=\"{ active: isActive, error: hasError }\">\n<input [ngStyle]=\"{ color: textColor, fontSize: fontSize + 'px' }\">"
+        },
+        {
+          "id": 4,
+          "question": "What is data binding in Angular?",
+          "answer": "Angular has 4 types of data binding. Interpolation {{}} for text. Property binding [property] from class to template. Event binding (event) from template to class. Two-way binding [(ngModel)] bidirectional.",
+          "example": "<!-- Interpolation - class → template (text) -->\n<h1>{{title}}</h1>\n\n<!-- Property binding - class → template (property) -->\n<img [src]=\"user.photoUrl\" [alt]=\"user.name\">\n<button [disabled]=\"isLoading\">Submit</button>\n\n<!-- Event binding - template → class -->\n<button (click)=\"onSave()\">Save</button>\n<input (keyup.enter)=\"search()\">\n\n<!-- Two-way binding -->\n<input [(ngModel)]=\"searchTerm\">"
+        },
+        {
+          "id": 5,
+          "question": "What is Angular dependency injection?",
+          "answer": "DI is a design pattern where Angular's injector provides dependencies (services) to components/services instead of components creating them. Makes code testable, reusable, and loosely coupled.",
+          "example": "@Injectable({\n  providedIn: 'root' // available app-wide, singleton\n})\nexport class UserService {\n  private users: User[] = [];\n  getUsers() { return this.http.get<User[]>('/api/users'); }\n  constructor(private http: HttpClient) {}\n}\n\n// Component - Angular injects UserService automatically\n@Component({ ... })\nexport class UserListComponent {\n  constructor(private userService: UserService) {} // injected!\n}"
+        },
+        {
+          "id": 6,
+          "question": "What is Angular Router and how do you set it up?",
+          "answer": "Angular Router handles navigation between views in a Single Page Application. Define routes as path-component pairs. Use routerLink for navigation, RouterOutlet as placeholder, and ActivatedRoute to read route info.",
+          "example": "// app-routing.module.ts\nconst routes: Routes = [\n  { path: '', redirectTo: '/home', pathMatch: 'full' },\n  { path: 'home', component: HomeComponent },\n  { path: 'users', component: UsersComponent, canActivate: [AuthGuard] },\n  { path: 'users/:id', component: UserDetailComponent },\n  { path: '**', component: NotFoundComponent } // wildcard\n];\n\n// In template\n<a routerLink=\"/users\" routerLinkActive=\"active\">Users</a>\n<router-outlet></router-outlet>\n\n// In component\nconstructor(private route: ActivatedRoute) {\n  this.route.params.subscribe(p => this.userId = p['id']);\n}"
+        },
+        {
+          "id": 7,
+          "question": "What are Angular lifecycle hooks?",
+          "answer": "Lifecycle hooks let you tap into component lifecycle events. ngOnInit (after first render, setup), ngOnChanges (input changes), ngOnDestroy (cleanup), ngAfterViewInit (after view ready), ngDoCheck (change detection).",
+          "example": "@Component({ ... })\nexport class ProductComponent implements OnInit, OnDestroy, OnChanges {\n  @Input() productId!: number;\n  private subscription?: Subscription;\n\n  ngOnChanges(changes: SimpleChanges) {\n    if (changes['productId']) this.loadProduct(); // input changed\n  }\n\n  ngOnInit() {\n    this.loadProduct(); // initial setup\n    this.subscription = this.events.subscribe(...);\n  }\n\n  ngOnDestroy() {\n    this.subscription?.unsubscribe(); // prevent memory leaks!\n  }\n}"
+        },
+        {
+          "id": 8,
+          "question": "What is RxJS and how is it used in Angular?",
+          "answer": "RxJS is a reactive programming library using Observables for async data streams. Angular uses it heavily for HTTP requests, route events, form value changes, and inter-component communication.",
+          "example": "import { Observable, Subject, combineLatest } from 'rxjs';\nimport { map, filter, debounceTime, switchMap, takeUntil } from 'rxjs/operators';\n\n// HTTP returns Observable\nthis.http.get<User[]>('/api/users').pipe(\n  map(users => users.filter(u => u.active)),\n  tap(users => console.log('Active users:', users.length))\n).subscribe(users => this.users = users);\n\n// Search with debounce\nthis.searchControl.valueChanges.pipe(\n  debounceTime(300),\n  distinctUntilChanged(),\n  switchMap(term => this.api.search(term))\n).subscribe(results => this.results = results);"
+        },
+        {
+          "id": 9,
+          "question": "What is the difference between Observable and Promise?",
+          "answer": "Promise handles single async value, eager (runs immediately), not cancellable. Observable handles 0 to N values over time, lazy (runs on subscribe), cancellable, and has powerful operators (map, filter, retry, etc.).",
+          "example": "// Promise - one value, runs immediately\nconst p = fetch('/api/user').then(r => r.json());\n// Can't cancel, no operators\n\n// Observable - multiple values, lazy, cancellable\nconst obs$ = this.http.get('/api/users').pipe(\n  retry(3),           // retry on error\n  map(users => users.filter(u => u.active)),\n  catchError(err => of([]))  // fallback\n);\nconst sub = obs$.subscribe(users => this.users = users);\nsubscription.unsubscribe(); // CANCEL! Cleans up."
+        },
+        {
+          "id": 10,
+          "question": "What is Angular HttpClient?",
+          "answer": "HttpClient is Angular's built-in service for making HTTP requests. Returns Observables, has typed responses, interceptors, and handles JSON automatically. Import HttpClientModule in app module.",
+          "example": "@Injectable({ providedIn: 'root' })\nexport class ApiService {\n  private apiUrl = 'https://api.example.com';\n  \n  constructor(private http: HttpClient) {}\n  \n  getUsers(): Observable<User[]> {\n    return this.http.get<User[]>(`${this.apiUrl}/users`);\n  }\n  \n  createUser(user: Partial<User>): Observable<User> {\n    return this.http.post<User>(`${this.apiUrl}/users`, user);\n  }\n  \n  updateUser(id: number, user: Partial<User>): Observable<User> {\n    return this.http.put<User>(`${this.apiUrl}/users/${id}`, user);\n  }\n}"
+        },
+        {
+          "id": 11,
+          "question": "What are Angular interceptors?",
+          "answer": "HTTP interceptors intercept every HTTP request and response. Used for adding auth tokens, logging, error handling, loading indicators, and caching. Like middleware for Angular's HTTP layer.",
+          "example": "@Injectable()\nexport class AuthInterceptor implements HttpInterceptor {\n  constructor(private auth: AuthService) {}\n  \n  intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {\n    const token = this.auth.getToken();\n    \n    if (token) {\n      req = req.clone({\n        setHeaders: { Authorization: `Bearer ${token}` }\n      });\n    }\n    \n    return next.handle(req).pipe(\n      catchError(err => {\n        if (err.status === 401) this.auth.logout();\n        return throwError(() => err);\n      })\n    );\n  }\n}"
+        },
+        {
+          "id": 12,
+          "question": "What is Angular's change detection?",
+          "answer": "Change detection checks for differences between the current view and component data, updating the DOM when needed. Two strategies: Default (checks all components) and OnPush (only checks when inputs change or events fire — much more performant).",
+          "example": "@Component({\n  selector: 'app-product',\n  changeDetection: ChangeDetectionStrategy.OnPush, // performance!\n  template: `{{product.name}}`\n})\nexport class ProductComponent {\n  @Input() product!: Product;\n  // Only re-checks when:\n  // 1. product @Input reference changes\n  // 2. An event fires in template\n  // 3. async pipe emits\n  // 4. markForCheck() called\n\n  constructor(private cdr: ChangeDetectorRef) {}\n  \n  updateName() {\n    this.product = { ...this.product, name: 'New' }; // NEW reference!\n    // Or: this.cdr.markForCheck();\n  }\n}"
+        },
+        {
+          "id": 13,
+          "question": "What are Angular pipes?",
+          "answer": "Pipes transform displayed values in templates. Built-in pipes: date, currency, number, uppercase, lowercase, json, async. Create custom pipes with @Pipe decorator for reusable data transformation.",
+          "example": "<!-- Built-in pipes -->\n{{user.createdAt | date:'mediumDate'}}          <!-- Jan 5, 2024 -->\n{{price | currency:'USD':'symbol':'1.2-2'}}    <!-- $1,234.50 -->\n{{title | titlecase}}                          <!-- Hello World -->\n{{data | json}}                                <!-- debug objects -->\n{{users$ | async | json}}                      <!-- auto-subscribe! -->\n\n// Custom pipe\n@Pipe({ name: 'truncate' })\nexport class TruncatePipe implements PipeTransform {\n  transform(value: string, limit = 50): string {\n    return value.length > limit ? value.slice(0, limit) + '...' : value;\n  }\n}"
+        },
+        {
+          "id": 14,
+          "question": "What are Angular forms — Template-driven vs Reactive?",
+          "answer": "Template-driven forms use directives in HTML, simple and familiar. Reactive forms define the form structure in TypeScript — better for complex validation, dynamic forms, and testing.",
+          "example": "// Reactive Forms\nimport { FormBuilder, Validators } from '@angular/forms';\n\nexport class LoginComponent {\n  loginForm = this.fb.group({\n    email: ['', [Validators.required, Validators.email]],\n    password: ['', [Validators.required, Validators.minLength(8)]]\n  });\n  \n  constructor(private fb: FormBuilder) {}\n  \n  onSubmit() {\n    if (this.loginForm.valid) {\n      this.authService.login(this.loginForm.value);\n    }\n  }\n}\n\n// Template\n<form [formGroup]=\"loginForm\" (ngSubmit)=\"onSubmit()\">\n  <input formControlName=\"email\">\n  <span *ngIf=\"loginForm.get('email')?.errors?.['email']\">Invalid email</span>\n</form>"
+        },
+        {
+          "id": 15,
+          "question": "What are route guards in Angular?",
+          "answer": "Route guards control navigation — they can allow or prevent access to routes. CanActivate (can enter route), CanDeactivate (can leave route), CanLoad (can load lazy module), Resolve (load data before navigation).",
+          "example": "@Injectable({ providedIn: 'root' })\nexport class AuthGuard implements CanActivate {\n  constructor(private auth: AuthService, private router: Router) {}\n  \n  canActivate(route: ActivatedRouteSnapshot): boolean {\n    if (this.auth.isLoggedIn()) {\n      // Check role\n      const requiredRole = route.data['role'];\n      if (requiredRole && !this.auth.hasRole(requiredRole)) {\n        this.router.navigate(['/unauthorized']);\n        return false;\n      }\n      return true;\n    }\n    this.router.navigate(['/login'], { queryParams: { returnUrl: route.url } });\n    return false;\n  }\n}"
+        },
+        {
+          "id": 16,
+          "question": "What is lazy loading in Angular?",
+          "answer": "Lazy loading loads feature modules only when the user navigates to that route — not at app startup. Dramatically reduces initial bundle size and improves load time.",
+          "example": "// app-routing.module.ts\nconst routes: Routes = [\n  { path: '', component: HomeComponent },\n  {\n    path: 'admin',\n    loadChildren: () =>\n      import('./admin/admin.module').then(m => m.AdminModule),\n    canLoad: [AuthGuard]\n  },\n  {\n    path: 'products',\n    loadChildren: () =>\n      import('./products/products.module').then(m => m.ProductsModule)\n  }\n];\n// admin.module.js and products.module.js loaded only when visited!"
+        },
+        {
+          "id": 17,
+          "question": "What is NgRx and when should you use it?",
+          "answer": "NgRx is Angular's Redux-inspired state management library using RxJS. It's good for: complex apps with shared state, many components needing same data, time-travel debugging. Overkill for simple apps.",
+          "example": "// Action\nexport const loadUsers = createAction('[Users] Load Users');\nexport const loadUsersSuccess = createAction('[Users] Load Users Success', props<{ users: User[] }>());\n\n// Reducer\nexport const usersReducer = createReducer(\n  initialState,\n  on(loadUsersSuccess, (state, { users }) => ({ ...state, users, loading: false }))\n);\n\n// Effect\n@Injectable()\nexport class UsersEffects {\n  loadUsers$ = createEffect(() => this.actions$.pipe(\n    ofType(loadUsers),\n    switchMap(() => this.api.getUsers().pipe(\n      map(users => loadUsersSuccess({ users }))\n    ))\n  ));\n}"
+        },
+        {
+          "id": 18,
+          "question": "What is the async pipe in Angular?",
+          "answer": "The async pipe subscribes to an Observable/Promise and automatically unsubscribes on component destroy. No need to manually subscribe/unsubscribe in component code. Works beautifully with OnPush change detection.",
+          "example": "// Component - no manual subscribe!\nexport class UsersComponent {\n  users$: Observable<User[]>;\n  \n  constructor(private userService: UserService) {\n    this.users$ = this.userService.getUsers();\n    // No subscribe, no unsubscribe needed!\n  }\n}\n\n<!-- Template -->\n<div *ngIf=\"users$ | async as users; else loading\">\n  <app-user-card\n    *ngFor=\"let user of users\"\n    [user]=\"user\">\n  </app-user-card>\n</div>\n<ng-template #loading>Loading...</ng-template>"
+        },
+        {
+          "id": 19,
+          "question": "What are Angular signals (Angular 16)?",
+          "answer": "Signals are a new reactive primitive in Angular 16. They are reactive values that automatically notify consumers when they change. Simpler and more performant than complex RxJS chains for local state.",
+          "example": "import { signal, computed, effect } from '@angular/core';\n\n@Component({ ... })\nexport class CounterComponent {\n  count = signal(0);  // writable signal\n  doubled = computed(() => this.count() * 2);  // derived\n  \n  constructor() {\n    effect(() => {\n      // Runs whenever count changes\n      console.log('Count is now:', this.count());\n    });\n  }\n  \n  increment() {\n    this.count.update(c => c + 1);\n    // or: this.count.set(10);\n  }\n}\n// Template: {{count()}} {{doubled()}}"
+        },
+        {
+          "id": 20,
+          "question": "What are standalone components in Angular 16?",
+          "answer": "Standalone components don't need NgModule. They declare their own imports directly in the @Component decorator. Reduces boilerplate and makes components more portable and self-contained.",
+          "example": "@Component({\n  selector: 'app-user-list',\n  standalone: true,  // no NgModule needed!\n  imports: [\n    CommonModule,\n    RouterModule,\n    HttpClientModule,\n    UserCardComponent  // import other standalone components\n  ],\n  template: `...`\n})\nexport class UserListComponent {\n  // Works independently without NgModule\n}\n\n// Bootstrap standalone app\nbootstrapApplication(AppComponent, {\n  providers: [provideRouter(routes), provideHttpClient()]\n});"
+        },
+        {
+          "id": 21,
+          "question": "What is ViewChild and ContentChild in Angular?",
+          "answer": "ViewChild accesses a child component, element, or directive from the component's own template. ContentChild accesses projected content (content passed via ng-content). Both available after view/content init.",
+          "example": "@Component({\n  template: `\n    <input #myInput type=\"text\">\n    <app-chart #chart [data]=\"data\"></app-chart>\n  `\n})\nexport class ParentComponent implements AfterViewInit {\n  @ViewChild('myInput') inputEl!: ElementRef;\n  @ViewChild('chart') chart!: ChartComponent;\n  @ViewChild(ChartComponent) chartRef!: ChartComponent;\n\n  ngAfterViewInit() {\n    this.inputEl.nativeElement.focus(); // focus the input\n    this.chart.refresh();               // call child method\n  }\n}"
+        },
+        {
+          "id": 22,
+          "question": "How do you share data between components in Angular?",
+          "answer": "Parent to Child: @Input property. Child to Parent: @Output EventEmitter. Between unrelated: Shared Service with BehaviorSubject. Sibling: via common parent or shared service.",
+          "example": "// Shared service for any-to-any communication\n@Injectable({ providedIn: 'root' })\nexport class NotificationService {\n  private notifications = new BehaviorSubject<Notification[]>([]);\n  notifications$ = this.notifications.asObservable();\n  \n  addNotification(msg: string) {\n    const current = this.notifications.getValue();\n    this.notifications.next([...current, { msg, timestamp: new Date() }]);\n  }\n}\n\n// Any component can emit:\nthis.notif.addNotification('User saved!');\n\n// Any component can receive:\nthis.notifications$ = this.notif.notifications$;"
+        },
+        {
+          "id": 23,
+          "question": "What is Angular Universal (SSR)?",
+          "answer": "Angular Universal renders Angular apps on the server (Server-Side Rendering). First page load is HTML from server (fast, SEO-friendly), then Angular takes over (hydration). Critical for SEO and performance.",
+          "example": "// Add SSR with Angular CLI\nng add @nguniversal/express-engine\n\n// Server-side rendering renders on server:\n// <app-root>\n//   <h1>Products</h1>  <-- real HTML, not empty shell!\n//   <ul>...\n// </app-root>\n\n// Check platform in code (some browser APIs not on server)\nimport { isPlatformBrowser } from '@angular/common';\n\nconstructor(@Inject(PLATFORM_ID) private platformId: Object) {}\n\nif (isPlatformBrowser(this.platformId)) {\n  // Safe to use window, localStorage, etc.\n  localStorage.setItem('key', 'value');\n}"
+        },
+        {
+          "id": 24,
+          "question": "What is Angular testing (unit testing components)?",
+          "answer": "Angular uses Jasmine + Karma by default (or Jest). TestBed creates a testing module to test components in isolation. Spy on services, test DOM output, and simulate user events.",
+          "example": "describe('UserCardComponent', () => {\n  let component: UserCardComponent;\n  let fixture: ComponentFixture<UserCardComponent>;\n\n  beforeEach(async () => {\n    await TestBed.configureTestingModule({\n      declarations: [UserCardComponent],\n      providers: [\n        { provide: UserService, useValue: mockUserService }\n      ]\n    }).compileComponents();\n    fixture = TestBed.createComponent(UserCardComponent);\n    component = fixture.componentInstance;\n  });\n\n  it('should display user name', () => {\n    component.user = { name: 'Alice', email: 'a@a.com' };\n    fixture.detectChanges();\n    const el = fixture.nativeElement.querySelector('h2');\n    expect(el.textContent).toContain('Alice');\n  });\n});"
+        },
+        {
+          "id": 25,
+          "question": "What is ng-content and content projection in Angular?",
+          "answer": "ng-content is Angular's slot for content projection — like Vue's slot or React's children prop. Pass content from parent into child component's template. Supports multiple named slots for flexible components.",
+          "example": "// Reusable Card component\n@Component({\n  selector: 'app-card',\n  template: `\n    <div class=\"card\">\n      <div class=\"card-header\">\n        <ng-content select=\"[slot=header]\"></ng-content>\n      </div>\n      <div class=\"card-body\">\n        <ng-content></ng-content>  <!-- default slot -->\n      </div>\n    </div>\n  `\n})\nexport class CardComponent {}\n\n<!-- Usage -->\n<app-card>\n  <h2 slot=\"header\">User Profile</h2>\n  <p>John Doe - Software Engineer</p>\n</app-card>"
+        }
+      ]
+    },
+    {
+      "id": "oracle",
+      "name": "Oracle SQL",
+      "icon": "🗄️",
+      "color": "#c74634",
+      "textColor": "#ffffff",
+      "questions": [
+        {
+          "id": 1,
+          "question": "What is Oracle SQL and how is it different from standard SQL?",
+          "answer": "Oracle SQL is Oracle's implementation of SQL with proprietary extensions. Differences: uses ROWNUM/ROWID, DUAL table for expressions, different data types (VARCHAR2, NUMBER), unique functions (NVL, DECODE, CONNECT BY for hierarchical queries).",
+          "example": "-- Oracle specific: DUAL table for expressions\nSELECT SYSDATE FROM DUAL;\nSELECT 2 + 2 FROM DUAL;\n\n-- Oracle ROWNUM (different from MySQL LIMIT)\nSELECT * FROM employees WHERE ROWNUM <= 10;\n\n-- Oracle doesn't support LIMIT directly:\n-- Use FETCH (12c+)\nSELECT * FROM employees\nFETCH FIRST 10 ROWS ONLY;"
+        },
+        {
+          "id": 2,
+          "question": "What is the difference between CHAR, VARCHAR2, and NVARCHAR2?",
+          "answer": "CHAR is fixed-length (padded with spaces), good for fixed codes like country codes. VARCHAR2 stores variable-length strings — most common. NVARCHAR2 is for Unicode (multibyte characters, international text).",
+          "example": "CREATE TABLE employees (\n  emp_id     NUMBER(10),\n  country_code CHAR(2),        -- always 2 chars, padded if less\n  first_name VARCHAR2(50),     -- up to 50 chars, no padding\n  last_name  VARCHAR2(50),\n  bio        NVARCHAR2(2000),  -- Unicode, for international text\n  salary     NUMBER(10, 2),    -- 10 digits, 2 decimal places\n  is_active  CHAR(1)           -- 'Y' or 'N'\n);"
+        },
+        {
+          "id": 3,
+          "question": "What are Oracle sequences?",
+          "answer": "Sequences generate unique sequential numbers — used for primary keys. Unlike MySQL's AUTO_INCREMENT, Oracle sequences are independent objects. In Oracle 12c+, use GENERATED ALWAYS AS IDENTITY instead.",
+          "example": "-- Create sequence\nCREATE SEQUENCE emp_id_seq\n  START WITH 1\n  INCREMENT BY 1\n  NOCACHE\n  NOCYCLE;\n\n-- Use sequence\nINSERT INTO employees (emp_id, first_name)\nVALUES (emp_id_seq.NEXTVAL, 'Alice');\n\n-- Get current value (must call NEXTVAL first)\nSELECT emp_id_seq.CURRVAL FROM DUAL;\n\n-- Oracle 12c+ Identity Column (simpler)\nCREATE TABLE employees (\n  emp_id NUMBER GENERATED ALWAYS AS IDENTITY,\n  name   VARCHAR2(100)\n);"
+        },
+        {
+          "id": 4,
+          "question": "What is NVL and NVL2 in Oracle?",
+          "answer": "NVL handles NULL values — if first expression is NULL, return the second. NVL2 is more flexible: if first is NOT NULL return second, if NULL return third. Oracle's equivalent of COALESCE/ISNULL.",
+          "example": "-- NVL: if commission is NULL, use 0\nSELECT first_name, \n       salary + NVL(commission, 0) AS total_comp\nFROM employees;\n\n-- NVL2: not null → value1, null → value2\nSELECT first_name,\n       NVL2(commission, 'Has Commission', 'No Commission') AS status\nFROM employees;\n\n-- COALESCE: returns first non-null (standard SQL)\nSELECT COALESCE(phone, mobile, email, 'No contact') FROM contacts;"
+        },
+        {
+          "id": 5,
+          "question": "What is the DECODE function in Oracle?",
+          "answer": "DECODE is Oracle's equivalent of CASE WHEN but in function form. Compares an expression against values and returns the corresponding result. Less readable than CASE WHEN but widely used in legacy code.",
+          "example": "-- DECODE(expr, search1, result1, search2, result2, ..., default)\nSELECT first_name,\n       DECODE(department_id,\n              10, 'IT',\n              20, 'HR',\n              30, 'Finance',\n              'Other') AS dept_name\nFROM employees;\n\n-- Modern CASE WHEN equivalent (preferred)\nSELECT first_name,\n       CASE department_id\n         WHEN 10 THEN 'IT'\n         WHEN 20 THEN 'HR'\n         ELSE 'Other'\n       END AS dept_name\nFROM employees;"
+        },
+        {
+          "id": 6,
+          "question": "What is a PL/SQL block?",
+          "answer": "PL/SQL is Oracle's procedural extension to SQL. A PL/SQL block has DECLARE (variables), BEGIN (code), EXCEPTION (error handling), END sections. Used for stored procedures, functions, and triggers.",
+          "example": "DECLARE\n  v_name    VARCHAR2(100);\n  v_salary  NUMBER;\nBEGIN\n  SELECT first_name, salary\n  INTO v_name, v_salary\n  FROM employees\n  WHERE emp_id = 101;\n  \n  DBMS_OUTPUT.PUT_LINE('Employee: ' || v_name);\n  DBMS_OUTPUT.PUT_LINE('Salary: ' || v_salary);\n\nEXCEPTION\n  WHEN NO_DATA_FOUND THEN\n    DBMS_OUTPUT.PUT_LINE('Employee not found');\n  WHEN OTHERS THEN\n    DBMS_OUTPUT.PUT_LINE('Error: ' || SQLERRM);\nEND;\n/"
+        },
+        {
+          "id": 7,
+          "question": "What is the difference between TRUNCATE and DELETE?",
+          "answer": "DELETE removes rows one by one, can be filtered with WHERE, generates undo/redo logs, can be rolled back, fires row-level triggers. TRUNCATE removes all rows at once, faster, minimal logging, cannot be rolled back (by default), doesn't fire row triggers.",
+          "example": "-- DELETE - selective, logged, rollbackable\nDELETE FROM audit_logs WHERE created_date < SYSDATE - 30;\nCOMMIT; -- or ROLLBACK if needed\n\n-- TRUNCATE - all rows, fast, minimal logging\nTRUNCATE TABLE temp_staging_data;\n-- Cannot rollback this (in most cases)\n\n-- Performance: TRUNCATE 1M rows = milliseconds\n--              DELETE  1M rows = minutes (row by row)"
+        },
+        {
+          "id": 8,
+          "question": "What are Oracle indexes and types?",
+          "answer": "Indexes speed up data retrieval by creating a sorted data structure. B-Tree index (default, good for equality and range queries). Bitmap index (low cardinality, data warehouse). Function-based (index on expression). Unique (enforces uniqueness).",
+          "example": "-- B-Tree index (most common)\nCREATE INDEX idx_emp_lastname ON employees(last_name);\n\n-- Unique index\nCREATE UNIQUE INDEX idx_emp_email ON employees(email);\n\n-- Composite index (column order matters!)\nCREATE INDEX idx_emp_dept_sal ON employees(department_id, salary);\n\n-- Function-based index\nCREATE INDEX idx_emp_upper_name ON employees(UPPER(last_name));\n-- Now this query uses index:\nSELECT * FROM employees WHERE UPPER(last_name) = 'SMITH';\n\n-- Bitmap (for low cardinality like gender, status)\nCREATE BITMAP INDEX idx_emp_gender ON employees(gender);"
+        },
+        {
+          "id": 9,
+          "question": "What is ROWNUM vs ROW_NUMBER() in Oracle?",
+          "answer": "ROWNUM is a pseudo-column assigned before ORDER BY is processed — so it's often wrong for paging. ROW_NUMBER() is an analytic function assigned after ORDER BY, correct for pagination.",
+          "example": "-- ROWNUM - wrong for paging (assigned before ORDER BY)\nSELECT * FROM (\n  SELECT * FROM employees ORDER BY salary DESC\n) WHERE ROWNUM <= 10;  -- wrap in subquery to work correctly\n\n-- ROW_NUMBER() - correct and readable\nSELECT * FROM (\n  SELECT emp_id, first_name, salary,\n         ROW_NUMBER() OVER (ORDER BY salary DESC) AS rn\n  FROM employees\n)\nWHERE rn BETWEEN 11 AND 20;  -- page 2\n\n-- Oracle 12c+ FETCH (simplest)\nSELECT * FROM employees\nORDER BY salary DESC\nOFFSET 10 ROWS FETCH NEXT 10 ROWS ONLY;"
+        },
+        {
+          "id": 10,
+          "question": "What are analytic/window functions in Oracle?",
+          "answer": "Analytic functions compute values across a set of rows related to the current row without collapsing them. Unlike GROUP BY, you keep all rows. Essential for rankings, running totals, moving averages.",
+          "example": "SELECT \n  first_name,\n  department_id,\n  salary,\n  -- Rank within department\n  RANK() OVER (PARTITION BY department_id ORDER BY salary DESC) AS dept_rank,\n  -- Running total by department\n  SUM(salary) OVER (PARTITION BY department_id ORDER BY hire_date) AS running_total,\n  -- Compare with previous row\n  LAG(salary, 1) OVER (ORDER BY hire_date) AS prev_salary,\n  -- Department average alongside individual row\n  AVG(salary) OVER (PARTITION BY department_id) AS dept_avg\nFROM employees;"
+        },
+        {
+          "id": 11,
+          "question": "What is the CONNECT BY clause in Oracle?",
+          "answer": "CONNECT BY is Oracle's hierarchical query syntax for traversing tree structures like org charts, menus, categories. PRIOR refers to the parent row. START WITH defines the root.",
+          "example": "-- Org chart: employees with managers\nSELECT \n  LEVEL,\n  LPAD(' ', (LEVEL-1)*3) || first_name AS emp_hierarchy,\n  emp_id,\n  manager_id\nFROM employees\nSTART WITH manager_id IS NULL    -- start with CEO (no manager)\nCONNECT BY PRIOR emp_id = manager_id  -- parent.emp_id = child.manager_id\nORDER SIBLINGS BY first_name;\n\n-- LEVEL = 1 is root, 2 is direct reports, etc.\n-- SYS_CONNECT_BY_PATH builds full path"
+        },
+        {
+          "id": 12,
+          "question": "What are Oracle stored procedures vs functions?",
+          "answer": "Procedures perform actions but don't return a value (can have OUT parameters). Functions return a value and can be used in SQL statements. Both are stored in the database and reusable.",
+          "example": "-- Stored Procedure (action, no return)\nCREATE OR REPLACE PROCEDURE update_salary(\n  p_emp_id IN NUMBER,\n  p_percent IN NUMBER,\n  p_new_salary OUT NUMBER  -- OUT parameter\n) AS\nBEGIN\n  UPDATE employees SET salary = salary * (1 + p_percent/100)\n  WHERE emp_id = p_emp_id\n  RETURNING salary INTO p_new_salary;\n  COMMIT;\nEND;\n\n-- Function (returns value, can use in SELECT)\nCREATE OR REPLACE FUNCTION get_full_name(p_emp_id NUMBER)\nRETURN VARCHAR2 AS\n  v_name VARCHAR2(200);\nBEGIN\n  SELECT first_name || ' ' || last_name INTO v_name\n  FROM employees WHERE emp_id = p_emp_id;\n  RETURN v_name;\nEND;\n\n-- Use in SQL:\nSELECT get_full_name(101) FROM DUAL;"
+        },
+        {
+          "id": 13,
+          "question": "What are Oracle triggers?",
+          "answer": "Triggers automatically execute PL/SQL code when a DML event (INSERT, UPDATE, DELETE) occurs on a table. Used for auditing, enforcing complex rules, derived column calculation, and cascading changes.",
+          "example": "-- Audit trigger: log all changes\nCREATE OR REPLACE TRIGGER emp_audit_trg\nAFTER INSERT OR UPDATE OR DELETE ON employees\nFOR EACH ROW\nBEGIN\n  IF INSERTING THEN\n    INSERT INTO audit_log VALUES ('INSERT', :NEW.emp_id, SYSDATE, USER);\n  ELSIF UPDATING THEN\n    INSERT INTO audit_log VALUES ('UPDATE', :OLD.emp_id, SYSDATE, USER);\n  ELSIF DELETING THEN\n    INSERT INTO audit_log VALUES ('DELETE', :OLD.emp_id, SYSDATE, USER);\n  END IF;\nEND;\n/\n-- :NEW = new values, :OLD = old values"
+        },
+        {
+          "id": 14,
+          "question": "What is MERGE statement in Oracle?",
+          "answer": "MERGE performs INSERT or UPDATE in a single statement based on whether matching rows exist — also called UPSERT. Efficient for data synchronization, ETL processes, and avoiding duplicate key errors.",
+          "example": "MERGE INTO target_employees t\nUSING source_employees s ON (t.emp_id = s.emp_id)\nWHEN MATCHED THEN\n  UPDATE SET\n    t.first_name = s.first_name,\n    t.salary = s.salary,\n    t.updated_date = SYSDATE\nWHEN NOT MATCHED THEN\n  INSERT (emp_id, first_name, salary, hire_date)\n  VALUES (s.emp_id, s.first_name, s.salary, SYSDATE);\n-- Updates existing rows, inserts new ones in one statement!"
+        },
+        {
+          "id": 15,
+          "question": "What is Oracle explain plan?",
+          "answer": "EXPLAIN PLAN shows how Oracle executes a SQL query — which indexes are used, join methods, estimated rows. Essential for query optimization. Use AUTOTRACE or SQL Developer's execution plan tab.",
+          "example": "-- Generate execution plan\nEXPLAIN PLAN FOR\nSELECT e.first_name, d.department_name\nFROM employees e\nJOIN departments d ON e.department_id = d.dept_id\nWHERE e.salary > 50000;\n\n-- View the plan\nSELECT * FROM TABLE(DBMS_XPLAN.DISPLAY);\n\n-- Or use AUTOTRACE\nSET AUTOTRACE TRACEONLY EXPLAIN;\nSELECT * FROM employees WHERE last_name = 'Smith';\n\n-- Look for TABLE ACCESS FULL (bad) vs INDEX RANGE SCAN (good)"
+        },
+        {
+          "id": 16,
+          "question": "What are Oracle partitioned tables?",
+          "answer": "Partitioning divides large tables into smaller, manageable pieces (partitions) while appearing as one table. Improves query performance, maintenance, and allows partition-level operations. Range, list, hash, composite.",
+          "example": "-- Range partitioning by date\nCREATE TABLE sales (\n  sale_id   NUMBER,\n  sale_date DATE,\n  amount    NUMBER\n)\nPARTITION BY RANGE (sale_date) (\n  PARTITION p2022 VALUES LESS THAN (DATE '2023-01-01'),\n  PARTITION p2023 VALUES LESS THAN (DATE '2024-01-01'),\n  PARTITION p2024 VALUES LESS THAN (DATE '2025-01-01'),\n  PARTITION p_future VALUES LESS THAN (MAXVALUE)\n);\n\n-- Query only touches p2024 partition (partition pruning)\nSELECT * FROM sales\nWHERE sale_date BETWEEN DATE '2024-01-01' AND DATE '2024-12-31';"
+        },
+        {
+          "id": 17,
+          "question": "What is Oracle WITH clause (CTE - Common Table Expressions)?",
+          "answer": "WITH clause creates named temporary result sets (CTEs) referenced in the main query. Makes complex queries readable, avoids repeated subqueries, and can be recursive for hierarchical data.",
+          "example": "-- Complex report with CTEs\nWITH dept_stats AS (\n  SELECT department_id,\n         AVG(salary) AS avg_sal,\n         MAX(salary) AS max_sal,\n         COUNT(*) AS headcount\n  FROM employees\n  GROUP BY department_id\n),\ntop_departments AS (\n  SELECT department_id\n  FROM dept_stats\n  WHERE headcount > 5\n)\nSELECT e.first_name, e.salary, d.avg_sal,\n       ROUND((e.salary / d.avg_sal - 1) * 100, 1) AS pct_above_avg\nFROM employees e\nJOIN dept_stats d USING (department_id)\nWHERE e.department_id IN (SELECT department_id FROM top_departments)\nORDER BY pct_above_avg DESC;"
+        },
+        {
+          "id": 18,
+          "question": "What is Oracle cursor?",
+          "answer": "A cursor is a pointer to the result set of a query. Implicit cursors are created automatically for single-row SELECT INTO. Explicit cursors give full control over multi-row result sets in PL/SQL.",
+          "example": "-- Explicit cursor\nDECLARE\n  CURSOR emp_cursor IS\n    SELECT emp_id, first_name, salary\n    FROM employees\n    WHERE department_id = 10;\n    \n  v_emp emp_cursor%ROWTYPE;\nBEGIN\n  OPEN emp_cursor;\n  LOOP\n    FETCH emp_cursor INTO v_emp;\n    EXIT WHEN emp_cursor%NOTFOUND;\n    DBMS_OUTPUT.PUT_LINE(v_emp.first_name || ': ' || v_emp.salary);\n  END LOOP;\n  CLOSE emp_cursor;\nEND;\n/\n\n-- Cursor FOR LOOP (simpler, auto-closes)\nFOR rec IN (SELECT * FROM employees WHERE dept_id = 10) LOOP\n  DBMS_OUTPUT.PUT_LINE(rec.first_name);\nEND LOOP;"
+        },
+        {
+          "id": 19,
+          "question": "What is FLASHBACK in Oracle?",
+          "answer": "Flashback lets you query or restore data from a past point in time using Oracle's undo logs. Flashback Query (AS OF), Flashback Table (RESTORE), Flashback Database. Incredibly useful for recovering from accidental deletes.",
+          "example": "-- Flashback Query - see data as it was\nSELECT * FROM employees\nAS OF TIMESTAMP (SYSTIMESTAMP - INTERVAL '30' MINUTE);\n\n-- Flashback Table - restore table to past state\nALTER TABLE employees ENABLE ROW MOVEMENT;\nFLASHBACK TABLE employees\nTO TIMESTAMP (SYSTIMESTAMP - INTERVAL '1' HOUR);\n\n-- Flashback using SCN (System Change Number)\nSELECT * FROM employees\nAS OF SCN 123456789;\n\n-- Flashback Drop (recycle bin)\nFLASHBACK TABLE employees TO BEFORE DROP;"
+        },
+        {
+          "id": 20,
+          "question": "What are Oracle packages?",
+          "answer": "A package groups related procedures, functions, variables, and types into a logical unit. Has a SPEC (public interface) and BODY (implementation). The only way to declare global variables in Oracle.",
+          "example": "-- Package Specification (public interface)\nCREATE OR REPLACE PACKAGE emp_pkg AS\n  c_max_salary CONSTANT NUMBER := 100000;\n  \n  PROCEDURE hire_employee(p_name VARCHAR2, p_salary NUMBER);\n  FUNCTION get_department_count(p_dept_id NUMBER) RETURN NUMBER;\nEND emp_pkg;\n/\n\n-- Package Body (implementation)\nCREATE OR REPLACE PACKAGE BODY emp_pkg AS\n  PROCEDURE hire_employee(p_name VARCHAR2, p_salary NUMBER) AS\n  BEGIN\n    IF p_salary > c_max_salary THEN\n      RAISE_APPLICATION_ERROR(-20001, 'Salary too high!');\n    END IF;\n    INSERT INTO employees(name, salary) VALUES(p_name, p_salary);\n  END;\n  -- ...\nEND emp_pkg;\n/\n\n-- Usage\nexec emp_pkg.hire_employee('Alice', 80000);"
+        }
+      ]
+    },
+    {
+      "id": "project",
+      "name": "Project & Experience",
+      "icon": "💼",
+      "color": "#6c3483",
+      "textColor": "#ffffff",
+      "questions": [
+        {
+          "id": 1,
+          "question": "Tell me about yourself and your experience.",
+          "answer": "I am a Full-Stack Developer with 4 years of experience specializing in Angular for front-end development and Node.js with Express for back-end APIs. I've worked extensively with Oracle SQL databases and have a strong foundation in HTML, CSS, and JavaScript. Throughout my career, I have delivered enterprise-level web applications, working in agile teams following best practices like code reviews, CI/CD, and test-driven development.",
+          "example": "4 Years Experience Stack:\n• Frontend: Angular 16, TypeScript, RxJS, NgRx\n• Backend: Node.js, Express.js, REST APIs\n• Database: Oracle SQL, PL/SQL\n• Tools: Git, Jenkins/GitLab CI, Jira\n• Testing: Jasmine, Karma, Supertest\n• Methodology: Agile/Scrum, TDD, Code Reviews"
+        },
+        {
+          "id": 2,
+          "question": "Describe your most complex Angular project.",
+          "answer": "I worked on an Enterprise HR Management System with Angular 16. It had 50+ components, role-based access control, real-time notifications, dynamic form generation, and offline support. The app served 10,000+ users across multiple departments with complex workflows like leave management, performance reviews, and payroll integration.",
+          "example": "Project: Enterprise HR Management System\n• Tech: Angular 16, NgRx, Node.js, Oracle DB\n• Features:\n  - Role-based dashboard (Employee/Manager/HR/Admin)\n  - Dynamic form builder for custom workflows\n  - Real-time notifications via WebSockets\n  - Offline support with Service Workers\n  - Charts/analytics with D3.js\n  - PDF report generation\n• Team: 6 developers, 2 QA, 1 Scrum Master\n• Duration: 18 months"
+        },
+        {
+          "id": 3,
+          "question": "How did you handle state management in your Angular projects?",
+          "answer": "For complex state, I used NgRx with a proper store structure. For simpler feature-level state, I used BehaviorSubjects in services. I always chose the simplest solution — over-engineering with NgRx for small state is wasteful. In Angular 16, I've started using Signals for local component state.",
+          "example": "State Strategy by Complexity:\n\nSimple (service + BehaviorSubject):\n→ Current user, theme, language\n→ Small feature flags\n\nMedium (service + state classes):\n→ Shopping cart, form state\n→ Single feature data\n\nComplex (NgRx):\n→ Large shared datasets\n→ Complex user flows\n→ Time-travel debugging needed\n→ Team of 5+ working on same state"
+        },
+        {
+          "id": 4,
+          "question": "What performance optimizations have you done in Angular?",
+          "answer": "I've applied multiple optimization techniques: OnPush change detection for pure components, lazy loading all feature modules, virtual scrolling for large lists, trackBy in ngFor, memoizing expensive computations, preloading strategies for critical modules, and AOT compilation.",
+          "example": "Performance Wins Achieved:\n\n1. OnPush CD: 60% fewer change detection cycles\n   Before: 2s render | After: 0.8s render\n\n2. Lazy Loading: Initial bundle 4MB → 800KB\n   First paint: 4.2s → 1.1s\n\n3. Virtual Scrolling: Rendered 10,000 rows\n   Before: browser crashed | After: 60fps\n\n4. trackBy in ngFor: Prevented unnecessary\n   DOM rebuilds on list updates\n\n5. Pure Pipes over methods in templates\n   Eliminated recalculation on every CD cycle"
+        },
+        {
+          "id": 5,
+          "question": "How do you handle errors and exceptions in your projects?",
+          "answer": "I implement error handling at multiple levels: Global HTTP interceptor for API errors, try/catch in services, global Angular error handler for uncaught errors, custom error pages for 404/500, user-friendly toast notifications, and error logging to a monitoring service like Sentry.",
+          "example": "// Global Angular Error Handler\n@Injectable()\nexport class GlobalErrorHandler implements ErrorHandler {\n  handleError(error: any) {\n    const message = error?.message || 'Unknown error';\n    const stack = error?.stack;\n    // Log to Sentry\n    Sentry.captureException(error);\n    // Show user-friendly toast\n    this.toastr.error('Something went wrong. Our team has been notified.');\n    // Avoid logging full stack to console in prod\n    if (!environment.production) console.error(error);\n  }\n}"
+        },
+        {
+          "id": 6,
+          "question": "How do you approach code reviews?",
+          "answer": "Code reviews are about improving code quality and sharing knowledge, not criticizing developers. I focus on correctness, readability, performance, security, and test coverage. I give constructive feedback with suggestions, ask questions to understand intent, and praise good code too.",
+          "example": "Code Review Checklist I Follow:\n✓ Does the code do what it's supposed to?\n✓ Are there unit tests covering edge cases?\n✓ Is there code duplication (DRY principle)?\n✓ Are variable/function names clear?\n✓ Are there potential security issues?\n  (SQL injection, XSS, exposed secrets)\n✓ Is error handling comprehensive?\n✓ Will this scale with more data/users?\n✓ Is there documentation for complex logic?\n✓ Follows team conventions (ESLint, Prettier)?\n✓ Any obvious performance issues?"
+        },
+        {
+          "id": 7,
+          "question": "How have you used Oracle SQL in your projects?",
+          "answer": "In my HR project, I worked extensively with Oracle 19c. I wrote complex PL/SQL stored procedures for payroll calculations, designed partitioned tables for audit logs, optimized slow queries using explain plans and proper indexing, and used hierarchical queries with CONNECT BY for org chart features.",
+          "example": "Oracle Work Highlights:\n\n1. Payroll Procedure (PL/SQL)\n   - Complex tax calculation logic\n   - 50+ business rules\n   - Processed 5,000 employee payroll in 2 mins\n\n2. Audit Logging\n   - Partitioned by month (12 partitions)\n   - Reduced query time from 45s to 1.2s\n\n3. Org Chart Feature\n   - CONNECT BY for hierarchy traversal\n   - SYS_CONNECT_BY_PATH for full path\n   - Handled 10-level deep organization\n\n4. Query Optimization\n   - Identified missing indexes via EXPLAIN PLAN\n   - Added function-based indexes for UPPER() searches\n   - Reduced report generation: 5min → 8sec"
+        },
+        {
+          "id": 8,
+          "question": "How do you handle authentication and authorization in your projects?",
+          "answer": "I implement JWT-based authentication: user logs in, receives access token (short-lived, 15min) and refresh token (long-lived, 7 days). Angular interceptor attaches token to every request. Angular route guards protect routes. Role-based access control restricts features.",
+          "example": "Auth Flow Implementation:\n\nBackend (Node.js/Express):\n• POST /auth/login → returns {accessToken, refreshToken}\n• POST /auth/refresh → validates refresh, issues new access token\n• POST /auth/logout → invalidates refresh token in DB\n• All protected routes behind auth middleware\n\nFrontend (Angular):\n• AuthInterceptor: auto-attaches Bearer token\n• Token refresh: intercepts 401, refreshes, retries request\n• AuthGuard: protects routes\n• Role directive: hides UI elements by role\n• Tokens stored in memory (not localStorage for XSS safety)\n  (refresh token in HttpOnly cookie)"
+        },
+        {
+          "id": 9,
+          "question": "Describe a challenging bug you solved.",
+          "answer": "The most memorable was a memory leak in Angular. User reported the app becoming slow after 20-30 minutes. Investigated with Chrome DevTools Memory profiler, found thousands of event listener objects growing. Root cause: ngOnDestroy wasn't cleaning up RxJS subscriptions. Fixed by using takeUntil pattern and Subject for cleanup.",
+          "example": "Bug: Memory Leak - App slow after 30 minutes\n\nSymptoms:\n• Heap growing 50MB every 10 minutes\n• UI becoming unresponsive\n• Network requests duplicating\n\nInvestigation:\n• Chrome DevTools → Memory → Heap Snapshot\n• Identified: thousands of Subject objects retained\n\nRoot Cause:\nComponents subscribing to observable streams\nbut not unsubscribing on destroy.\n\nFix:\n// Add to every component with subscriptions:\nprivate destroy$ = new Subject<void>();\n\nthis.userService.users$.pipe(\n  takeUntil(this.destroy$)  // auto-unsubscribe!\n).subscribe(...);\n\nngOnDestroy() {\n  this.destroy$.next();\n  this.destroy$.complete();\n}\n\nResult: Memory stable, no more leaks"
+        },
+        {
+          "id": 10,
+          "question": "How do you stay updated with new Angular and JavaScript features?",
+          "answer": "I follow Angular's official blog and changelog, watch Angular team talks from ng-conf and AngularConnect, read articles on Medium and dev.to, practice new features in side projects, and participate in team knowledge-sharing sessions where we discuss new technologies monthly.",
+          "example": "Learning Routine:\n\nDaily (15 min):\n• Angular GitHub releases\n• Twitter: @angular, @mgechev\n• RSS feeds (dev.to, css-tricks)\n\nWeekly (1-2 hours):\n• YouTube: Fireship, Academind\n• Read one in-depth article on new features\n\nMonthly:\n• Team tech talk (I present something new)\n• One new side project using new features\n• Angular 16 features I've adopted:\n  - Standalone components\n  - Signals (replacing some NgRx)\n  - Input required validation\n  - Self-closing component tags\n  - esbuild for faster builds"
+        }
+      ]
+    }
+  ]
+}

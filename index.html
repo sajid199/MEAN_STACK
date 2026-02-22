@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>DevInterview Pro — Interview Preparation Guide</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=JetBrains+Mono:wght@400;600&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+  <!-- Header -->
+  <header class="site-header">
+    <div class="header-inner">
+      <div class="logo">
+        <span class="logo-icon">⟨/⟩</span>
+        <span class="logo-text">DevInterview<span class="logo-accent">Pro</span></span>
+      </div>
+      <div class="header-meta">
+        <span class="badge">4 Years Experience</span>
+        <span class="badge badge-primary">Angular · Node · Oracle</span>
+      </div>
+    </div>
+    <div class="header-stats" id="statsBar"></div>
+  </header>
+
+  <!-- Hero -->
+  <section class="hero">
+    <div class="hero-inner">
+      <div class="hero-tag">Interview Preparation Guide</div>
+      <h1 class="hero-title">Ace Every<br><em>Technical Interview</em></h1>
+      <p class="hero-subtitle">Real-world answers with code examples — crafted for experienced developers with 4 years of expertise in Angular, Node.js, Express, Oracle SQL, HTML, CSS, and JavaScript.</p>
+      <div class="search-container">
+        <span class="search-icon">⌕</span>
+        <input type="text" id="searchInput" class="search-input" placeholder="Search any question, keyword, or topic...">
+        <button class="search-clear" id="clearSearch" style="display:none">✕</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- Main Content -->
+  <main class="main-layout">
+
+    <!-- Sidebar Navigation -->
+    <aside class="sidebar">
+      <div class="sidebar-label">Topics</div>
+      <nav id="topicNav" class="topic-nav"></nav>
+      <div class="sidebar-progress" id="sidebarProgress"></div>
+    </aside>
+
+    <!-- Questions Area -->
+    <div class="content-area">
+
+      <!-- Topic Header -->
+      <div class="topic-header" id="topicHeader" style="display:none">
+        <div class="topic-header-inner">
+          <span class="topic-icon" id="topicIcon"></span>
+          <div>
+            <h2 class="topic-title" id="topicTitle"></h2>
+            <p class="topic-count" id="topicCount"></p>
+          </div>
+        </div>
+        <div class="topic-controls">
+          <button class="btn-control" id="expandAll">Expand All</button>
+          <button class="btn-control" id="collapseAll">Collapse All</button>
+          <button class="btn-control btn-primary" id="markAllRead">Mark All Read</button>
+        </div>
+      </div>
+
+      <!-- Search Results Info -->
+      <div id="searchInfo" class="search-info" style="display:none"></div>
+
+      <!-- Questions List -->
+      <div id="questionsContainer" class="questions-container"></div>
+
+      <!-- Home Screen -->
+      <div id="homeScreen" class="home-screen">
+        <div class="home-grid" id="homeGrid"></div>
+      </div>
+    </div>
+  </main>
+  <!-- Toast -->
+  <div id="toast" class="toast"></div>
+
+  <!-- Progress Bar (top) -->
+  <div class="progress-line" id="progressLine"></div>
+
+  <script src="app.js"></script>
+</body>
+</html>
